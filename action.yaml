@@ -31,4 +31,4 @@ action: submit
 gpus: 0
 test: true
 milestone: none
-notes: "CPU smoke job: install dependencies, run scaled tiny-NeRF WarpRF reproduction, write scores.json, and validate comparison."
+notes: "Rerun CPU smoke job after fixing NumPy 2 evaluator incompatibility; should train tiny NeRF, compute WarpRF, write scores.json, and validate comparison."

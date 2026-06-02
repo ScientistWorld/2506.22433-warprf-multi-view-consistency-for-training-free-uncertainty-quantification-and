@@ -1,0 +1,36 @@
+{
+  "experiments": {
+    "tiny_nerf_depth_uncertainty": {
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.2828184869697828,
+          "spearman_depth_error": -0.0003470611098025888,
+          "mean_depth_error": 4.511122703552246,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.22166197160750317,
+          "spearman_depth_error": 0.626722386809331,
+          "mean_depth_error": 4.511122703552246,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_active_view_proxy": {
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.19740960001945496,
+          "selection_regret": 0.21427825093269348,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.41168785095214844,
+          "selection_regret": 0.0,
+          "view_budget": 5
+        }
+      }
+    }
+  }
+}
