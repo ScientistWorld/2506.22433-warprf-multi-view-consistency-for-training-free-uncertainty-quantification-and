@@ -19,6 +19,10 @@
   method predictions plus tracked `data/` labels instead of trusting
   method-written metric arrays, and the shifted sparse split is documented as a
   diagnostic partial negative rather than a primary target.
+- Job `8aa25908-8cb` reran the complete scaled reproduction under the stricter
+  artifact contract. The regenerated artifacts contain rendered predictions and
+  view indices, not method-supplied evaluation labels, and
+  `python validate.py --compare` passes.
 - A final web/code-availability check on 2026-06-02 found that the project page
   now links to the official repository at `https://github.com/sadrasafa/WarpRF`.
   The repository currently provides the 3DGS experiment code, while this gym
@@ -67,9 +71,6 @@ shifted sparse, and dense eight-source-view splits and passed
 
 ## Remaining
 
-- Rerun `scripts/reproduce.sh` inside the container after the evaluator/artifact
-  contract fix so `scoring/scores.json` is regenerated from the new method
-  artifacts.
 - Higher milestones would require reproducing the paper's full dataset/backbone
   matrix on ScanNet++, ETH3D, NeRF Synthetic, Tanks and Temples, 3DGS, and
   SVRaster, which is outside this scaled CPU reproduction.
@@ -110,8 +111,8 @@ shifted sparse, and dense eight-source-view splits and passed
   `depth_error` and `candidate_oracle_errors`. The method artifact contract now
   saves rendered predictions and view indices, while `eval/` reconstructs the
   analytic ground-truth labels from `data/` and computes the error metrics
-  independently. A CPU rerun has been prepared to refresh the artifacts and
-  scores under this stricter contract.
+  independently. Job `8aa25908-8cb` refreshed the artifacts and scores under
+  this stricter contract.
 
 ## Deviations from Paper
 

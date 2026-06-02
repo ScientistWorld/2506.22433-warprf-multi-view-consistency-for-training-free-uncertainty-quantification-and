@@ -1,8 +1,8 @@
 # IMPORTANT: Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends. Sleeping blocks the entire pipeline.
-action: submit
+action: done
 gpus: 0
 test: false
-milestone: core_claim
-notes: "Continuation audit fixed evaluator independence and target metadata; run full CPU reproduction to regenerate artifacts and scores under the stricter contract before restoring core_claim_plus."
+milestone: core_claim_plus
+notes: "Job 8aa25908-8cb reran the full scaled WarpRF reproduction under the stricter artifact contract; validation passes and the milestone is restored to core_claim_plus."
