@@ -29,7 +29,9 @@ def ause(uncertainty: np.ndarray, error: np.ndarray, fractions: int = 101) -> fl
         curve_u.append(float(np.mean(e[order_u[-keep:]])))
         curve_e.append(float(np.mean(e[order_e[-keep:]])))
     norm = max(curve_u[0], 1e-8)
-    return float(np.trapz((np.array(curve_u) - np.array(curve_e)) / norm, dx=0.99 / (fractions - 1)))
+    y = (np.array(curve_u) - np.array(curve_e)) / norm
+    dx = 0.99 / (fractions - 1)
+    return float(np.sum((y[:-1] + y[1:]) * 0.5 * dx))
 
 
 def spearman_rank(a: np.ndarray, b: np.ndarray) -> float:

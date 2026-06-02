@@ -35,6 +35,10 @@ imports, but the login Python lacks NumPy; dependencies are declared in
 - Full ETH3D/ScanNet++/3DGS/SVRaster reproduction is too large for the first
   smoke test, so the first benchmark uses a scaled synthetic radiance-field
   scene while preserving WarpRF's core computation.
+- Job `475dc534-7af` trained the tiny radiance field and wrote
+  `outputs/warprf/warprf_outputs.npz`, but failed during evaluation because the
+  container has NumPy 2, where `np.trapz` has been removed. The evaluator now
+  computes the trapezoid integral directly.
 
 ## Deviations from Paper
 

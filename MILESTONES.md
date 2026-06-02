@@ -21,5 +21,11 @@
   tiny NeRF reproduction harness.
 - Prepared the first container job; no successful method run has completed yet.
 
+### [2026-06-02 22:25] - none
+- Job `475dc534-7af` produced WarpRF artifacts but failed before scoring due to
+  a NumPy 2 evaluation API incompatibility.
+- Patched the evaluator and prepared a rerun; no successful end-to-end method
+  run has completed yet.
+
 ## Stop Justification
 - Not stopped.
