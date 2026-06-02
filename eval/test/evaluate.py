@@ -227,6 +227,7 @@ def _score_artifact(artifact: Path, prefix: str, method: str) -> dict:
     selected_oracle_error = float(oracle_errors[selected])
     random_oracle_error = float(np.mean(oracle_errors))
     best_oracle_error = float(np.max(oracle_errors))
+    oracle_scale = max(random_oracle_error, 1e-8)
     random_scores = np.mod(np.arange(scores.size, dtype=np.float32) * 0.75487766625, 1.0).reshape(scores.shape)
 
     return {
@@ -249,14 +250,18 @@ def _score_artifact(artifact: Path, prefix: str, method: str) -> dict:
         f"{prefix}_active_view_proxy": {
             "random_view": {
                 "selected_candidate_error": random_oracle_error,
+                "selected_error_lift": 1.0,
                 "selection_regret": best_oracle_error - random_oracle_error,
+                "selection_regret_fraction": (best_oracle_error - random_oracle_error) / oracle_scale,
                 "candidate_score_spearman": spearman_rank(random_scores, oracle_errors),
                 "top_half_error_lift": top_half_error_lift(random_scores, oracle_errors),
                 "view_budget": _scalar_int(data, "source_view_count") + 1,
             },
             method: {
                 "selected_candidate_error": selected_oracle_error,
+                "selected_error_lift": selected_oracle_error / oracle_scale,
                 "selection_regret": best_oracle_error - selected_oracle_error,
+                "selection_regret_fraction": (best_oracle_error - selected_oracle_error) / oracle_scale,
                 "candidate_score_spearman": spearman_rank(scores, oracle_errors),
                 "top_half_error_lift": top_half_error_lift(scores, oracle_errors),
                 "view_budget": _scalar_int(data, "source_view_count") + 1,
