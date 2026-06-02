@@ -72,7 +72,4 @@
   under the same nine-view budget.
 
 ## Stop Justification
-- Stopped at `core_claim_plus`: the core WarpRF claim is reproduced on the
-  original sparse split and an additional dense source-view split. The shifted
-  sparse depth uncertainty split remains a documented negative/partial result,
-  while shifted active-view selection supports the claim.
+- Completed at milestone `core_claim_plus`.
