@@ -30,5 +30,5 @@
 action: submit
 gpus: 0
 test: true
-milestone: none
-notes: "Rerun CPU smoke job after fixing NumPy 2 evaluator incompatibility; should train tiny NeRF, compute WarpRF, write scores.json, and validate comparison."
+milestone: core_claim
+notes: "Run expanded CPU reproduction with original and shifted camera splits; expect merged scores.json and validation for core_claim_plus."

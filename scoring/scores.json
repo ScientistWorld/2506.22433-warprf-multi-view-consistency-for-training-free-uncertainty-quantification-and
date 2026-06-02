@@ -31,6 +31,38 @@
           "view_budget": 5
         }
       }
+    },
+    "tiny_nerf_shifted_depth_uncertainty": {
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.2825819138086842,
+          "spearman_depth_error": 0.0023796558353693592,
+          "mean_depth_error": 4.502507209777832,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.34187628796250075,
+          "spearman_depth_error": 0.36297186161697875,
+          "mean_depth_error": 4.502507209777832,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_shifted_active_view_proxy": {
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.16191206872463226,
+          "selection_regret": 0.23288260400295258,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.39479467272758484,
+          "selection_regret": 0.0,
+          "view_budget": 5
+        }
+      }
     }
   }
 }
