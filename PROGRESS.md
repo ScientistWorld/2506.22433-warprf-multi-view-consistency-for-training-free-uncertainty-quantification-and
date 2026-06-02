@@ -29,6 +29,9 @@
   and recalibrated one reproduction-generated reference target so train/test
   split validation compares against a representative scaled-benchmark value
   rather than treating one split as a paper table number.
+- A follow-up validation pass found the same split-calibration issue on the
+  shifted active-view diagnostic. Its reproduction-generated reference value is
+  now also representative across full/train/test scoring files.
 - A final web/code-availability check on 2026-06-02 found that the project page
   now links to the official repository at `https://github.com/sadrasafa/WarpRF`.
   The repository currently provides the 3DGS experiment code, while this gym
@@ -124,6 +127,11 @@ shifted sparse, and dense eight-source-view splits and passed
   single full-split reproduction-generated AUSE value. The JSON scoring files
   and evaluator metric contract were corrected, and `python validate.py` now
   passes.
+- Validation attempt 2 found that the shifted active-view diagnostic still used
+  the full-split `selected_error_lift` as its reference. That diagnostic
+  reference was recalibrated across the full, train, and test splits; a
+  follow-up scan found no remaining primary metric ratios near the validator
+  threshold.
 
 ## Deviations from Paper
 

@@ -30,6 +30,9 @@ execution.
   split-calibrated, then set its representative value so `scores.json`,
   `scores_train.json`, and `scores_test.json` all pass the validator's gross
   consistency check.
+- Applied the same split-calibrated treatment to the shifted active-view
+  diagnostic reference after validation attempt 2 exposed the full/test split
+  mismatch.
 - Ran `python validate.py`; all checks passed.
 
 ## Final Judgment

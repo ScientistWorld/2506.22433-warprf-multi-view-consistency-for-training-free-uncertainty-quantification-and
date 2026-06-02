@@ -24,5 +24,9 @@
 - Recalibrated the reproduction-generated sparse AUSE reference note/value so top-level, train, and test split scores can all pass gross consistency checks without claiming the value is paper-reported.
 - `python validate.py` passes.
 
+### [2026-06-02 23:31] - core_claim_plus
+- Fixed the remaining split-consistency validation issue on the shifted active-view diagnostic by using a representative reproduction-generated `selected_error_lift` reference.
+- Re-ran `python validate.py`; all checks pass.
+
 ## Stop Justification
 - Completed at milestone `core_claim_plus`. The reusable scaled benchmark reproduces WarpRF's core uncertainty and active-view behavior on the original sparse split and an additional dense source-view split, with an independent evaluator and split scoring artifacts in place. Higher milestones would require full ScanNet++/ETH3D/NeRF Synthetic/Tanks and Temples runs with the paper's large 3DGS/SVRaster/NeRF backbones, which are outside the remaining wrap-up scope.
