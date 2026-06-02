@@ -12,6 +12,13 @@ For image-level uncertainty, WarpRF renders source images and warps them into a 
 
 The method is applied without changing the radiance-field training objective or model internals. The paper demonstrates it on NeRF, 3D Gaussian Splatting, and SVRaster.
 
+## Code Availability
+
+The paper markdown states that code will be released. As of the final
+reproduction audit, the project page links to the official repository at
+`https://github.com/sadrasafa/WarpRF`, which provides the 3DGS experiment
+implementation and notes that NeRF/SVRaster code is forthcoming.
+
 ## Main Claims
 
 - **Primary claim**: Multi-view consistency provides a strong training-free uncertainty estimate for radiance fields, outperforming prior uncertainty methods on AUSE for ScanNet++ and ETH3D.

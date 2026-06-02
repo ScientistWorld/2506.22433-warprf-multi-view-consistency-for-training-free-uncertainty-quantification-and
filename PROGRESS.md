@@ -14,6 +14,10 @@
 - Continued-agent audit on 2026-06-02 verified that the method code contains
   the paper's geometric warping computation, the evaluator is independent of
   `method/`, and `python validate.py --compare` passes.
+- A final web/code-availability check on 2026-06-02 found that the project page
+  now links to the official repository at `https://github.com/sadrasafa/WarpRF`.
+  The repository currently provides the 3DGS experiment code, while this gym
+  keeps a lightweight NeRF-style implementation for a reusable scaled benchmark.
 
 ## Results
 
@@ -67,9 +71,10 @@ shifted sparse, and dense eight-source-view splits and passed
 
 ## Issues
 
-- No public WarpRF code release was found in the paper text or quick web search;
-  the paper says code will be released. The method was implemented directly from
-  the equations and protocol.
+- The paper markdown only says code will be released, but the project page now
+  links to the official repository. The packaged benchmark was implemented
+  directly from the paper equations and kept lightweight because the official
+  3DGS code path depends on full benchmark datasets and CUDA extensions.
 - Full ETH3D/ScanNet++/3DGS/SVRaster reproduction is too large for the first
   smoke test, so the first benchmark uses a scaled synthetic radiance-field
   scene while preserving WarpRF's core computation.
@@ -106,3 +111,7 @@ shifted sparse, and dense eight-source-view splits and passed
   steps, but keeps the WarpRF algorithm unchanged: rendered RGB/depth maps from
   known views are backward-warped to unseen views and consistency differences
   produce uncertainty.
+- The official repository is not vendored into `method/`; it is an external
+  3DGS implementation with dataset-specific scripts. The local method code
+  preserves WarpRF's core computation in a compact benchmark that can run in
+  this environment without downloading large scene datasets.
