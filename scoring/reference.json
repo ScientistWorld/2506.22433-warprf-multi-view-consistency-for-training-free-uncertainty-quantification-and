@@ -5,8 +5,8 @@
       "weight": 0.15,
       "primary_metric": "eth3d_ause",
       "metrics": {
-        "scannetpp_ause": {"higher_is_better": false, "coefficient": 0.5},
-        "eth3d_ause": {"higher_is_better": false, "coefficient": 1.0}
+        "scannetpp_ause": {"higher_is_better": false, "coefficient": 0.5, "description": "Area under the sparsification error curve on ScanNet++."},
+        "eth3d_ause": {"higher_is_better": false, "coefficient": 1.0, "description": "Area under the sparsification error curve on ETH3D."}
       },
       "results": {
         "nerf_bayesrays": {"type": "baseline", "scannetpp_ause": 0.438, "eth3d_ause": 0.278},
@@ -21,11 +21,11 @@
       "weight": 0.15,
       "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true, "coefficient": 1.0},
-        "ssim": {"higher_is_better": true, "coefficient": 0.4},
-        "lpips": {"higher_is_better": false, "coefficient": 0.4},
-        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
-        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
+        "psnr": {"higher_is_better": true, "coefficient": 1.0, "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."},
+        "ssim": {"higher_is_better": true, "coefficient": 0.4, "description": "Novel-view structural similarity."},
+        "lpips": {"higher_is_better": false, "coefficient": 0.4, "description": "Novel-view perceptual distance."},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of selected camera views used by the active-view procedure."},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that the fixed rendering backbone was changed."}
       },
       "results": {
         "3dgs_random": {"type": "baseline", "psnr": 20.67, "ssim": 0.8242, "lpips": 0.2049, "selected_views": 10, "backbone_changed": 0},
@@ -40,11 +40,11 @@
       "weight": 0.1,
       "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true, "coefficient": 1.0},
-        "ssim": {"higher_is_better": true, "coefficient": 0.4},
-        "lpips": {"higher_is_better": false, "coefficient": 0.4},
-        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
-        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
+        "psnr": {"higher_is_better": true, "coefficient": 1.0, "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."},
+        "ssim": {"higher_is_better": true, "coefficient": 0.4, "description": "Novel-view structural similarity."},
+        "lpips": {"higher_is_better": false, "coefficient": 0.4, "description": "Novel-view perceptual distance."},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of selected camera views used by the active-view procedure."},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that the fixed rendering backbone was changed."}
       },
       "results": {
         "svraster_random": {"type": "baseline", "psnr": 16.633, "ssim": 0.5738, "lpips": 0.3578, "selected_views": 40, "backbone_changed": 0},
@@ -57,9 +57,9 @@
       "weight": 0.1,
       "primary_metric": "mean_f1",
       "metrics": {
-        "mean_f1": {"higher_is_better": true, "coefficient": 1.0},
-        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
-        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
+        "mean_f1": {"higher_is_better": true, "coefficient": 1.0, "description": "Mean reconstruction F1 score across active-mapping scenes."},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of selected camera views used by the active-mapping procedure."},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that the fixed reconstruction backbone was changed."}
       },
       "results": {
         "3dgs_fisherrf": {"type": "baseline", "mean_f1": 0.29, "selected_views": 40, "backbone_changed": 0},
@@ -71,11 +71,11 @@
       "weight": 0.15,
       "primary_metric": "ause",
       "metrics": {
-        "ause": {"higher_is_better": false, "coefficient": 1.0},
-        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5},
-        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2},
-        "source_view_count": {"higher_is_better": false, "coefficient": -0.1},
-        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0}
+        "ause": {"higher_is_better": false, "coefficient": 1.0, "description": "Area under the sparsification error curve for held-out depth uncertainty."},
+        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5, "description": "Rank correlation between predicted uncertainty and held-out depth error."},
+        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2, "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."},
+        "source_view_count": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views used before uncertainty scoring."},
+        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that ground-truth labels were used to construct uncertainty scores."}
       },
       "results": {
         "random_uncertainty": {"type": "baseline", "ause": 0.13074142235091496, "spearman_depth_error": -0.02578958659636379, "mean_depth_error": 1.7156070470809937, "source_view_count": 4, "used_ground_truth_for_uncertainty": 0},
@@ -87,9 +87,11 @@
       "weight": 0.1,
       "primary_metric": "selected_candidate_error",
       "metrics": {
-        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0},
-        "selection_regret": {"higher_is_better": false, "coefficient": 0.5},
-        "view_budget": {"higher_is_better": false, "coefficient": -0.1}
+        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0, "description": "Current rendering error exposed by the selected next-view candidate."},
+        "selection_regret": {"higher_is_better": false, "coefficient": 0.5, "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."},
+        "candidate_score_spearman": {"higher_is_better": true, "coefficient": 0.35, "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."},
+        "top_half_error_lift": {"higher_is_better": true, "coefficient": 0.25, "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."},
+        "view_budget": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views after adding the selected candidate."}
       },
       "results": {
         "random_view": {"type": "baseline", "selected_candidate_error": 0.19740960001945496, "selection_regret": 0.21427825093269348, "view_budget": 5},
@@ -101,11 +103,11 @@
       "weight": 0.05,
       "primary_metric": "ause",
       "metrics": {
-        "ause": {"higher_is_better": false, "coefficient": 1.0},
-        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5},
-        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2},
-        "source_view_count": {"higher_is_better": false, "coefficient": -0.1},
-        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0}
+        "ause": {"higher_is_better": false, "coefficient": 1.0, "description": "Area under the sparsification error curve for held-out depth uncertainty."},
+        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5, "description": "Rank correlation between predicted uncertainty and held-out depth error."},
+        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2, "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."},
+        "source_view_count": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views used before uncertainty scoring."},
+        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that ground-truth labels were used to construct uncertainty scores."}
       },
       "results": {
         "random_uncertainty": {"type": "baseline", "ause": 0.3060368577689189, "spearman_depth_error": 0.0010133194188346791, "mean_depth_error": 1.1638996601104736, "source_view_count": 8, "used_ground_truth_for_uncertainty": 0},
@@ -117,9 +119,11 @@
       "weight": 0.05,
       "primary_metric": "selected_candidate_error",
       "metrics": {
-        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0},
-        "selection_regret": {"higher_is_better": false, "coefficient": 0.5},
-        "view_budget": {"higher_is_better": false, "coefficient": -0.1}
+        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0, "description": "Current rendering error exposed by the selected next-view candidate."},
+        "selection_regret": {"higher_is_better": false, "coefficient": 0.5, "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."},
+        "candidate_score_spearman": {"higher_is_better": true, "coefficient": 0.35, "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."},
+        "top_half_error_lift": {"higher_is_better": true, "coefficient": 0.25, "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."},
+        "view_budget": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views after adding the selected candidate."}
       },
       "results": {
         "random_view": {"type": "baseline", "selected_candidate_error": 0.10720635950565338, "selection_regret": 0.041164398193359375, "view_budget": 9},
@@ -131,11 +135,11 @@
       "weight": 0.1,
       "primary_metric": "ause",
       "metrics": {
-        "ause": {"higher_is_better": false, "coefficient": 1.0},
-        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5},
-        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2},
-        "source_view_count": {"higher_is_better": false, "coefficient": -0.1},
-        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0}
+        "ause": {"higher_is_better": false, "coefficient": 1.0, "description": "Area under the sparsification error curve for held-out depth uncertainty."},
+        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5, "description": "Rank correlation between predicted uncertainty and held-out depth error."},
+        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2, "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."},
+        "source_view_count": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views used before uncertainty scoring."},
+        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0, "description": "Indicator that ground-truth labels were used to construct uncertainty scores."}
       },
       "results": {
         "random_uncertainty": {"type": "baseline", "ause": 0.13704211599587574, "spearman_depth_error": -0.02204279452321182, "mean_depth_error": 1.7319464683532715, "source_view_count": 4, "used_ground_truth_for_uncertainty": 0},
@@ -147,9 +151,11 @@
       "weight": 0.05,
       "primary_metric": "selected_candidate_error",
       "metrics": {
-        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0},
-        "selection_regret": {"higher_is_better": false, "coefficient": 0.5},
-        "view_budget": {"higher_is_better": false, "coefficient": -0.1}
+        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0, "description": "Current rendering error exposed by the selected next-view candidate."},
+        "selection_regret": {"higher_is_better": false, "coefficient": 0.5, "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."},
+        "candidate_score_spearman": {"higher_is_better": true, "coefficient": 0.35, "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."},
+        "top_half_error_lift": {"higher_is_better": true, "coefficient": 0.25, "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."},
+        "view_budget": {"higher_is_better": false, "coefficient": -0.1, "description": "Number of source views after adding the selected candidate."}
       },
       "results": {
         "random_view": {"type": "baseline", "selected_candidate_error": 0.16191206872463226, "selection_regret": 0.23288260400295258, "view_budget": 5},

@@ -129,6 +129,19 @@ def spearman_rank(a: np.ndarray, b: np.ndarray, valid_mask: np.ndarray | None = 
     return float(np.sum(ar * br) / max(denom, 1e-12))
 
 
+def top_half_error_lift(scores: np.ndarray, oracle_errors: np.ndarray) -> float:
+    scores = scores.reshape(-1)
+    oracle_errors = oracle_errors.reshape(-1)
+    valid = np.isfinite(scores) & np.isfinite(oracle_errors)
+    scores = scores[valid]
+    oracle_errors = oracle_errors[valid]
+    if scores.size == 0:
+        return float("nan")
+    keep = max(1, scores.size // 2)
+    top = np.argsort(scores)[-keep:]
+    return float(np.mean(oracle_errors[top]) / max(float(np.mean(oracle_errors)), 1e-8))
+
+
 def _depth_arrays(data: np.lib.npyio.NpzFile) -> tuple[np.ndarray, np.ndarray, np.ndarray | None]:
     uncertainty = data["uncertainty"].astype(np.float32)
     if "test_rendered_depths" in data.files:
@@ -199,6 +212,7 @@ def _score_artifact(artifact: Path, prefix: str, method: str) -> dict:
     selected_oracle_error = float(oracle_errors[selected])
     random_oracle_error = float(np.mean(oracle_errors))
     best_oracle_error = float(np.max(oracle_errors))
+    random_scores = np.mod(np.arange(scores.size, dtype=np.float32) * 0.75487766625, 1.0).reshape(scores.shape)
 
     return {
         f"{prefix}_depth_uncertainty": {
@@ -221,11 +235,15 @@ def _score_artifact(artifact: Path, prefix: str, method: str) -> dict:
             "random_view": {
                 "selected_candidate_error": random_oracle_error,
                 "selection_regret": best_oracle_error - random_oracle_error,
+                "candidate_score_spearman": spearman_rank(random_scores, oracle_errors),
+                "top_half_error_lift": top_half_error_lift(random_scores, oracle_errors),
                 "view_budget": _scalar_int(data, "source_view_count") + 1,
             },
             method: {
                 "selected_candidate_error": selected_oracle_error,
                 "selection_regret": best_oracle_error - selected_oracle_error,
+                "candidate_score_spearman": spearman_rank(scores, oracle_errors),
+                "top_half_error_lift": top_half_error_lift(scores, oracle_errors),
                 "view_budget": _scalar_int(data, "source_view_count") + 1,
             },
         },
