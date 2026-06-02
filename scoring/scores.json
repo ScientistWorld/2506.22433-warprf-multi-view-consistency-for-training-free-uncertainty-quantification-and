@@ -3,16 +3,16 @@
     "tiny_nerf_depth_uncertainty": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.2828184869697828,
-          "spearman_depth_error": -0.0003470611098025888,
-          "mean_depth_error": 4.511122703552246,
+          "ause": 0.13074142235091496,
+          "spearman_depth_error": -0.02578958659636379,
+          "mean_depth_error": 1.7156070470809937,
           "source_view_count": 4,
           "used_ground_truth_for_uncertainty": 0
         },
         "warprf": {
-          "ause": 0.22166197160750317,
-          "spearman_depth_error": 0.626722386809331,
-          "mean_depth_error": 4.511122703552246,
+          "ause": 0.10979708769810403,
+          "spearman_depth_error": 0.15851205228737464,
+          "mean_depth_error": 1.7156070470809937,
           "source_view_count": 4,
           "used_ground_truth_for_uncertainty": 0
         }
@@ -35,16 +35,16 @@
     "tiny_nerf_shifted_depth_uncertainty": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.2825819138086842,
-          "spearman_depth_error": 0.0023796558353693592,
-          "mean_depth_error": 4.502507209777832,
+          "ause": 0.13704211599587574,
+          "spearman_depth_error": -0.02204279452321182,
+          "mean_depth_error": 1.7319464683532715,
           "source_view_count": 4,
           "used_ground_truth_for_uncertainty": 0
         },
         "warprf": {
-          "ause": 0.34187628796250075,
-          "spearman_depth_error": 0.36297186161697875,
-          "mean_depth_error": 4.502507209777832,
+          "ause": 0.17989042974553468,
+          "spearman_depth_error": -0.36074351067670546,
+          "mean_depth_error": 1.7319464683532715,
           "source_view_count": 4,
           "used_ground_truth_for_uncertainty": 0
         }

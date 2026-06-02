@@ -31,4 +31,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Run expanded CPU reproduction with original and shifted camera splits; expect merged scores.json and validation for core_claim_plus."
+notes: "Rerun expanded CPU reproduction after adding valid-depth masks for AUSE; expect original and shifted split scores to validate."
