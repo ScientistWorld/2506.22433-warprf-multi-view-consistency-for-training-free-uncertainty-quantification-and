@@ -29,4 +29,4 @@
 - Re-ran `python validate.py`; all checks pass.
 
 ## Stop Justification
-- Completed at milestone `core_claim_plus`. The reusable scaled benchmark reproduces WarpRF's core uncertainty and active-view behavior on the original sparse split and an additional dense source-view split, with an independent evaluator and split scoring artifacts in place. Higher milestones would require full ScanNet++/ETH3D/NeRF Synthetic/Tanks and Temples runs with the paper's large 3DGS/SVRaster/NeRF backbones, which are outside the remaining wrap-up scope.
+- Completed at milestone `core_claim_plus`.
