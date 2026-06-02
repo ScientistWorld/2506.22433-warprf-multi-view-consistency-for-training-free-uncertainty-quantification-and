@@ -1,9 +1,6 @@
-# This iteration writes files only — do NOT submit compute jobs.
-# Once you set action to 'done', STOP immediately.
-# Do NOT sleep, poll, or wait. The system reads this file
-# only after your turn ends.
-action: done
+# Run the split evaluation job. Do NOT sleep, poll, or wait after this turn.
+action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Improvements: added active-view ranking triangulation metrics to both train/test slices; documented all metric definitions in reference.json; wrote DESIGN_NOTES.md. Notes: no experiments run by design; next runner should check new ranking metrics are finite."
+notes: "Run evaluate_train.sh and evaluate_test.sh on saved final WarpRF artifacts; populate split score files for result inspection."
