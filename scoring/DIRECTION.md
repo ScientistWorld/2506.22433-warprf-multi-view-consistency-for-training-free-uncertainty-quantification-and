@@ -1,94 +1,21 @@
 # Research Direction
 
-<!-- Do not edit this unless you decide to stop -->
-
-<!--
-Define the research direction a scientist must follow when trying to
-improve on the paper's results. This is NOT about resource constraints
-(model size, dataset — those go in CONSTRAINTS.md). This is about
-the methodological scope: what research question is being pursued,
-and what approaches are in-bounds vs out-of-bounds.
-
-WHY THIS MATTERS: Without direction constraints, a scientist evaluate on this
-can trivially "beat" a paper by switching paradigms entirely. As a general
-example: if a paper proposes a novel Mamba variant and benchmarks it
-against prior Mamba models, switching to a Transformer would likely
-beat the numbers — but that tells us nothing about Mamba research.
-The scientist must work within the paper's problem space so that
-improvement demonstrates genuine insight in that area.
-
-THE RIGHT LEVEL OF SPECIFICITY: The direction should be scoped to the
-paper's actual contribution — not so broad that anything goes, but not
-so narrow that it dictates the exact technique. Think of it as: the
-scientist must work on the SAME PROBLEM and improve the SAME KIND OF
-THING the paper contributed, but they have full freedom in HOW they
-improve it.
-
-In the same example: 
-Too broad:  "Must use SSMs" — lets the scientist work on any SSM
-            problem, ignoring what this paper actually contributed.
-Too narrow: "Must use selective scan with input-dependent A matrices"
-            — dictates the technique, leaving no room for creativity.
-Right:      "Must improve input-dependent state dynamics for SSM
-            language modeling" — scoped to the contribution, open on
-            how to achieve it.
-
-WHAT TO WRITE:
-1. Research Problem — what question the paper addresses (one paragraph)
-2. Core Contribution — what specific thing the paper introduced or
-   improved (this is the area the scientist must work within)
-3. Approach Scope — what approach family and what aspects the scientist
-   can modify
-4. Out of Bounds — paradigm switches and scope violations
-
-Be specific to this paper. Explain the reasoning so the scientist
-understands the intent, not just the rule.
-
-Example for a paper proposing a new Mamba variant for language modeling:
-
 ## Research Problem
-This paper improves state-space models (SSMs) for language modeling.
-The core question is whether input-dependent state dynamics can close
-the quality gap between SSMs and Transformers on language tasks. ...
+
+This benchmark asks whether a radiance-field system can estimate uncertainty in unseen views and use that uncertainty to acquire better training views under a limited imaging budget. Improvements should target the quality of uncertainty ranking or view selection while preserving the same renderer, data, and acquisition budget.
 
 ## Core Contribution
-The paper's novelty is a selective scan mechanism that adapts the
-state transition matrices to the input, replacing the fixed dynamics
-of prior SSMs (S4, H3). The scientist must work on improving this
-kind of contribution: how the SSM processes sequences with
-input-dependent dynamics. ...
+
+The paper's contribution is a training-free uncertainty signal for radiance fields and its use as a selection criterion for active view acquisition. A scientist should work on the same class of problem: uncertainty estimation and active view selection for fixed radiance-field models.
 
 ## Approach Scope
-The scientist should focus on the scan / state-dynamics component
-of the SSM. They may:
-- Redesign the selection mechanism (different parameterization,
-  gating, conditioning)
-- Change the state representation (different dimensions, structure,
-  initialization)
-- Modify how input signals interact with the state (mixing,
-  normalization, discretization)
-- Alter the training procedure for the SSM components (loss,
-  scheduling, curriculum)
- - ...
 
-The scientist may also make architectural changes around the core
-SSM block (normalization, skip connections, mixing layers) as long
-as the SSM with input-dependent dynamics remains the central
-sequence-processing component. ...
+In-bounds work may redesign how uncertainty is computed from available renderings, depths, poses, colors, geometry, or candidate-view statistics. It may change aggregation rules, normalization, occlusion handling, confidence calibration, candidate scoring, or acquisition scheduling within the fixed protocol. It may also introduce lightweight computations around the fixed renderer if they do not train on extra data or alter the underlying radiance-field backbone.
 
 ## Out of Bounds
-- Replacing the SSM backbone with a Transformer or attention-based
-  architecture. The paper's thesis is that SSMs can be competitive
-  — switching to attention sidesteps that thesis entirely.
-- Hybrid architectures that are majority-attention (e.g., Transformer
-  with one SSM layer). A small attention component used as a tool
-  within an SSM-first design is acceptable if justified.
-- Ensemble methods that combine an SSM with a separate Transformer.
-  The goal is a single-model SSM contribution.
-- Working on a different SSM problem (e.g., improving SSM efficiency
-  or hardware utilization) rather than the quality of input-dependent
-  dynamics. Stay on the paper's research question.
- - ...
 
-Delete this comment block and fill in your actual direction below.
--->
+- Replacing the evaluated radiance-field backbone with a stronger renderer or pretrained reconstruction system.
+- Solving the task by adding more training images, external depth supervision, external meshes, or online data not present in the benchmark.
+- Using test-set ground truth to choose views, tune scene-specific parameters, or calibrate uncertainty.
+- Turning the benchmark into a supervised uncertainty-learning problem with labels from the evaluation scenes unless the protocol explicitly provides such labels for training.
+- Reporting only benefit metrics while omitting the fixed-budget or fixed-backbone constraints.
