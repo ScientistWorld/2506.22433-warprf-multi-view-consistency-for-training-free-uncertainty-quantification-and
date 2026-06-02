@@ -13,6 +13,7 @@ set -e
 cd /home/user
 
 mkdir -p scoring
+export PYTHONPATH="/home/user:${PYTHONPATH:-}"
 
 ARTIFACT_INPUT="${1:-outputs}"
 SCORES="${2:-scoring/scores_train.json}"

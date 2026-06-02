@@ -3,4 +3,4 @@ action: submit
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Run evaluate_train.sh and evaluate_test.sh on saved final WarpRF artifacts; populate split score files for result inspection."
+notes: "Resubmit split scoring after fixing PYTHONPATH for evaluator access to data.synthetic_radiance."
