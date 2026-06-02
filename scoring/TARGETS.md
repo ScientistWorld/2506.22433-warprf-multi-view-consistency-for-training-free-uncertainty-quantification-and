@@ -17,6 +17,23 @@ exposes more current model error than a random candidate.
 - **Constraint metric**: view_budget
 - **How to run**: Run `bash scripts/method.sh`, then `bash scripts/evaluate.sh`.
 
+## Primary: tiny_nerf_dense_depth_uncertainty
+
+Tests the pixel uncertainty target with eight source views instead of four.
+
+- **Metric**: AUSE (lower is better)
+- **Constraint metrics**: source_view_count and used_ground_truth_for_uncertainty
+- **How to run**: Run `bash scripts/reproduce.sh`.
+
+## Primary: tiny_nerf_dense_active_view_proxy
+
+Tests fixed-budget active view selection with eight source views instead of
+four.
+
+- **Metric**: selected_candidate_error (higher is better)
+- **Constraint metric**: view_budget
+- **How to run**: Run `bash scripts/reproduce.sh`.
+
 ## Primary: tiny_nerf_shifted_depth_uncertainty
 
 Tests the same pixel uncertainty target on a shifted camera split.

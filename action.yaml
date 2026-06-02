@@ -31,4 +31,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Rerun expanded CPU reproduction after assigning high uncertainty to target pixels with no valid source reprojection; verify original and shifted split scores."
+notes: "Run expanded CPU reproduction with original sparse, shifted sparse, and dense eight-source-view splits; check whether dense split supports core_claim_plus."

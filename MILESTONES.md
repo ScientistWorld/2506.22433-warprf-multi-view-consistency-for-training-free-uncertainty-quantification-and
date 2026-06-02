@@ -53,5 +53,13 @@
   reprojection are high-uncertainty instead of false zero-uncertainty; prepared
   a rerun before considering `core_claim_plus`.
 
+### [2026-06-02 23:05] - core_claim
+- Job `744c73e2-b00` completed after the no-source-reprojection fallback patch
+  and passed `python validate.py --compare`.
+- Scores were unchanged, so the shifted sparse depth uncertainty failure is not
+  caused by all-invalid target pixels.
+- Added a dense eight-source-view split to test the same WarpRF method under a
+  different multi-view support setting before considering `core_claim_plus`.
+
 ## Stop Justification
 - Not stopped.

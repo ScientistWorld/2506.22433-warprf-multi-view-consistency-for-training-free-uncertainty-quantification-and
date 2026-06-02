@@ -117,9 +117,19 @@ def run(args: argparse.Namespace) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     dataset = render_dataset(num_views=args.num_views, width=args.width, height=args.height)
     offset = args.split_offset % args.num_views
-    train_indices = (np.array([0, 6, 12, 18], dtype=np.int64) + offset) % args.num_views
-    candidate_indices = (np.array([2, 4, 8, 10, 14, 16, 20, 22], dtype=np.int64) + offset) % args.num_views
-    test_indices = (np.array([3, 9, 15, 21], dtype=np.int64) + offset) % args.num_views
+    if args.split_mode == "sparse":
+        train_bases = np.array([0, 6, 12, 18], dtype=np.int64)
+        candidate_bases = np.array([2, 4, 8, 10, 14, 16, 20, 22], dtype=np.int64)
+        test_bases = np.array([3, 9, 15, 21], dtype=np.int64)
+    elif args.split_mode == "dense":
+        train_bases = np.array([0, 3, 6, 9, 12, 15, 18, 21], dtype=np.int64)
+        candidate_bases = np.array([1, 2, 4, 5, 7, 8, 10, 11], dtype=np.int64)
+        test_bases = np.array([13, 14, 16, 17], dtype=np.int64)
+    else:
+        raise ValueError(f"unknown split mode: {args.split_mode}")
+    train_indices = (train_bases + offset) % args.num_views
+    candidate_indices = (candidate_bases + offset) % args.num_views
+    test_indices = (test_bases + offset) % args.num_views
     device = torch.device("cuda" if torch.cuda.is_available() and not args.cpu else "cpu")
     model = train_model(dataset, train_indices, args.steps, args.batch_size, device)
     source_images, source_depths = render_model_views(model, dataset, train_indices, device)
@@ -173,6 +183,7 @@ def run(args: argparse.Namespace) -> None:
         "width": args.width,
         "height": args.height,
         "split_offset": args.split_offset,
+        "split_mode": args.split_mode,
         "selected_candidate_view": chosen,
     }
     (out_dir / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
@@ -188,6 +199,7 @@ def main() -> None:
     parser.add_argument("--num-views", type=int, default=24)
     parser.add_argument("--seed", type=int, default=11)
     parser.add_argument("--split-offset", type=int, default=0)
+    parser.add_argument("--split-mode", choices=["sparse", "dense"], default="sparse")
     parser.add_argument("--cpu", action="store_true")
     args = parser.parse_args()
     run(args)

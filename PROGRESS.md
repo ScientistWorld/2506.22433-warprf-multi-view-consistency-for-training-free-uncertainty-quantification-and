@@ -37,12 +37,18 @@ masking and passed `python validate.py --compare`.
 - `tiny_nerf_shifted_active_view_proxy`: the shifted split did support the
   active-view proxy claim, with WarpRF zero regret vs random regret 0.233.
 
+Job `744c73e2-b00` reran the two-split reproduction after assigning high
+uncertainty to pixels with no valid source reprojection. The job completed and
+passed `python validate.py --compare`, but the numeric scores were unchanged,
+showing that the shifted depth failure is not caused by all-invalid target
+pixels.
+
 ## Remaining
 
-- Rerun the two-split reproduction after fixing all-invalid source reprojection
-  pixels in the WarpRF depth uncertainty map.
-- If the shifted depth split passes, mark `core_claim_plus` and package the
-  final `scores.json`.
+- Run the expanded reproduction with a dense eight-source-view split in
+  addition to the original and shifted sparse splits.
+- If the dense split supports both depth uncertainty and active view selection,
+  mark `core_claim_plus` and package the final `scores.json`.
 
 ## Issues
 
@@ -65,6 +71,10 @@ masking and passed `python validate.py --compare`.
   Inspecting the method implementation showed pixels with no valid source
   reprojection received zero uncertainty; these are now assigned a high observed
   reprojection inconsistency before rerunning the expanded benchmark.
+- Job `744c73e2-b00` showed that the all-invalid reprojection fallback did not
+  change the scores. The shifted sparse split remains documented as a partial
+  negative result, and the next run adds a dense source-view condition to test a
+  separate multi-view support axis without hiding the shifted result.
 
 ## Deviations from Paper
 

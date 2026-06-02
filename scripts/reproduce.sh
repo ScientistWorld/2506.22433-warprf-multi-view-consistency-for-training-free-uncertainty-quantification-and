@@ -22,3 +22,4 @@ rm -f scoring/scores.json
 
 bash scripts/method.sh outputs/warprf tiny_nerf 0 false
 bash scripts/method.sh outputs/warprf_shifted tiny_nerf_shifted 1 true
+bash scripts/method.sh outputs/warprf_dense tiny_nerf_dense 0 true dense

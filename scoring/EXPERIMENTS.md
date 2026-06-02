@@ -15,6 +15,18 @@ candidate pool under a fixed view budget. The selected view is scored by how
 much current rendering error it exposes compared with a deterministic random
 candidate baseline.
 
+## tiny_nerf_dense_depth_uncertainty
+
+Repeats the held-out pixel uncertainty test with eight source views instead of
+four. This checks whether the uncertainty-ranking behavior holds when the same
+scene has denser multi-view support.
+
+## tiny_nerf_dense_active_view_proxy
+
+Repeats the fixed-budget candidate-selection test with eight source views. This
+checks whether the candidate ranking remains useful when the initial
+reconstruction has more observed cameras.
+
 ## tiny_nerf_shifted_depth_uncertainty
 
 Repeats the held-out pixel uncertainty test on a shifted camera split. This

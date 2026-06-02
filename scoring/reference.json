@@ -2,7 +2,7 @@
   "experiments": {
     "uncertainty_ause_table1": {
       "description": "Paper Table 1: AUSE evaluation on ScanNet++ and ETH3D. Lower is better.",
-      "weight": 0.2,
+      "weight": 0.15,
       "primary_metric": "eth3d_ause",
       "metrics": {
         "scannetpp_ause": {"higher_is_better": false, "coefficient": 0.5},
@@ -96,9 +96,39 @@
         "warprf": {"type": "proposed", "selected_candidate_error": 0.08, "selection_regret": 0.02, "view_budget": 5}
       }
     },
+    "tiny_nerf_dense_depth_uncertainty": {
+      "description": "Scaled reproduction benchmark with eight source views: uncertainty should rank held-out depth errors better than random uncertainty.",
+      "weight": 0.05,
+      "primary_metric": "ause",
+      "metrics": {
+        "ause": {"higher_is_better": false, "coefficient": 1.0},
+        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5},
+        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2},
+        "source_view_count": {"higher_is_better": false, "coefficient": -0.1},
+        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "random_uncertainty": {"type": "baseline", "ause": 0.45, "spearman_depth_error": 0.0, "mean_depth_error": 1.0, "source_view_count": 8, "used_ground_truth_for_uncertainty": 0},
+        "warprf": {"type": "proposed", "ause": 0.3, "spearman_depth_error": 0.2, "mean_depth_error": 1.0, "source_view_count": 8, "used_ground_truth_for_uncertainty": 0}
+      }
+    },
+    "tiny_nerf_dense_active_view_proxy": {
+      "description": "Scaled reproduction benchmark with eight source views: selected candidate view should expose more current model error than random candidate selection under the same budget.",
+      "weight": 0.05,
+      "primary_metric": "selected_candidate_error",
+      "metrics": {
+        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0},
+        "selection_regret": {"higher_is_better": false, "coefficient": 0.5},
+        "view_budget": {"higher_is_better": false, "coefficient": -0.1}
+      },
+      "results": {
+        "random_view": {"type": "baseline", "selected_candidate_error": 0.05, "selection_regret": 0.05, "view_budget": 5},
+        "warprf": {"type": "proposed", "selected_candidate_error": 0.08, "selection_regret": 0.02, "view_budget": 5}
+      }
+    },
     "tiny_nerf_shifted_depth_uncertainty": {
       "description": "Scaled reproduction benchmark on a shifted camera split: uncertainty should rank held-out depth errors better than random uncertainty.",
-      "weight": 0.15,
+      "weight": 0.1,
       "primary_metric": "ause",
       "metrics": {
         "ause": {"higher_is_better": false, "coefficient": 1.0},
