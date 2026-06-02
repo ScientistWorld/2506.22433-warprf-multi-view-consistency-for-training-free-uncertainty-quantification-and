@@ -2,8 +2,8 @@
 # Once you set action to 'done', STOP immediately.
 # Do NOT sleep, poll, or wait. The system reads this file
 # only after your turn ends.
-action: done
+action: pending
 gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Even/odd held-out-view and candidate-view split across saved TinyNeRF artifacts; 6 train experiments and 6 test experiments with matching metric schemas; scripts written, scores produced later."
+notes: ""
