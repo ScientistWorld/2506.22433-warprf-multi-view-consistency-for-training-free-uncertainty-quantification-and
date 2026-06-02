@@ -136,14 +136,12 @@ def run(args: argparse.Namespace) -> None:
     test_images, test_depths = render_model_views(model, dataset, test_indices, device)
     candidate_images, candidate_depths = render_model_views(model, dataset, candidate_indices, device)
 
-    uncertainties, errors, valid_masks = [], [], []
+    uncertainties = []
     for i, view_idx in enumerate(test_indices):
         u = pixel_uncertainty_depth(
             test_depths[i], dataset["poses"][view_idx], source_depths, dataset["poses"][train_indices], dataset["intrinsics"]
         )
         uncertainties.append(u)
-        errors.append(np.abs(test_depths[i] - dataset["depths"][view_idx]))
-        valid_masks.append(dataset["depths"][view_idx] < 5.95)
 
     candidate_scores = []
     for i, view_idx in enumerate(candidate_indices):
@@ -160,21 +158,22 @@ def run(args: argparse.Namespace) -> None:
         )
     candidate_scores = np.array(candidate_scores, dtype=np.float32)
     chosen = int(candidate_indices[int(np.argmax(candidate_scores))])
-    oracle_errors = np.mean(np.abs(candidate_images - dataset["images"][candidate_indices]), axis=(1, 2, 3))
 
     np.savez_compressed(
         out_dir / "warprf_outputs.npz",
         uncertainty=np.stack(uncertainties),
-        depth_error=np.stack(errors),
-        valid_depth_mask=np.stack(valid_masks),
+        test_rendered_depths=test_depths,
+        candidate_rendered_images=candidate_images,
         candidate_scores=candidate_scores,
-        candidate_oracle_errors=oracle_errors.astype(np.float32),
         candidate_indices=candidate_indices,
         selected_index=np.array(chosen),
         train_indices=train_indices,
         test_indices=test_indices,
         source_view_count=np.array(len(train_indices)),
         used_ground_truth_for_uncertainty=np.array(0),
+        width=np.array(args.width),
+        height=np.array(args.height),
+        num_views=np.array(args.num_views),
     )
     metadata = {
         "method": "tiny_nerf_warprf",

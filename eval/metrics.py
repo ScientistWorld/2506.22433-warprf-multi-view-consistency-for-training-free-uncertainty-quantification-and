@@ -12,6 +12,57 @@ from pathlib import Path
 
 import numpy as np
 
+from data.synthetic_radiance import render_dataset
+
+
+def _scalar_int(data: np.lib.npyio.NpzFile, key: str, default: int | None = None) -> int:
+    if key not in data.files:
+        if default is None:
+            raise KeyError(f"artifact missing required scalar field '{key}'")
+        return default
+    return int(np.asarray(data[key]).reshape(()))
+
+
+def _depth_errors_from_artifact(data: np.lib.npyio.NpzFile) -> tuple[np.ndarray, np.ndarray | None]:
+    """Compute held-out depth errors from method predictions and data/.
+
+    New artifacts write rendered depths plus view indices. The evaluator
+    reconstructs the analytic benchmark labels itself so methods cannot
+    directly supply their own error maps. Legacy artifacts from earlier runs are
+    still readable, but new submissions should not rely on those fields.
+    """
+    if "test_rendered_depths" in data.files:
+        test_depths = data["test_rendered_depths"].astype(np.float32)
+        test_indices = data["test_indices"].astype(np.int64)
+        height, width = test_depths.shape[-2:]
+        num_views = _scalar_int(data, "num_views", int(np.max(test_indices)) + 1)
+        dataset = render_dataset(num_views=num_views, width=width, height=height)
+        gt_depths = dataset["depths"][test_indices]
+        valid_mask = gt_depths < 5.95
+        return np.abs(test_depths - gt_depths), valid_mask
+
+    if "depth_error" in data.files:
+        valid_mask = data["valid_depth_mask"] if "valid_depth_mask" in data.files else None
+        return data["depth_error"], valid_mask
+
+    raise KeyError("artifact must contain test_rendered_depths or legacy depth_error")
+
+
+def _candidate_oracle_errors_from_artifact(data: np.lib.npyio.NpzFile) -> np.ndarray:
+    """Score candidate views using evaluator-computed ground-truth RGB error."""
+    if "candidate_rendered_images" in data.files:
+        rendered = data["candidate_rendered_images"].astype(np.float32)
+        candidate_indices = data["candidate_indices"].astype(np.int64)
+        height, width = rendered.shape[1:3]
+        num_views = _scalar_int(data, "num_views", int(np.max(candidate_indices)) + 1)
+        dataset = render_dataset(num_views=num_views, width=width, height=height)
+        return np.mean(np.abs(rendered - dataset["images"][candidate_indices]), axis=(1, 2, 3)).astype(np.float32)
+
+    if "candidate_oracle_errors" in data.files:
+        return data["candidate_oracle_errors"]
+
+    raise KeyError("artifact must contain candidate_rendered_images or legacy candidate_oracle_errors")
+
 
 def ause(uncertainty: np.ndarray, error: np.ndarray, valid_mask: np.ndarray | None = None, fractions: int = 101) -> float:
     u = uncertainty.reshape(-1)
@@ -55,8 +106,7 @@ def spearman_rank(a: np.ndarray, b: np.ndarray, valid_mask: np.ndarray | None = 
 def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     data = np.load(path)
     uncertainty = data["uncertainty"]
-    depth_error = data["depth_error"]
-    valid_mask = data["valid_depth_mask"] if "valid_depth_mask" in data.files else None
+    depth_error, valid_mask = _depth_errors_from_artifact(data)
     warprf_ause = ause(uncertainty, depth_error, valid_mask)
     # Deterministic artifact-shaped baseline; evaluation still reads only the
     # submitted method output and does not rerun any rendering or warping code.
@@ -68,7 +118,7 @@ def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     rank_corr = spearman_rank(uncertainty, depth_error, valid_mask)
 
     scores = data["candidate_scores"]
-    oracle_errors = data["candidate_oracle_errors"]
+    oracle_errors = _candidate_oracle_errors_from_artifact(data)
     selected = int(np.argmax(scores))
     selected_oracle_error = float(oracle_errors[selected])
     random_oracle_error = float(np.mean(oracle_errors))

@@ -30,11 +30,13 @@ reconstruction has more observed cameras.
 ## tiny_nerf_shifted_depth_uncertainty
 
 Repeats the held-out pixel uncertainty test on a shifted camera split. This
-checks that the central uncertainty result is not tied to one particular choice
-of initial training and held-out views.
+is reported as a diagnostic stress test: the current sparse shifted result is a
+partial negative result, so it should not be treated as evidence for the
+milestone claim unless a future method improves it under the same constraints.
 
 ## tiny_nerf_shifted_active_view_proxy
 
 Repeats the fixed-budget candidate-selection test on the shifted camera split.
-This checks whether the active-view conclusion survives a different set of
-initial, candidate, and held-out camera poses.
+This records whether the active-view conclusion survives a different set of
+initial, candidate, and held-out camera poses, even though the companion depth
+uncertainty diagnostic is currently negative.

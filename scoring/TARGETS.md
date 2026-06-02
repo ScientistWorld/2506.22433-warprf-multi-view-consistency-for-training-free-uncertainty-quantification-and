@@ -34,17 +34,20 @@ four.
 - **Constraint metric**: view_budget
 - **How to run**: Run `bash scripts/reproduce.sh`.
 
-## Primary: tiny_nerf_shifted_depth_uncertainty
+## Diagnostic: tiny_nerf_shifted_depth_uncertainty
 
-Tests the same pixel uncertainty target on a shifted camera split.
+Reports the same pixel uncertainty target on a shifted sparse camera split.
+The current reproduction keeps this partial negative result visible, but it is
+not used as a primary milestone target because WarpRF is worse than the random
+uncertainty control on this split.
 
 - **Metric**: AUSE (lower is better)
 - **Constraint metrics**: source_view_count and used_ground_truth_for_uncertainty
 - **How to run**: Run `bash scripts/reproduce.sh`.
 
-## Primary: tiny_nerf_shifted_active_view_proxy
+## Diagnostic: tiny_nerf_shifted_active_view_proxy
 
-Tests the same active-view target on a shifted camera split.
+Reports the same active-view target on the shifted sparse camera split.
 
 - **Metric**: selected_candidate_error (higher is better)
 - **Constraint metric**: view_budget

@@ -14,6 +14,11 @@
 - Continued-agent audit on 2026-06-02 verified that the method code contains
   the paper's geometric warping computation, the evaluator is independent of
   `method/`, and `python validate.py --compare` passes.
+- A continuation audit on 2026-06-02 found two packaging issues and fixed them:
+  the evaluator now computes depth and candidate-view error labels from
+  method predictions plus tracked `data/` labels instead of trusting
+  method-written metric arrays, and the shifted sparse split is documented as a
+  diagnostic partial negative rather than a primary target.
 - A final web/code-availability check on 2026-06-02 found that the project page
   now links to the official repository at `https://github.com/sadrasafa/WarpRF`.
   The repository currently provides the 3DGS experiment code, while this gym
@@ -62,6 +67,9 @@ shifted sparse, and dense eight-source-view splits and passed
 
 ## Remaining
 
+- Rerun `scripts/reproduce.sh` inside the container after the evaluator/artifact
+  contract fix so `scoring/scores.json` is regenerated from the new method
+  artifacts.
 - Higher milestones would require reproducing the paper's full dataset/backbone
   matrix on ScanNet++, ETH3D, NeRF Synthetic, Tanks and Temples, 3DGS, and
   SVRaster, which is outside this scaled CPU reproduction.
@@ -98,6 +106,12 @@ shifted sparse, and dense eight-source-view splits and passed
 - Job `ae1fa212-48e` reached `core_claim_plus` on the dense source-view axis.
   The dense active-view budget is nine because the evaluator records the eight
   fixed source views plus one selected candidate view.
+- Continuation audit found that earlier artifacts included precomputed
+  `depth_error` and `candidate_oracle_errors`. The method artifact contract now
+  saves rendered predictions and view indices, while `eval/` reconstructs the
+  analytic ground-truth labels from `data/` and computes the error metrics
+  independently. A CPU rerun has been prepared to refresh the artifacts and
+  scores under this stricter contract.
 
 ## Deviations from Paper
 

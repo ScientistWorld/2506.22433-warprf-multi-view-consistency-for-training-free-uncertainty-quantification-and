@@ -10,9 +10,9 @@
 
 ## Baselines and Targets
 
-Uncertainty calibration should be compared against paper-reported AUSE values on ScanNet++ and ETH3D for both NeRF and 3DGS backbones. Active view selection should be compared against fixed-budget selection baselines such as random, farthest-view, ActiveNeRF, Manifold, and FisherRF where available. Mapping should compare against prior active mapping or uncertainty-based view selection baselines under the same view budget.
+Uncertainty calibration should be compared against paper-reported AUSE values on ScanNet++ and ETH3D for both NeRF and 3DGS backbones when the full datasets and backbones are available. Active view selection should be compared against fixed-budget selection baselines such as random, farthest-view, ActiveNeRF, Manifold, and FisherRF where available. Mapping should compare against prior active mapping or uncertainty-based view selection baselines under the same view budget.
 
-The primary target is to match or improve the paper-reported method results in `scoring/reference.json`, while preserving the fixed-view-budget and fixed-backbone constraints described in `scoring/CONSTRAINTS.md`.
+This packaged gym also contains a scaled analytic posed-view protocol so the core uncertainty and view-selection claims can be exercised without large external datasets. For those targets, `eval/` reads method artifacts, reconstructs the tracked ground truth from `data/`, and reports AUSE, rank correlation, selected-candidate error, regret, and fixed-budget constraints.
 
 ## Evaluation Protocol
 
@@ -21,3 +21,5 @@ Evaluate uncertainty on held-out test views with ground-truth depth. For ScanNet
 For active view selection, begin from the same small initial camera set as the reference protocol, select one view at each acquisition step from the candidate pool, retrain or continue training according to the fixed backbone schedule, and evaluate final held-out renderings using PSNR, SSIM, and LPIPS. Report averages over the same scene sets and repeated runs when the protocol uses stochastic selection.
 
 For active mapping, keep the initial views, acquisition budget, candidate-pose generation, training iterations, and reconstruction evaluation fixed. Report both rendering quality and surface reconstruction quality so that a method cannot improve images while degrading geometry, or vice versa.
+
+For the scaled analytic protocol, evaluate held-out pixel uncertainty on the fixed test views and evaluate candidate-view selection on the fixed candidate pool. The evaluator computes true depth and RGB errors from the tracked scene labels; submitted method artifacts should provide predictions, uncertainty scores, view indices, and candidate scores rather than precomputed error labels.

@@ -2,15 +2,31 @@
 
 ## Backbones
 
-Use the same radiance-field backbone family required by each experiment: NeRF for NeRF experiments, 3DGS or PGSR-style 3DGS for 3DGS experiments, and SVRaster for SVRaster experiments. Do not replace the backbone with a different renderer, larger model family, ensemble, or pretrained scene prior. The benchmark is about uncertainty estimation and view selection, not changing the renderer being evaluated.
+For the runnable scaled benchmark targets in `scoring/TARGETS.md`, use the
+provided tiny NeRF-style radiance-field backbone and the same training budget
+unless an experiment explicitly changes one of those quantities. Do not replace
+the renderer with a larger model family, an ensemble, a pretrained scene prior,
+or a direct predictor of the evaluation labels. The benchmark is about
+uncertainty estimation and view selection, not changing the renderer being
+evaluated.
 
 ## Data
 
-Use only the datasets and scene splits specified by the benchmark protocol: ScanNet++ and ETH3D for AUSE, Mip-NeRF360 and NeRF Synthetic for 3DGS active view selection, NeRF Synthetic and Tanks and Temples for SVRaster active view selection, and the specified NeRF Synthetic or Tanks and Temples scenes for active mapping. Do not add external images, depth maps, meshes, learned priors, or manually curated views beyond the allowed candidate pools.
+Use only the tracked analytic posed-view scene from `data/` for the runnable
+scaled benchmark targets. Do not add external images, depth maps, meshes,
+learned priors, or manually curated views beyond the fixed initial, candidate,
+and held-out view sets. Paper-scale reference entries in
+`scoring/reference.json` document the original ScanNet++, ETH3D, NeRF
+Synthetic, Mip-NeRF360, Tanks and Temples, 3DGS, and SVRaster results; those are
+not claimed as reproduced by this scaled gym.
 
 ## View Budget
 
-Keep the initial views, candidate pool, acquisition interval, and final number of selected training views fixed for each experiment. A method may change how it scores or selects among allowed candidate views, but it may not improve scores by using extra views, test views, denser camera trajectories, or additional pose optimization outside the protocol.
+Keep the initial views, candidate pool, and final selected-view count fixed for
+each experiment. A method may change how it scores or selects among allowed
+candidate views, but it may not improve scores by using extra views, held-out
+views, denser camera trajectories, or additional pose optimization outside the
+protocol.
 
 ## Evaluation
 
@@ -18,7 +34,8 @@ Held-out test views and ground-truth depths or meshes may only be used for evalu
 
 ## Compliance Checklist
 
-- [ ] The evaluated backbone family matches the required backbone for each experiment.
+- [ ] The evaluated backbone family matches the required tiny NeRF-style
+      backbone for each runnable scaled experiment.
 - [ ] No external scene data, labels, depths, meshes, or pretrained scene priors are used.
 - [ ] Final selected view counts match the protocol budget.
 - [ ] Candidate views come only from the allowed candidate pool.
