@@ -31,4 +31,4 @@ action: submit
 gpus: 0
 test: true
 milestone: core_claim
-notes: "Rerun expanded CPU reproduction after adding valid-depth masks for AUSE; expect original and shifted split scores to validate."
+notes: "Rerun expanded CPU reproduction after assigning high uncertainty to target pixels with no valid source reprojection; verify original and shifted split scores."

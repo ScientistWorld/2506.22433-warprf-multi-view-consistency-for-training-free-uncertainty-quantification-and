@@ -14,7 +14,7 @@
 
 ## Results
 
-Job `00b6dbce-c5f` completed the scaled reproduction and passed
+Job `00b6dbce-c5f` completed the first scaled reproduction and passed
 `python validate.py --compare`.
 
 - `tiny_nerf_depth_uncertainty`: WarpRF AUSE 0.222 vs deterministic random
@@ -24,13 +24,25 @@ Job `00b6dbce-c5f` completed the scaled reproduction and passed
   zero regret vs random-view mean selected-candidate error 0.197 and regret
   0.214.
 
+Job `fecc9c62-9ce` completed the two-split reproduction after valid-depth
+masking and passed `python validate.py --compare`.
+
+- `tiny_nerf_depth_uncertainty`: WarpRF AUSE 0.110 vs deterministic random
+  uncertainty AUSE 0.131; WarpRF Spearman correlation with true depth error
+  0.159 vs random -0.026.
+- `tiny_nerf_active_view_proxy`: WarpRF again selected the highest-error
+  candidate view with zero selection regret.
+- `tiny_nerf_shifted_depth_uncertainty`: the shifted split still failed the
+  depth-uncertainty ranking target, with WarpRF AUSE 0.180 vs random 0.137.
+- `tiny_nerf_shifted_active_view_proxy`: the shifted split did support the
+  active-view proxy claim, with WarpRF zero regret vs random regret 0.233.
+
 ## Remaining
 
-- Run the first container job to produce `outputs/warprf/warprf_outputs.npz` and
-- Run the shifted camera split added after `core_claim` to test whether the
-  effect holds beyond one initial-view configuration.
-- If the shifted split passes, mark `core_claim_plus` and package the final
-  `scores.json`.
+- Rerun the two-split reproduction after fixing all-invalid source reprojection
+  pixels in the WarpRF depth uncertainty map.
+- If the shifted depth split passes, mark `core_claim_plus` and package the
+  final `scores.json`.
 
 ## Issues
 
@@ -48,6 +60,11 @@ Job `00b6dbce-c5f` completed the scaled reproduction and passed
   computed over synthetic background fill pixels. The paper evaluates valid
   annotated depths, so the method artifact now writes a valid-depth mask and
   the evaluator uses it for AUSE, rank correlation, and mean depth error.
+- Job `fecc9c62-9ce` passed after valid-depth masking. The shifted active-view
+  proxy supports WarpRF, but shifted depth AUSE remained worse than random.
+  Inspecting the method implementation showed pixels with no valid source
+  reprojection received zero uncertainty; these are now assigned a high observed
+  reprojection inconsistency before rerunning the expanded benchmark.
 
 ## Deviations from Paper
 

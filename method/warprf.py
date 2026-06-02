@@ -70,9 +70,18 @@ def pixel_uncertainty_depth(
         pts_target = pts_world @ target_w2c.T
         reprojected_target_depth = pts_target[..., 2]
         diff = np.abs(target_depth - reprojected_target_depth)
-        accum += np.where(valid & (reprojected_target_depth > 0.0), diff, 0.0)
-        counts += valid.astype(np.float32)
-    return accum / np.maximum(counts, 1.0)
+        valid_reprojection = valid & (reprojected_target_depth > 0.0)
+        accum += np.where(valid_reprojection, diff, 0.0)
+        counts += valid_reprojection.astype(np.float32)
+
+    uncertainty = accum / np.maximum(counts, 1.0)
+    if np.any(counts > 0.0):
+        # Pixels outside every source view are not certain; assign a high
+        # observed reprojection inconsistency instead of the arithmetic zero.
+        fallback = float(np.percentile(uncertainty[counts > 0.0], 95.0))
+    else:
+        fallback = float(np.mean(target_depth))
+    return np.where(counts > 0.0, uncertainty, fallback).astype(np.float32)
 
 
 def image_uncertainty(

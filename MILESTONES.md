@@ -43,5 +43,15 @@
   patched the artifact/evaluator to score only valid scene depths, matching the
   paper's annotated-depth evaluation intent.
 
+### [2026-06-02 22:55] - core_claim
+- Job `fecc9c62-9ce` completed the two-split run with valid-depth masking and
+  passed `python validate.py --compare`.
+- The original split still supports the core uncertainty claim, and the shifted
+  split supports the active-view proxy, but shifted depth AUSE remained worse
+  than random.
+- Patched WarpRF depth uncertainty so target pixels with no valid source
+  reprojection are high-uncertainty instead of false zero-uncertainty; prepared
+  a rerun before considering `core_claim_plus`.
+
 ## Stop Justification
 - Not stopped.
