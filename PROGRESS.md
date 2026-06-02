@@ -44,6 +44,10 @@ Job `00b6dbce-c5f` completed the scaled reproduction and passed
   `outputs/warprf/warprf_outputs.npz`, but failed during evaluation because the
   container has NumPy 2, where `np.trapz` has been removed. The evaluator now
   computes the trapezoid integral directly.
+- Job `e3c662a6-b0d` passed, but the shifted split showed that AUSE was being
+  computed over synthetic background fill pixels. The paper evaluates valid
+  annotated depths, so the method artifact now writes a valid-depth mask and
+  the evaluator uses it for AUSE, rank correlation, and mean depth error.
 
 ## Deviations from Paper
 

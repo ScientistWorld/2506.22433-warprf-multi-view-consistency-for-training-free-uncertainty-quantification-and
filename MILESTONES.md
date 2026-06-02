@@ -35,5 +35,13 @@
 - On the active-view proxy benchmark, WarpRF selected the highest-error
   candidate view with zero selection regret under the same five-view budget.
 
+### [2026-06-02 22:50] - core_claim
+- Job `e3c662a6-b0d` completed the two-split run, but the shifted depth AUSE was
+  worse than the deterministic random baseline while rank correlation and active
+  view selection improved.
+- Diagnosed that synthetic background fill pixels were included in depth AUSE;
+  patched the artifact/evaluator to score only valid scene depths, matching the
+  paper's annotated-depth evaluation intent.
+
 ## Stop Justification
 - Not stopped.

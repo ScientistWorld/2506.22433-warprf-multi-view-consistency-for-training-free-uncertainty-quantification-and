@@ -13,10 +13,12 @@ from pathlib import Path
 import numpy as np
 
 
-def ause(uncertainty: np.ndarray, error: np.ndarray, fractions: int = 101) -> float:
+def ause(uncertainty: np.ndarray, error: np.ndarray, valid_mask: np.ndarray | None = None, fractions: int = 101) -> float:
     u = uncertainty.reshape(-1)
     e = error.reshape(-1)
     valid = np.isfinite(u) & np.isfinite(e)
+    if valid_mask is not None:
+        valid &= valid_mask.reshape(-1).astype(bool)
     u = u[valid]
     e = e[valid]
     if u.size < 2:
@@ -34,10 +36,12 @@ def ause(uncertainty: np.ndarray, error: np.ndarray, fractions: int = 101) -> fl
     return float(np.sum((y[:-1] + y[1:]) * 0.5 * dx))
 
 
-def spearman_rank(a: np.ndarray, b: np.ndarray) -> float:
+def spearman_rank(a: np.ndarray, b: np.ndarray, valid_mask: np.ndarray | None = None) -> float:
     a = a.reshape(-1)
     b = b.reshape(-1)
     valid = np.isfinite(a) & np.isfinite(b)
+    if valid_mask is not None:
+        valid &= valid_mask.reshape(-1).astype(bool)
     a = a[valid]
     b = b[valid]
     ar = np.argsort(np.argsort(a)).astype(np.float64)
@@ -52,15 +56,16 @@ def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     data = np.load(path)
     uncertainty = data["uncertainty"]
     depth_error = data["depth_error"]
-    warprf_ause = ause(uncertainty, depth_error)
+    valid_mask = data["valid_depth_mask"] if "valid_depth_mask" in data.files else None
+    warprf_ause = ause(uncertainty, depth_error, valid_mask)
     # Deterministic artifact-shaped baseline; evaluation still reads only the
     # submitted method output and does not rerun any rendering or warping code.
     random_uncertainty = np.mod(np.arange(uncertainty.size, dtype=np.float32) * 0.61803398875, 1.0).reshape(
         uncertainty.shape
     )
-    random_ause = ause(random_uncertainty, depth_error)
-    mean_error = float(np.mean(depth_error))
-    rank_corr = spearman_rank(uncertainty, depth_error)
+    random_ause = ause(random_uncertainty, depth_error, valid_mask)
+    mean_error = float(np.mean(depth_error[valid_mask.astype(bool)] if valid_mask is not None else depth_error))
+    rank_corr = spearman_rank(uncertainty, depth_error, valid_mask)
 
     scores = data["candidate_scores"]
     oracle_errors = data["candidate_oracle_errors"]
@@ -76,7 +81,7 @@ def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
                 "results": {
                     "random_uncertainty": {
                         "ause": random_ause,
-                        "spearman_depth_error": spearman_rank(random_uncertainty, depth_error),
+                        "spearman_depth_error": spearman_rank(random_uncertainty, depth_error, valid_mask),
                         "mean_depth_error": mean_error,
                         "source_view_count": int(data["source_view_count"]),
                         "used_ground_truth_for_uncertainty": 0,
