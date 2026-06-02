@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: none**
+**Current: core_claim**
 
 <!-- Milestone levels (update "Current" above as you progress):
   none             — just started, no meaningful progress yet
@@ -26,6 +26,14 @@
   a NumPy 2 evaluation API incompatibility.
 - Patched the evaluator and prepared a rerun; no successful end-to-end method
   run has completed yet.
+
+### [2026-06-02 22:35] - core_claim
+- Job `00b6dbce-c5f` completed successfully and passed `python validate.py --compare`.
+- On the scaled tiny-NeRF depth uncertainty benchmark, WarpRF improved AUSE
+  from 0.283 to 0.222 and Spearman correlation with depth error from ~0.000 to
+  0.627 under the same four-source-view constraint.
+- On the active-view proxy benchmark, WarpRF selected the highest-error
+  candidate view with zero selection regret under the same five-view budget.
 
 ## Stop Justification
 - Not stopped.

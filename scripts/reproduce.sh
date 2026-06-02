@@ -18,4 +18,7 @@ set -e
 
 cd /home/user
 
-bash scripts/method.sh outputs/warprf
+rm -f scoring/scores.json
+
+bash scripts/method.sh outputs/warprf tiny_nerf 0 false
+bash scripts/method.sh outputs/warprf_shifted tiny_nerf_shifted 1 true

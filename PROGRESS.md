@@ -14,18 +14,23 @@
 
 ## Results
 
-No compute-container results yet. A local smoke run was attempted only to catch
-imports, but the login Python lacks NumPy; dependencies are declared in
-`environment/setup.sh` for the submitted container job.
+Job `00b6dbce-c5f` completed the scaled reproduction and passed
+`python validate.py --compare`.
+
+- `tiny_nerf_depth_uncertainty`: WarpRF AUSE 0.222 vs deterministic random
+  uncertainty AUSE 0.283; WarpRF Spearman correlation with true depth error
+  0.627 vs random approximately 0.000.
+- `tiny_nerf_active_view_proxy`: WarpRF selected-candidate error 0.412 with
+  zero regret vs random-view mean selected-candidate error 0.197 and regret
+  0.214.
 
 ## Remaining
 
 - Run the first container job to produce `outputs/warprf/warprf_outputs.npz` and
-  `scoring/scores.json`.
-- Inspect whether WarpRF improves AUSE and active-view proxy metrics over the
-  deterministic random baselines.
-- If the core claim is supported, expand to additional synthetic scene settings
-  or higher training resolution.
+- Run the shifted camera split added after `core_claim` to test whether the
+  effect holds beyond one initial-view configuration.
+- If the shifted split passes, mark `core_claim_plus` and package the final
+  `scores.json`.
 
 ## Issues
 

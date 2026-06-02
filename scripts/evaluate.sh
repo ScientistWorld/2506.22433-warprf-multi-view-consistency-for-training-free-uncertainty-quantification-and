@@ -28,5 +28,11 @@ mkdir -p scoring
 
 ARTIFACT="${1:-outputs/warprf/warprf_outputs.npz}"
 SCORES="${2:-scoring/scores.json}"
+PREFIX="${3:-tiny_nerf}"
+MERGE="${4:-false}"
 
-python -m eval.metrics --artifact "$ARTIFACT" --scores "$SCORES"
+if [ "$MERGE" = "true" ]; then
+  python -m eval.metrics --artifact "$ARTIFACT" --scores "$SCORES" --experiment-prefix "$PREFIX" --merge-existing
+else
+  python -m eval.metrics --artifact "$ARTIFACT" --scores "$SCORES" --experiment-prefix "$PREFIX"
+fi

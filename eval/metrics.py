@@ -48,7 +48,7 @@ def spearman_rank(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.sum(ar * br) / max(denom, 1e-12))
 
 
-def evaluate_artifact(path: Path) -> dict:
+def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     data = np.load(path)
     uncertainty = data["uncertainty"]
     depth_error = data["depth_error"]
@@ -72,7 +72,7 @@ def evaluate_artifact(path: Path) -> dict:
 
     return {
         "experiments": {
-            "tiny_nerf_depth_uncertainty": {
+            f"{experiment_prefix}_depth_uncertainty": {
                 "results": {
                     "random_uncertainty": {
                         "ause": random_ause,
@@ -90,7 +90,7 @@ def evaluate_artifact(path: Path) -> dict:
                     },
                 }
             },
-            "tiny_nerf_active_view_proxy": {
+            f"{experiment_prefix}_active_view_proxy": {
                 "results": {
                     "random_view": {
                         "selected_candidate_error": random_oracle_error,
@@ -112,10 +112,16 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--artifact", default="outputs/warprf/warprf_outputs.npz")
     parser.add_argument("--scores", default="scoring/scores.json")
+    parser.add_argument("--experiment-prefix", default="tiny_nerf")
+    parser.add_argument("--merge-existing", action="store_true")
     args = parser.parse_args()
-    results = evaluate_artifact(Path(args.artifact))
+    results = evaluate_artifact(Path(args.artifact), args.experiment_prefix)
     out = Path(args.scores)
     out.parent.mkdir(parents=True, exist_ok=True)
+    if args.merge_existing and out.exists():
+        existing = json.loads(out.read_text(encoding="utf-8"))
+        existing.setdefault("experiments", {}).update(results["experiments"])
+        results = existing
     out.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(results, indent=2))
 
