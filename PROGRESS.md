@@ -11,6 +11,9 @@
   `outputs/` and writes `scoring/scores.json` without importing `method/`.
 - Added paper reference numbers for Table 1, Table 4, Table 5, and Table 7 in
   `scoring/reference.json`.
+- Continued-agent audit on 2026-06-02 verified that the method code contains
+  the paper's geometric warping computation, the evaluator is independent of
+  `method/`, and `python validate.py --compare` passes.
 
 ## Results
 
