@@ -52,6 +52,13 @@ For image-level uncertainty, WarpRF renders source images and warps them into a 
 
 The method is applied without changing the radiance-field training objective or model internals. The paper demonstrates it on NeRF, 3D Gaussian Splatting, and SVRaster.
 
+## Code Availability
+
+The paper markdown states that code will be released. As of the final
+reproduction audit, the project page links to the official repository at
+`https://github.com/sadrasafa/WarpRF`, which provides the 3DGS experiment
+implementation and notes that NeRF/SVRaster code is forthcoming.
+
 ## Main Claims
 
 - **Primary claim**: Multi-view consistency provides a strong training-free uncertainty estimate for radiance fields, outperforming prior uncertainty methods on AUSE for ScanNet++ and ETH3D.
@@ -73,9 +80,9 @@ The method is applied without changing the radiance-field training objective or 
 
 ## Baselines and Targets
 
-Uncertainty calibration should be compared against paper-reported AUSE values on ScanNet++ and ETH3D for both NeRF and 3DGS backbones. Active view selection should be compared against fixed-budget selection baselines such as random, farthest-view, ActiveNeRF, Manifold, and FisherRF where available. Mapping should compare against prior active mapping or uncertainty-based view selection baselines under the same view budget.
+Uncertainty calibration should be compared against paper-reported AUSE values on ScanNet++ and ETH3D for both NeRF and 3DGS backbones when the full datasets and backbones are available. Active view selection should be compared against fixed-budget selection baselines such as random, farthest-view, ActiveNeRF, Manifold, and FisherRF where available. Mapping should compare against prior active mapping or uncertainty-based view selection baselines under the same view budget.
 
-The primary target is to match or improve the paper-reported method results in `scoring/reference.json`, while preserving the fixed-view-budget and fixed-backbone constraints described in `scoring/CONSTRAINTS.md`.
+This packaged gym also contains a scaled analytic posed-view protocol so the core uncertainty and view-selection claims can be exercised without large external datasets. For those targets, `eval/` reads method artifacts, reconstructs the tracked ground truth from `data/`, and reports AUSE, rank correlation, selected-candidate error, regret, and fixed-budget constraints.
 
 ## Evaluation Protocol
 
@@ -84,6 +91,8 @@ Evaluate uncertainty on held-out test views with ground-truth depth. For ScanNet
 For active view selection, begin from the same small initial camera set as the reference protocol, select one view at each acquisition step from the candidate pool, retrain or continue training according to the fixed backbone schedule, and evaluate final held-out renderings using PSNR, SSIM, and LPIPS. Report averages over the same scene sets and repeated runs when the protocol uses stochastic selection.
 
 For active mapping, keep the initial views, acquisition budget, candidate-pose generation, training iterations, and reconstruction evaluation fixed. Report both rendering quality and surface reconstruction quality so that a method cannot improve images while degrading geometry, or vice versa.
+
+For the scaled analytic protocol, evaluate held-out pixel uncertainty on the fixed test views and evaluate candidate-view selection on the fixed candidate pool. The evaluator computes true depth and RGB errors from the tracked scene labels; submitted method artifacts should provide predictions, uncertainty scores, view indices, and candidate scores rather than precomputed error labels.
 
 ---
 
@@ -178,12 +187,37 @@ For active mapping, keep the initial views, acquisition budget, candidate-pose g
 
 </details>
 
+### Iteration 3: gpt-5.5
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 10m | **GPU**: 0.0h
+- **Jobs**: 7 total (6 completed, 1 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-06-02 22:52] - core_claim_plus
+- Implemented and ran WarpRF's actual multi-view RGB/depth warping uncertainty on a scaled tiny-NeRF benchmark.
+- Reproduced the core claim on the original sparse split and an additional dense source-view split.
+- Verified reusable evaluation with `python validate.py --compare`.
+
+### [2026-06-02 22:59] - core_claim
+- Continuation audit accepted the core WarpRF implementation but found benchmark packaging issues before restoring `core_claim_plus`.
+- Fixed evaluator independence by making `eval/` compute ground-truth depth and candidate errors from tracked `data/` labels and saved predictions.
+- Demoted the shifted sparse split to a diagnostic partial negative and submitted a CPU rerun to refresh scores under the stricter artifact contract.
+
+### [2026-06-02 23:07] - core_claim_plus
+- Job `8aa25908-8cb` completed successfully and regenerated all scaled benchmark artifacts under the stricter prediction-only artifact contract.
+- Verified that artifacts no longer contain method-supplied `depth_error` or `candidate_oracle_errors`; `eval/` computes those labels from tracked `data/`.
+- `python validate.py --compare` passes, with the core sparse split and dense source-view split supporting the WarpRF uncertainty and active-view claims.
+
+</details>
+
 
 ---
 
 # Reproduction Milestones
 
-**Current: core_claim**
+**Current: core_claim_plus**
 
 ## Stop Justification
-- Completed at milestone `core_claim`.
+- Completed at milestone `core_claim_plus`.

@@ -20,4 +20,4 @@
 - `python validate.py --compare` passes, with the core sparse split and dense source-view split supporting the WarpRF uncertainty and active-view claims.
 
 ## Stop Justification
-- Completed at milestone `core_claim_plus`; higher milestones require the full paper-scale ScanNet++/ETH3D/3DGS/SVRaster dataset and backbone matrix.
+- Completed at milestone `core_claim_plus`.
