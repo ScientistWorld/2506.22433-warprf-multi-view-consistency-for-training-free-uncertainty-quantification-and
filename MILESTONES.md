@@ -15,7 +15,11 @@
 
 ## Progress Log
 
-<!-- Write your progress here -->
+### [2026-06-02 22:10] - none
+- Read the WarpRF paper and supplementary tables.
+- Implemented the paper's WarpRF warping-consistency computation and a scaled
+  tiny NeRF reproduction harness.
+- Prepared the first container job; no successful method run has completed yet.
 
 ## Stop Justification
-- Completed at milestone `none`.
+- Not stopped.

@@ -17,4 +17,10 @@ set -e
 
 cd /home/user
 
-# TODO: run baseline
+python -m baseline.random_uncertainty
+
+if [ -e outputs/warprf/warprf_outputs.npz ]; then
+  bash scripts/evaluate.sh outputs/warprf/warprf_outputs.npz
+else
+  echo "No WarpRF artifact found. Run scripts/method.sh first; the evaluator computes the random baseline from the same artifact."
+fi

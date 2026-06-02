@@ -1,165 +1,99 @@
 {
-  "paper": {
-    "id": "2506.22433",
-    "title": "WarpRF: Multi-View Consistency for Training-Free Uncertainty Quantification and Applications in Radiance Fields"
-  },
   "experiments": {
     "uncertainty_ause_table1": {
-      "description": "Table 1 AUSE evaluation on ScanNet++ and ETH3D. Lower is better.",
-      "target": "uncertainty_ause",
+      "description": "Paper Table 1: AUSE evaluation on ScanNet++ and ETH3D. Lower is better.",
+      "weight": 0.25,
+      "primary_metric": "eth3d_ause",
       "metrics": {
-        "scannetpp_ause": {"higher_is_better": false},
-        "eth3d_ause": {"higher_is_better": false}
+        "scannetpp_ause": {"higher_is_better": false, "coefficient": 0.5},
+        "eth3d_ause": {"higher_is_better": false, "coefficient": 1.0}
       },
       "results": {
-        "nerf_bayesrays": {
-          "type": "baseline",
-          "scannetpp_ause": 0.438,
-          "eth3d_ause": 0.278
-        },
-        "nerf_warprf": {
-          "type": "proposed",
-          "scannetpp_ause": 0.423,
-          "eth3d_ause": 0.250
-        },
-        "3dgs_manifold": {
-          "type": "baseline",
-          "scannetpp_ause": 0.510,
-          "eth3d_ause": 0.522
-        },
-        "3dgs_fisherrf": {
-          "type": "baseline",
-          "scannetpp_ause": 0.355,
-          "eth3d_ause": 0.295
-        },
-        "3dgs_warprf": {
-          "type": "proposed",
-          "scannetpp_ause": 0.337,
-          "eth3d_ause": 0.227
-        }
-      }
-    },
-    "active_view_mipnerf360_table2": {
-      "description": "Table 2 active view selection for novel view synthesis on Mip-NeRF360 with 3DGS. Averages over three runs.",
-      "target": "active_view_nvs",
-      "metrics": {
-        "psnr": {"higher_is_better": true},
-        "ssim": {"higher_is_better": true},
-        "lpips": {"higher_is_better": false}
-      },
-      "constraints": {
-        "selected_views": 20,
-        "backbone_changed": false
-      },
-      "results": {
-        "3dgs_random": {"type": "baseline", "psnr": 17.914, "ssim": 0.564, "lpips": 0.430},
-        "3dgs_activenerf": {"type": "baseline", "psnr": 17.889, "ssim": 0.5326, "lpips": 0.4142},
-        "3dgs_manifold": {"type": "baseline", "psnr": 20.654, "ssim": 0.6163, "lpips": 0.3478},
-        "3dgs_fisherrf": {"type": "baseline", "psnr": 20.295, "ssim": 0.6015, "lpips": 0.3595},
-        "3dgs_warprf": {"type": "proposed", "psnr": 20.715, "ssim": 0.6174, "lpips": 0.3487}
-      }
-    },
-    "active_view_nerf_synthetic_20_table3": {
-      "description": "Table 3 active view selection for novel view synthesis on NeRF Synthetic with 20 selected views.",
-      "target": "active_view_nvs",
-      "metrics": {
-        "psnr": {"higher_is_better": true},
-        "ssim": {"higher_is_better": true},
-        "lpips": {"higher_is_better": false}
-      },
-      "constraints": {
-        "selected_views": 20,
-        "backbone_changed": false
-      },
-      "results": {
-        "nerf_activenerf": {"type": "baseline", "psnr": 26.240, "ssim": 0.8560, "lpips": 0.1240},
-        "3dgs_random": {"type": "baseline", "psnr": 28.732, "ssim": 0.9389, "lpips": 0.0534},
-        "3dgs_activenerf": {"type": "baseline", "psnr": 25.854, "ssim": 0.9157, "lpips": 0.0766},
-        "3dgs_manifold": {"type": "baseline", "psnr": 28.148, "ssim": 0.9352, "lpips": 0.0567},
-        "3dgs_fisherrf": {"type": "baseline", "psnr": 29.262, "ssim": 0.9425, "lpips": 0.0501},
-        "3dgs_warprf": {"type": "proposed", "psnr": 29.269, "ssim": 0.9442, "lpips": 0.0482},
-        "svraster_random": {"type": "baseline", "psnr": 26.382, "ssim": 0.9053, "lpips": 0.0879},
-        "svraster_farthest": {"type": "baseline", "psnr": 26.555, "ssim": 0.9117, "lpips": 0.0790},
-        "svraster_warprf": {"type": "proposed", "psnr": 27.410, "ssim": 0.9201, "lpips": 0.0730}
+        "nerf_bayesrays": {"type": "baseline", "scannetpp_ause": 0.438, "eth3d_ause": 0.278},
+        "nerf_warprf": {"type": "proposed", "scannetpp_ause": 0.423, "eth3d_ause": 0.25},
+        "3dgs_manifold": {"type": "baseline", "scannetpp_ause": 0.51, "eth3d_ause": 0.522},
+        "3dgs_fisherrf": {"type": "baseline", "scannetpp_ause": 0.355, "eth3d_ause": 0.295},
+        "3dgs_warprf": {"type": "proposed", "scannetpp_ause": 0.337, "eth3d_ause": 0.227}
       }
     },
     "active_view_nerf_synthetic_10_table4": {
-      "description": "Table 4 active view selection for novel view synthesis on NeRF Synthetic with 10 selected views and 3DGS.",
-      "target": "active_view_nvs",
+      "description": "Paper Table 4: active view selection for novel view synthesis on NeRF Synthetic with 10 selected views.",
+      "weight": 0.2,
+      "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true},
-        "ssim": {"higher_is_better": true},
-        "lpips": {"higher_is_better": false}
-      },
-      "constraints": {
-        "selected_views": 10,
-        "backbone_changed": false
+        "psnr": {"higher_is_better": true, "coefficient": 1.0},
+        "ssim": {"higher_is_better": true, "coefficient": 0.4},
+        "lpips": {"higher_is_better": false, "coefficient": 0.4},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
       },
       "results": {
-        "3dgs_random": {"type": "baseline", "psnr": 20.670, "ssim": 0.8242, "lpips": 0.2049},
-        "3dgs_activenerf": {"type": "baseline", "psnr": 22.979, "ssim": 0.8756, "lpips": 0.1109},
-        "3dgs_manifold": {"type": "baseline", "psnr": 24.159, "ssim": 0.8912, "lpips": 0.0942},
-        "3dgs_fisherrf": {"type": "baseline", "psnr": 24.943, "ssim": 0.8962, "lpips": 0.0867},
-        "3dgs_warprf": {"type": "proposed", "psnr": 24.957, "ssim": 0.9002, "lpips": 0.0845}
+        "3dgs_random": {"type": "baseline", "psnr": 20.67, "ssim": 0.8242, "lpips": 0.2049, "selected_views": 10, "backbone_changed": 0},
+        "3dgs_activenerf": {"type": "baseline", "psnr": 22.979, "ssim": 0.8756, "lpips": 0.1109, "selected_views": 10, "backbone_changed": 0},
+        "3dgs_manifold": {"type": "baseline", "psnr": 24.159, "ssim": 0.8912, "lpips": 0.0942, "selected_views": 10, "backbone_changed": 0},
+        "3dgs_fisherrf": {"type": "baseline", "psnr": 24.943, "ssim": 0.8962, "lpips": 0.0867, "selected_views": 10, "backbone_changed": 0},
+        "3dgs_warprf": {"type": "proposed", "psnr": 24.957, "ssim": 0.9002, "lpips": 0.0845, "selected_views": 10, "backbone_changed": 0}
       }
     },
     "active_view_tanks_temples_table5": {
-      "description": "Table 5 active view selection for novel view synthesis on Tanks and Temples with SVRaster.",
-      "target": "active_view_nvs",
+      "description": "Paper Table 5: active view selection for novel view synthesis on Tanks and Temples with SVRaster.",
+      "weight": 0.15,
+      "primary_metric": "psnr",
       "metrics": {
-        "psnr": {"higher_is_better": true},
-        "ssim": {"higher_is_better": true},
-        "lpips": {"higher_is_better": false}
-      },
-      "constraints": {
-        "selected_views": 40,
-        "backbone_changed": false
+        "psnr": {"higher_is_better": true, "coefficient": 1.0},
+        "ssim": {"higher_is_better": true, "coefficient": 0.4},
+        "lpips": {"higher_is_better": false, "coefficient": 0.4},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
       },
       "results": {
-        "svraster_random": {"type": "baseline", "psnr": 16.633, "ssim": 0.5738, "lpips": 0.3578},
-        "svraster_farthest": {"type": "baseline", "psnr": 17.474, "ssim": 0.6117, "lpips": 0.3264},
-        "svraster_warprf": {"type": "proposed", "psnr": 17.774, "ssim": 0.6244, "lpips": 0.3178}
-      }
-    },
-    "fixed_view_budget": {
-      "description": "Protocol constraint: final training view counts must match the active acquisition budget.",
-      "target": "fixed_view_budget",
-      "metrics": {
-        "selected_views": {"higher_is_better": false}
-      },
-      "results": {
-        "3dgs_nerf_synthetic_10": {"type": "constraint", "selected_views": 10},
-        "3dgs_mipnerf360_20": {"type": "constraint", "selected_views": 20},
-        "3dgs_nerf_synthetic_20": {"type": "constraint", "selected_views": 20},
-        "svraster_tanks_temples_40": {"type": "constraint", "selected_views": 40},
-        "3dgs_active_mapping_40": {"type": "constraint", "selected_views": 40}
-      }
-    },
-    "method_general_backbone": {
-      "description": "Protocol constraint: evaluated methods must not replace the required backbone family.",
-      "target": "method_general_backbone",
-      "metrics": {
-        "backbone_changed": {"higher_is_better": false}
-      },
-      "results": {
-        "nerf_protocol": {"type": "constraint", "backbone_changed": false},
-        "3dgs_protocol": {"type": "constraint", "backbone_changed": false},
-        "svraster_protocol": {"type": "constraint", "backbone_changed": false}
+        "svraster_random": {"type": "baseline", "psnr": 16.633, "ssim": 0.5738, "lpips": 0.3578, "selected_views": 40, "backbone_changed": 0},
+        "svraster_farthest": {"type": "baseline", "psnr": 17.474, "ssim": 0.6117, "lpips": 0.3264, "selected_views": 40, "backbone_changed": 0},
+        "svraster_warprf": {"type": "proposed", "psnr": 17.774, "ssim": 0.6244, "lpips": 0.3178, "selected_views": 40, "backbone_changed": 0}
       }
     },
     "active_mapping_3dgs_table7": {
-      "description": "Table 7 active mapping with 3DGS on Tanks and Temples. F1 score is higher better.",
-      "target": "active_mapping",
+      "description": "Paper Table 7: active mapping with 3DGS on Tanks and Temples. F1 score is higher better.",
+      "weight": 0.1,
+      "primary_metric": "mean_f1",
       "metrics": {
-        "mean_f1": {"higher_is_better": true}
-      },
-      "constraints": {
-        "selected_views": 40,
-        "backbone_changed": false
+        "mean_f1": {"higher_is_better": true, "coefficient": 1.0},
+        "selected_views": {"higher_is_better": false, "coefficient": -0.1},
+        "backbone_changed": {"higher_is_better": false, "coefficient": -1.0}
       },
       "results": {
-        "3dgs_fisherrf": {"type": "baseline", "mean_f1": 0.290},
-        "3dgs_warprf": {"type": "proposed", "mean_f1": 0.326}
+        "3dgs_fisherrf": {"type": "baseline", "mean_f1": 0.29, "selected_views": 40, "backbone_changed": 0},
+        "3dgs_warprf": {"type": "proposed", "mean_f1": 0.326, "selected_views": 40, "backbone_changed": 0}
+      }
+    },
+    "tiny_nerf_depth_uncertainty": {
+      "description": "Scaled reproduction benchmark: uncertainty should rank held-out depth errors better than random uncertainty.",
+      "weight": 0.2,
+      "primary_metric": "ause",
+      "metrics": {
+        "ause": {"higher_is_better": false, "coefficient": 1.0},
+        "spearman_depth_error": {"higher_is_better": true, "coefficient": 0.5},
+        "mean_depth_error": {"higher_is_better": false, "coefficient": -0.2},
+        "source_view_count": {"higher_is_better": false, "coefficient": -0.1},
+        "used_ground_truth_for_uncertainty": {"higher_is_better": false, "coefficient": -1.0}
+      },
+      "results": {
+        "random_uncertainty": {"type": "baseline", "ause": 0.45, "spearman_depth_error": 0.0, "mean_depth_error": 1.0, "source_view_count": 4, "used_ground_truth_for_uncertainty": 0},
+        "warprf": {"type": "proposed", "ause": 0.3, "spearman_depth_error": 0.2, "mean_depth_error": 1.0, "source_view_count": 4, "used_ground_truth_for_uncertainty": 0}
+      }
+    },
+    "tiny_nerf_active_view_proxy": {
+      "description": "Scaled reproduction benchmark: selected candidate view should expose more current model error than random candidate selection under the same budget.",
+      "weight": 0.1,
+      "primary_metric": "selected_candidate_error",
+      "metrics": {
+        "selected_candidate_error": {"higher_is_better": true, "coefficient": 1.0},
+        "selection_regret": {"higher_is_better": false, "coefficient": 0.5},
+        "view_budget": {"higher_is_better": false, "coefficient": -0.1}
+      },
+      "results": {
+        "random_view": {"type": "baseline", "selected_candidate_error": 0.05, "selection_regret": 0.05, "view_budget": 5},
+        "warprf": {"type": "proposed", "selected_candidate_error": 0.08, "selection_regret": 0.02, "view_budget": 5}
       }
     }
   }
