@@ -103,6 +103,15 @@ def spearman_rank(a: np.ndarray, b: np.ndarray, valid_mask: np.ndarray | None = 
     return float(np.sum(ar * br) / max(denom, 1e-12))
 
 
+def top_half_error_lift(scores: np.ndarray, oracle_errors: np.ndarray) -> float:
+    if scores.size == 0:
+        return float("nan")
+    count = max(1, scores.size // 2)
+    top = np.argsort(-scores)[:count]
+    scale = max(float(np.mean(oracle_errors)), 1e-8)
+    return float(np.mean(oracle_errors[top]) / scale)
+
+
 def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     data = np.load(path)
     uncertainty = data["uncertainty"]
@@ -124,6 +133,8 @@ def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
     random_oracle_error = float(np.mean(oracle_errors))
     best_oracle_error = float(np.max(oracle_errors))
     selection_regret = best_oracle_error - selected_oracle_error
+    oracle_scale = max(random_oracle_error, 1e-8)
+    random_scores = np.mod(np.arange(scores.size, dtype=np.float32) * 0.61803398875, 1.0)
 
     return {
         "experiments": {
@@ -149,12 +160,20 @@ def evaluate_artifact(path: Path, experiment_prefix: str = "tiny_nerf") -> dict:
                 "results": {
                     "random_view": {
                         "selected_candidate_error": random_oracle_error,
+                        "selected_error_lift": 1.0,
                         "selection_regret": best_oracle_error - random_oracle_error,
+                        "selection_regret_fraction": (best_oracle_error - random_oracle_error) / oracle_scale,
+                        "candidate_score_spearman": spearman_rank(random_scores, oracle_errors),
+                        "top_half_error_lift": top_half_error_lift(random_scores, oracle_errors),
                         "view_budget": int(data["source_view_count"] + 1),
                     },
                     "warprf": {
                         "selected_candidate_error": selected_oracle_error,
+                        "selected_error_lift": selected_oracle_error / oracle_scale,
                         "selection_regret": selection_regret,
+                        "selection_regret_fraction": selection_regret / oracle_scale,
+                        "candidate_score_spearman": spearman_rank(scores, oracle_errors),
+                        "top_half_error_lift": top_half_error_lift(scores, oracle_errors),
                         "view_budget": int(data["source_view_count"] + 1),
                     },
                 }

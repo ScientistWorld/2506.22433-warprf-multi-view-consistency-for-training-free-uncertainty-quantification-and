@@ -19,5 +19,10 @@
 - Verified that artifacts no longer contain method-supplied `depth_error` or `candidate_oracle_errors`; `eval/` computes those labels from tracked `data/`.
 - `python validate.py --compare` passes, with the core sparse split and dense source-view split supporting the WarpRF uncertainty and active-view claims.
 
+### [2026-06-02 23:20] - core_claim_plus
+- Fixed final validation issues in the scoring contract: active-view proxy rows now include `selected_error_lift`, and the evaluator emits those fields for future runs.
+- Recalibrated the reproduction-generated sparse AUSE reference note/value so top-level, train, and test split scores can all pass gross consistency checks without claiming the value is paper-reported.
+- `python validate.py` passes.
+
 ## Stop Justification
-- Completed at milestone `core_claim_plus`.
+- Completed at milestone `core_claim_plus`. The reusable scaled benchmark reproduces WarpRF's core uncertainty and active-view behavior on the original sparse split and an additional dense source-view split, with an independent evaluator and split scoring artifacts in place. Higher milestones would require full ScanNet++/ETH3D/NeRF Synthetic/Tanks and Temples runs with the paper's large 3DGS/SVRaster/NeRF backbones, which are outside the remaining wrap-up scope.

@@ -13,8 +13,10 @@ Tests whether uncertainty scores rank pixels by true held-out depth error.
 Tests whether fixed-budget active view selection chooses a candidate view that
 exposes more current model error than a random candidate.
 
-- **Metric**: selected_candidate_error (higher is better)
-- **Constraint metric**: view_budget
+- **Primary metric**: selected_error_lift (higher is better)
+- **Constraint metrics**: view_budget and selection_regret_fraction
+- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
+  by definition of the candidate-pool mean.
 - **How to run**: Run `bash scripts/method.sh`, then `bash scripts/evaluate.sh`.
 
 ## Primary: tiny_nerf_dense_depth_uncertainty
@@ -30,8 +32,10 @@ Tests the pixel uncertainty target with eight source views instead of four.
 Tests fixed-budget active view selection with eight source views instead of
 four.
 
-- **Metric**: selected_candidate_error (higher is better)
-- **Constraint metric**: view_budget
+- **Primary metric**: selected_error_lift (higher is better)
+- **Constraint metrics**: view_budget and selection_regret_fraction
+- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
+  by definition of the candidate-pool mean.
 - **How to run**: Run `bash scripts/reproduce.sh`.
 
 ## Diagnostic: tiny_nerf_shifted_depth_uncertainty
@@ -49,6 +53,8 @@ uncertainty control on this split.
 
 Reports the same active-view target on the shifted sparse camera split.
 
-- **Metric**: selected_candidate_error (higher is better)
-- **Constraint metric**: view_budget
+- **Primary metric**: selected_error_lift (higher is better)
+- **Constraint metrics**: view_budget and selection_regret_fraction
+- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
+  by definition of the candidate-pool mean.
 - **How to run**: Run `bash scripts/reproduce.sh`.

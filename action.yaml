@@ -1,6 +1,3 @@
-# Run the split evaluation job. Do NOT sleep, poll, or wait after this turn.
-action: submit
-gpus: 0
-test: false
+action: done
 milestone: core_claim_plus
-notes: "Resubmit split scoring after fixing PYTHONPATH for evaluator access to data.synthetic_radiance."
+notes: "Final validation fixed; scoring contract and documentation are consistent for core_claim_plus gym use."

@@ -23,12 +23,16 @@
         "random_view": {
           "selected_candidate_error": 0.19740960001945496,
           "selection_regret": 0.21427825093269348,
-          "view_budget": 5
+          "view_budget": 5,
+          "selected_error_lift": 1.0,
+          "selection_regret_fraction": 1.0854500029966936
         },
         "warprf": {
           "selected_candidate_error": 0.41168785095214844,
           "selection_regret": 0.0,
-          "view_budget": 5
+          "view_budget": 5,
+          "selected_error_lift": 2.085450002996694,
+          "selection_regret_fraction": 0.0
         }
       }
     },
@@ -55,12 +59,16 @@
         "random_view": {
           "selected_candidate_error": 0.16191206872463226,
           "selection_regret": 0.23288260400295258,
-          "view_budget": 5
+          "view_budget": 5,
+          "selected_error_lift": 1.0,
+          "selection_regret_fraction": 1.4383276418944508
         },
         "warprf": {
           "selected_candidate_error": 0.39479467272758484,
           "selection_regret": 0.0,
-          "view_budget": 5
+          "view_budget": 5,
+          "selected_error_lift": 2.4383276418944506,
+          "selection_regret_fraction": 0.0
         }
       }
     },
@@ -87,12 +95,16 @@
         "random_view": {
           "selected_candidate_error": 0.10720635950565338,
           "selection_regret": 0.041164398193359375,
-          "view_budget": 9
+          "view_budget": 9,
+          "selected_error_lift": 1.0,
+          "selection_regret_fraction": 0.3839734730586447
         },
         "warprf": {
           "selected_candidate_error": 0.14307190477848053,
           "selection_regret": 0.0052988529205322266,
-          "view_budget": 9
+          "view_budget": 9,
+          "selected_error_lift": 1.3345468070943667,
+          "selection_regret_fraction": 0.04942666596427798
         }
       }
     }
