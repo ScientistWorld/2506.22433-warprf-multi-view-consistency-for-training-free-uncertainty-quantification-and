@@ -27,8 +27,6 @@
 #   milestone: core_claim
 #   notes: "Reproduced the core claim. Environment packaged."
 
-action: submit
-gpus: 0
-test: true
-milestone: core_claim
-notes: "Run expanded CPU reproduction with original sparse, shifted sparse, and dense eight-source-view splits; check whether dense split supports core_claim_plus."
+action: done
+milestone: core_claim_plus
+notes: "Reproduced WarpRF core claim on the original sparse split and an additional dense source-view split; packaged reusable environment with documented shifted-split limitation."

@@ -1,6 +1,6 @@
 # Reproduction Milestones
 
-**Current: core_claim**
+**Current: core_claim_plus**
 
 <!-- Milestone levels (update "Current" above as you progress):
   none             — just started, no meaningful progress yet
@@ -61,5 +61,18 @@
 - Added a dense eight-source-view split to test the same WarpRF method under a
   different multi-view support setting before considering `core_claim_plus`.
 
+### [2026-06-02 23:15] - core_claim_plus
+- Job `ae1fa212-48e` completed the original sparse, shifted sparse, and dense
+  eight-source-view splits and passed `python validate.py --compare`.
+- On the dense depth uncertainty benchmark, WarpRF improved AUSE from 0.306 to
+  0.052 and Spearman correlation with depth error from 0.001 to 0.801 under the
+  same eight-source-view constraint.
+- On the dense active-view proxy benchmark, WarpRF improved selected-candidate
+  error from 0.107 to 0.143 and reduced selection regret from 0.041 to 0.005
+  under the same nine-view budget.
+
 ## Stop Justification
-- Not stopped.
+- Stopped at `core_claim_plus`: the core WarpRF claim is reproduced on the
+  original sparse split and an additional dense source-view split. The shifted
+  sparse depth uncertainty split remains a documented negative/partial result,
+  while shifted active-view selection supports the claim.

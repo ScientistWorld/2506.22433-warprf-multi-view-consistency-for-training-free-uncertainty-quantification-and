@@ -122,8 +122,8 @@
         "view_budget": {"higher_is_better": false, "coefficient": -0.1}
       },
       "results": {
-        "random_view": {"type": "baseline", "selected_candidate_error": 0.05, "selection_regret": 0.05, "view_budget": 5},
-        "warprf": {"type": "proposed", "selected_candidate_error": 0.08, "selection_regret": 0.02, "view_budget": 5}
+        "random_view": {"type": "baseline", "selected_candidate_error": 0.05, "selection_regret": 0.05, "view_budget": 9},
+        "warprf": {"type": "proposed", "selected_candidate_error": 0.08, "selection_regret": 0.02, "view_budget": 9}
       }
     },
     "tiny_nerf_shifted_depth_uncertainty": {

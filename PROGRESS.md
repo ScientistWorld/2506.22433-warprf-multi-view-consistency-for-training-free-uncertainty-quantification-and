@@ -43,12 +43,24 @@ passed `python validate.py --compare`, but the numeric scores were unchanged,
 showing that the shifted depth failure is not caused by all-invalid target
 pixels.
 
+Job `ae1fa212-48e` completed the expanded reproduction with original sparse,
+shifted sparse, and dense eight-source-view splits and passed
+`python validate.py --compare`.
+
+- `tiny_nerf_dense_depth_uncertainty`: WarpRF AUSE 0.052 vs deterministic
+  random uncertainty AUSE 0.306; WarpRF Spearman correlation with true depth
+  error 0.801 vs random 0.001.
+- `tiny_nerf_dense_active_view_proxy`: WarpRF selected-candidate error 0.143
+  and regret 0.005 vs random selected-candidate error 0.107 and regret 0.041.
+
 ## Remaining
 
-- Run the expanded reproduction with a dense eight-source-view split in
-  addition to the original and shifted sparse splits.
-- If the dense split supports both depth uncertainty and active view selection,
-  mark `core_claim_plus` and package the final `scores.json`.
+- Higher milestones would require reproducing the paper's full dataset/backbone
+  matrix on ScanNet++, ETH3D, NeRF Synthetic, Tanks and Temples, 3DGS, and
+  SVRaster, which is outside this scaled CPU reproduction.
+- The shifted sparse depth uncertainty split is a documented partial negative
+  result; shifted sparse active-view selection and dense depth/active settings
+  support the claim.
 
 ## Issues
 
@@ -75,6 +87,9 @@ pixels.
   change the scores. The shifted sparse split remains documented as a partial
   negative result, and the next run adds a dense source-view condition to test a
   separate multi-view support axis without hiding the shifted result.
+- Job `ae1fa212-48e` reached `core_claim_plus` on the dense source-view axis.
+  The dense active-view budget is nine because the evaluator records the eight
+  fixed source views plus one selected candidate view.
 
 ## Deviations from Paper
 
