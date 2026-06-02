@@ -18,4 +18,4 @@
 - Re-ran `python validate.py --compare`; all scoring and structure checks passed.
 
 ## Stop Justification
-- Completed at milestone `core_claim_plus`; higher milestones require large real-dataset NeRF/3DGS/SVRaster experiments beyond this packaged scaled reproduction.
+- Completed at milestone `core_claim_plus`.
