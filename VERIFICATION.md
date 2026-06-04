@@ -2,44 +2,41 @@
 
 ## Initial Assessment
 
-The workspace started this pass at `core_claim_plus`. The implementation runs
-the paper's actual multi-view RGB/depth warping uncertainty computation on a
-scaled analytic radiance-field benchmark, writes reusable artifacts, and scores
-those artifacts with evaluator code that does not import from `method/`.
+The workspace started this final pass at `core_claim_plus`, and that milestone
+is justified. The method code implements the paper's RGB-D multi-view warping
+uncertainty computation, the scaled analytic radiance-field benchmark has
+scored artifacts for sparse, shifted, and dense settings, and
+`python validate.py --compare` passes.
 
-`python validate.py --compare` already passed before this final cleanup. The
-claimed milestone was justified, with the main limitation that the reproduction
-is scaled and synthetic rather than the full paper benchmark matrix.
+I checked folder structure, method/evaluation separation, scoring definitions,
+train/test split artifacts, download portability, and method-agnostic
+documentation. The worktree was clean at the start of this verification.
 
 ## Issues Found
 
-- **Minor**: The reproduced diagnostic shifted-camera experiments had too much
-  influence after the gym renormalizes weights over experiments present in
-  `scores.json`. They are useful stress tests, but should not dominate the
-  primary reproduced claims.
-- **Minor**: A method-safe guidance file named the paper method in a diagnostic
-  target note where a generic description was sufficient.
-- **Cosmetic**: The working tree still contains pre-existing deleted trajectory
-  runtime artifacts. These are unrelated to the gym contents and were left
-  untouched.
+- **Known limitation**: The runnable gym uses a scaled analytic scene with a
+  tiny NeRF-style backbone. Full paper-scale ScanNet++/ETH3D and
+  3DGS/SVRaster-style benchmark reproduction remains reference context rather
+  than reproduced output.
+- **Cosmetic**: `VERIFICATION.md` needed this final verifier judgment in the
+  requested format.
 
 ## Fixes Applied
 
-- Reweighted the reproduced scaled experiments in `scoring/reference.json` so
-  the primary sparse and dense targets carry most of the effective gym score,
-  while shifted diagnostics remain visible at lower weight.
-- Rephrased `scoring/TARGETS.md` so the diagnostic note describes the current
-  reproduced method without leaking the paper method name.
-- Re-ran `python validate.py --compare`; validation passes after the changes.
+- Rewrote this verification report with the final assessment, checks performed,
+  and gym-readiness judgment.
+- No code, scoring, experiment, or milestone changes were required.
 
 ## Final Judgment
 
-The workspace is ready for gym use. From-scratch agents can read the problem,
-data, and evaluation without method-specific leakage in the strict
-method-agnostic files, and improve-mode agents have a working paper-method
-implementation plus scored artifacts to compare against.
+The workspace is ready to serve as a research gym. From-scratch agents can use
+the problem, data, and evaluation files without seeing method-specific
+implementation details, while improve-mode agents have a working paper-method
+implementation and scored artifacts to compare against. The scoring captures
+both benefit and constraint metrics, avoids wall-clock metrics, and the
+train/test evaluators score method outputs rather than importing the method.
 
 - Milestone: core_claim_plus
 - Ready for gym use: yes
-- Confidence: medium
-- Key limitation: scaled synthetic radiance-field benchmark rather than the full paper dataset/backbone matrix.
+- Confidence: high
+- Key limitation: scaled analytic radiance-field benchmark rather than the full paper dataset/backbone matrix.

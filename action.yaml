@@ -1,3 +1,3 @@
 action: done
 milestone: core_claim_plus
-notes: "Core_claim_plus reproduction packaged. validate.py --compare passes; scripts/run.sh regenerates the scaled WarpRF benchmark before scoring; stale runtime logs removed from git."
+notes: "Final verification passed: method/eval separation, scoring, train/test split, portability, and docs are gym-ready; limitation is scaled analytic benchmark only."

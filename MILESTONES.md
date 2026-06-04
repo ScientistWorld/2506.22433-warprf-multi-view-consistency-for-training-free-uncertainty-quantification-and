@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-06-04 22:13] - core_claim_plus
+- Completed final verifier audit of folder structure, method/eval separation, scoring weights and coefficients, train/test split behavior, download portability, and method-agnostic documentation.
+- Re-ran `python validate.py --compare`; all checks pass.
+- Kept milestone `core_claim_plus`; the main limitation remains the scaled analytic benchmark rather than the full paper-scale dataset/backbone matrix.
+
 ### [2026-06-04 22:10] - core_claim_plus
 - Revalidated the packaged WarpRF reproduction with `python validate.py --compare`; all scoring, method/eval separation, train/test, and structure checks pass.
 - Updated `scripts/run.sh` to regenerate the scaled reproduction before scoring, so submitted jobs do not depend on pre-existing ignored `outputs/` artifacts.
