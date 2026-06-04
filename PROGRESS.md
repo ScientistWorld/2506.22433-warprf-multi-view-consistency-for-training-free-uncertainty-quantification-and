@@ -2,6 +2,10 @@
 
 ## What Works
 
+- Reactivation audit on 2026-06-04 verified that the existing
+  `core_claim_plus` state is still valid: `python validate.py --compare`
+  passes, `method/` implements WarpRF's RGB-D warping uncertainty rather than a
+  surrogate, and `eval/` remains method-independent.
 - Read the WarpRF paper and identified the core method: training-free
   uncertainty from multi-view RGB/depth consistency using backward warping.
 - Implemented a scaled radiance-field benchmark with fixed posed views,
