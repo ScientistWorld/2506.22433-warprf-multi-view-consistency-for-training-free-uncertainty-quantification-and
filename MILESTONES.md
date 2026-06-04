@@ -4,6 +4,11 @@
 
 ## Progress Log
 
+### [2026-06-04 22:07] - core_claim_plus
+- Completed final verification of folder structure, method/eval separation, scoring contract, train/test artifacts, and documentation.
+- Rebalanced reproduced experiment weights so primary sparse and dense targets dominate the effective gym score while shifted diagnostics remain lower-weight stress tests.
+- Re-ran `python validate.py --compare`; all checks pass.
+
 ### [2026-06-04 22:03] - core_claim_plus
 - Re-audited the existing WarpRF reproduction after reactivation.
 - Verified `python validate.py --compare` passes and a sub-agent audit found no blockers in method integrity, evaluator separation, or scoring consistency.
