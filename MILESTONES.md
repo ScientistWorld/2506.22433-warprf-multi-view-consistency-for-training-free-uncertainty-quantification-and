@@ -4,6 +4,12 @@
 
 ## Progress Log
 
+### [2026-06-04 22:10] - core_claim_plus
+- Revalidated the packaged WarpRF reproduction with `python validate.py --compare`; all scoring, method/eval separation, train/test, and structure checks pass.
+- Updated `scripts/run.sh` to regenerate the scaled reproduction before scoring, so submitted jobs do not depend on pre-existing ignored `outputs/` artifacts.
+- Removed stale tracked trajectory and job logs from the git index so runtime traces remain ignored artifacts.
+- Kept the completed `core_claim_plus` milestone; full paper-scale 3DGS/SVRaster and benchmark-dataset reproduction remains outside this scaled gym.
+
 ### [2026-06-04 22:07] - core_claim_plus
 - Completed final verification of folder structure, method/eval separation, scoring contract, train/test artifacts, and documentation.
 - Rebalanced reproduced experiment weights so primary sparse and dense targets dominate the effective gym score while shifted diagnostics remain lower-weight stress tests.

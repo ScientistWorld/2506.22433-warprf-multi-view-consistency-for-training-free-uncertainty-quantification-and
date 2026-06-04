@@ -2,6 +2,15 @@
 
 ## What Works
 
+- Final audit on 2026-06-04 22:10 re-ran `python validate.py --compare`
+  successfully and confirmed the packaged environment is still at
+  `core_claim_plus`.
+- Updated `scripts/run.sh` to regenerate the scaled reproduction before
+  scoring train/test splits, removing its dependency on local ignored
+  `outputs/` artifacts.
+- Removed stale tracked `trajectory/` and `jobs/` runtime logs from the git
+  index; both directories are ignored and no method, evaluation, or scoring
+  artifacts changed.
 - Reactivation audit on 2026-06-04 verified that the existing
   `core_claim_plus` state is still valid: `python validate.py --compare`
   passes, `method/` implements WarpRF's RGB-D warping uncertainty rather than a

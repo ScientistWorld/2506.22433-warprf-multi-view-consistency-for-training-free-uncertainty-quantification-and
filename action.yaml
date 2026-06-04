@@ -1,3 +1,3 @@
 action: done
 milestone: core_claim_plus
-notes: "Final verification complete: validate.py --compare passes; scoring weights and method-agnostic docs are ready for core_claim_plus gym use."
+notes: "Core_claim_plus reproduction packaged. validate.py --compare passes; scripts/run.sh regenerates the scaled WarpRF benchmark before scoring; stale runtime logs removed from git."
