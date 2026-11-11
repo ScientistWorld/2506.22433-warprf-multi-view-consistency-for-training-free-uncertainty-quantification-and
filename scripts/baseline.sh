@@ -1,26 +1,24 @@
 #!/bin/bash
-# Run a baseline method from the paper.
+# Baselines are owned by the evaluator, not by a method: every evaluation run
+# recomputes them on the same instances as the methods it scores.
+#   random_uncertainty - fixed pseudo-random pixel uncertainty
+#   random_view        - exact expectation of uniformly random sequential acquisition
+#   farthest_view      - acquire the candidate camera farthest from all current cameras
 #
-# Baselines are simple reference methods the paper compares against. 
-# Implement this only if applicable, i.e. the paper has baselines.
-# You do not need to implement all baselines to begin — 
-# just enough to validate that the evaluation pipeline works 
-# and provide a reference point. You can decide to expand more baselines later.
-# Each baseline must be actually run and scored through evaluate.sh
-# so the numbers are verified, not self-reported.
-# You can decide what this baseline script should do yourself.
-#
-# Usage:
-#   bash scripts/baseline.sh <name>
+# Usage: bash scripts/baseline.sh   (prints the baseline rows of the train split)
 
-set -e
+set -euo pipefail
 
 cd /home/user
+export PYTHONPATH="/home/user:${PYTHONPATH:-}"
 
-python -m baseline.random_uncertainty
-
-if [ -e outputs/warprf/warprf_outputs.npz ]; then
-  bash scripts/evaluate.sh outputs/warprf/warprf_outputs.npz
-else
-  echo "No WarpRF artifact found. Run scripts/method.sh first; the evaluator computes the random baseline from the same artifact."
-fi
+mkdir -p tmp
+python eval/train/evaluate.py --scores tmp/baseline_scores.json > /dev/null
+python - <<'PY'
+import json
+s = json.load(open("tmp/baseline_scores.json"))
+for exp, data in s["experiments"].items():
+    for name in ("random_uncertainty", "random_view", "farthest_view"):
+        if name in data["results"]:
+            print(exp, name, data["results"][name])
+PY

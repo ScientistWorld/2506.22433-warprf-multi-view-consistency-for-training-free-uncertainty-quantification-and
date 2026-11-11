@@ -1,32 +1,17 @@
 #!/bin/bash
-# Evaluate the held-out test slice of saved method artifacts.
+# Score every registered method on the hidden test instances.
 #
-# Mirrors scripts/evaluate.sh's positional contract:
-#   ./evaluate_test.sh [artifact_or_outputs_dir] [scores_path] [experiment_prefix] [merge_existing]
+# Usage: bash scripts/evaluate_test.sh        (no arguments)
 #
-# With no artifact argument, all outputs/*/warprf_outputs.npz artifacts are
-# enumerated. When scoring/scores_train.json exists, the test evaluator scores
-# exactly the same experiment/method keys on the held-out slice.
+# Methods are registered as outputs/<name>/predict.json (see briefing/evaluation.md).
+# The evaluator runs each method's command on the hidden inputs held only in
+# eval/test/assets/, derives every acquisition itself, and writes all scores to
+# scoring/scores_test.json. Any stale score file is deleted first.
 
-set -e
+set -euo pipefail
 
 cd /home/user
-
-mkdir -p scoring
 export PYTHONPATH="/home/user:${PYTHONPATH:-}"
 
-ARTIFACT_INPUT="${1:-outputs}"
-SCORES="${2:-scoring/scores_test.json}"
-EXPERIMENT_PREFIX="${3:-}"
-MERGE="${4:-false}"
-TRAIN_SCORES="${TRAIN_SCORES:-scoring/scores_train.json}"
-
-CMD=(python eval/test/evaluate.py --artifact "$ARTIFACT_INPUT" --scores "$SCORES" --expected-scores "$TRAIN_SCORES")
-if [ -n "$EXPERIMENT_PREFIX" ]; then
-  CMD+=(--experiment-prefix "$EXPERIMENT_PREFIX")
-fi
-if [ "$MERGE" = "true" ]; then
-  CMD+=(--merge-existing)
-fi
-
-"${CMD[@]}"
+rm -f scoring/scores_test.json
+python eval/test/evaluate.py

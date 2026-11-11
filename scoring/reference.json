@@ -1,550 +1,320 @@
 {
+  "_paper_reported": {
+    "note": "Numbers reported in the paper (Tables 1, 4, 5, 7), kept verbatim for reference. They come from ScanNet++/ETH3D/NeRF-Synthetic/Tanks-and-Temples with full-scale NeRF, 3DGS and SVRaster backbones and are not on this gym's scale; they are not scored.",
+    "tables": {
+      "uncertainty_ause_table1": {
+        "description": "Paper Table 1: AUSE evaluation on ScanNet++ and ETH3D. Lower is better.",
+        "primary_metric": "eth3d_ause",
+        "metrics": {
+          "scannetpp_ause": {
+            "higher_is_better": false,
+            "coefficient": 0.5,
+            "description": "Area under the sparsification error curve on ScanNet++."
+          },
+          "eth3d_ause": {
+            "higher_is_better": false,
+            "coefficient": 1.0,
+            "description": "Area under the sparsification error curve on ETH3D."
+          }
+        },
+        "results": {
+          "nerf_bayesrays": {
+            "type": "baseline",
+            "scannetpp_ause": 0.438,
+            "eth3d_ause": 0.278
+          },
+          "nerf_warprf": {
+            "type": "proposed",
+            "scannetpp_ause": 0.423,
+            "eth3d_ause": 0.25
+          },
+          "3dgs_manifold": {
+            "type": "baseline",
+            "scannetpp_ause": 0.51,
+            "eth3d_ause": 0.522
+          },
+          "3dgs_fisherrf": {
+            "type": "baseline",
+            "scannetpp_ause": 0.355,
+            "eth3d_ause": 0.295
+          },
+          "3dgs_warprf": {
+            "type": "proposed",
+            "scannetpp_ause": 0.337,
+            "eth3d_ause": 0.227
+          }
+        }
+      },
+      "active_view_nerf_synthetic_10_table4": {
+        "description": "Paper Table 4: active view selection for novel view synthesis on NeRF Synthetic with 10 selected views.",
+        "primary_metric": "psnr",
+        "metrics": {
+          "psnr": {
+            "higher_is_better": true,
+            "coefficient": 1.0,
+            "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."
+          },
+          "ssim": {
+            "higher_is_better": true,
+            "coefficient": 0.4,
+            "description": "Novel-view structural similarity."
+          },
+          "lpips": {
+            "higher_is_better": false,
+            "coefficient": 0.4,
+            "description": "Novel-view perceptual distance."
+          },
+          "selected_views": {
+            "higher_is_better": false,
+            "coefficient": -0.1,
+            "description": "Number of selected camera views used by the active-view procedure."
+          },
+          "backbone_changed": {
+            "higher_is_better": false,
+            "coefficient": -1.0,
+            "description": "Indicator that the fixed rendering backbone was changed."
+          }
+        },
+        "results": {
+          "3dgs_random": {
+            "type": "baseline",
+            "psnr": 20.67,
+            "ssim": 0.8242,
+            "lpips": 0.2049,
+            "selected_views": 10,
+            "backbone_changed": 0
+          },
+          "3dgs_activenerf": {
+            "type": "baseline",
+            "psnr": 22.979,
+            "ssim": 0.8756,
+            "lpips": 0.1109,
+            "selected_views": 10,
+            "backbone_changed": 0
+          },
+          "3dgs_manifold": {
+            "type": "baseline",
+            "psnr": 24.159,
+            "ssim": 0.8912,
+            "lpips": 0.0942,
+            "selected_views": 10,
+            "backbone_changed": 0
+          },
+          "3dgs_fisherrf": {
+            "type": "baseline",
+            "psnr": 24.943,
+            "ssim": 0.8962,
+            "lpips": 0.0867,
+            "selected_views": 10,
+            "backbone_changed": 0
+          },
+          "3dgs_warprf": {
+            "type": "proposed",
+            "psnr": 24.957,
+            "ssim": 0.9002,
+            "lpips": 0.0845,
+            "selected_views": 10,
+            "backbone_changed": 0
+          }
+        }
+      },
+      "active_view_tanks_temples_table5": {
+        "description": "Paper Table 5: active view selection for novel view synthesis on Tanks and Temples with SVRaster.",
+        "primary_metric": "psnr",
+        "metrics": {
+          "psnr": {
+            "higher_is_better": true,
+            "coefficient": 1.0,
+            "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."
+          },
+          "ssim": {
+            "higher_is_better": true,
+            "coefficient": 0.4,
+            "description": "Novel-view structural similarity."
+          },
+          "lpips": {
+            "higher_is_better": false,
+            "coefficient": 0.4,
+            "description": "Novel-view perceptual distance."
+          },
+          "selected_views": {
+            "higher_is_better": false,
+            "coefficient": -0.1,
+            "description": "Number of selected camera views used by the active-view procedure."
+          },
+          "backbone_changed": {
+            "higher_is_better": false,
+            "coefficient": -1.0,
+            "description": "Indicator that the fixed rendering backbone was changed."
+          }
+        },
+        "results": {
+          "svraster_random": {
+            "type": "baseline",
+            "psnr": 16.633,
+            "ssim": 0.5738,
+            "lpips": 0.3578,
+            "selected_views": 40,
+            "backbone_changed": 0
+          },
+          "svraster_farthest": {
+            "type": "baseline",
+            "psnr": 17.474,
+            "ssim": 0.6117,
+            "lpips": 0.3264,
+            "selected_views": 40,
+            "backbone_changed": 0
+          },
+          "svraster_warprf": {
+            "type": "proposed",
+            "psnr": 17.774,
+            "ssim": 0.6244,
+            "lpips": 0.3178,
+            "selected_views": 40,
+            "backbone_changed": 0
+          }
+        }
+      },
+      "active_mapping_3dgs_table7": {
+        "description": "Paper Table 7: active mapping with 3DGS on Tanks and Temples. F1 score is higher better.",
+        "primary_metric": "mean_f1",
+        "metrics": {
+          "mean_f1": {
+            "higher_is_better": true,
+            "coefficient": 1.0,
+            "description": "Mean reconstruction F1 score across active-mapping scenes."
+          },
+          "selected_views": {
+            "higher_is_better": false,
+            "coefficient": -0.1,
+            "description": "Number of selected camera views used by the active-mapping procedure."
+          },
+          "backbone_changed": {
+            "higher_is_better": false,
+            "coefficient": -1.0,
+            "description": "Indicator that the fixed reconstruction backbone was changed."
+          }
+        },
+        "results": {
+          "3dgs_fisherrf": {
+            "type": "baseline",
+            "mean_f1": 0.29,
+            "selected_views": 40,
+            "backbone_changed": 0
+          },
+          "3dgs_warprf": {
+            "type": "proposed",
+            "mean_f1": 0.326,
+            "selected_views": 40,
+            "backbone_changed": 0
+          }
+        }
+      }
+    }
+  },
   "experiments": {
-    "uncertainty_ause_table1": {
-      "description": "Paper Table 1: AUSE evaluation on ScanNet++ and ETH3D. Lower is better.",
-      "weight": 0.15,
-      "primary_metric": "eth3d_ause",
-      "metrics": {
-        "scannetpp_ause": {
-          "higher_is_better": false,
-          "coefficient": 0.5,
-          "description": "Area under the sparsification error curve on ScanNet++."
-        },
-        "eth3d_ause": {
-          "higher_is_better": false,
-          "coefficient": 1.0,
-          "description": "Area under the sparsification error curve on ETH3D."
-        }
-      },
-      "results": {
-        "nerf_bayesrays": {
-          "type": "baseline",
-          "scannetpp_ause": 0.438,
-          "eth3d_ause": 0.278
-        },
-        "nerf_warprf": {
-          "type": "proposed",
-          "scannetpp_ause": 0.423,
-          "eth3d_ause": 0.25
-        },
-        "3dgs_manifold": {
-          "type": "baseline",
-          "scannetpp_ause": 0.51,
-          "eth3d_ause": 0.522
-        },
-        "3dgs_fisherrf": {
-          "type": "baseline",
-          "scannetpp_ause": 0.355,
-          "eth3d_ause": 0.295
-        },
-        "3dgs_warprf": {
-          "type": "proposed",
-          "scannetpp_ause": 0.337,
-          "eth3d_ause": 0.227
-        }
-      }
-    },
-    "active_view_nerf_synthetic_10_table4": {
-      "description": "Paper Table 4: active view selection for novel view synthesis on NeRF Synthetic with 10 selected views.",
-      "weight": 0.13,
-      "primary_metric": "psnr",
-      "metrics": {
-        "psnr": {
-          "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."
-        },
-        "ssim": {
-          "higher_is_better": true,
-          "coefficient": 0.4,
-          "description": "Novel-view structural similarity."
-        },
-        "lpips": {
-          "higher_is_better": false,
-          "coefficient": 0.4,
-          "description": "Novel-view perceptual distance."
-        },
-        "selected_views": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of selected camera views used by the active-view procedure."
-        },
-        "backbone_changed": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that the fixed rendering backbone was changed."
-        }
-      },
-      "results": {
-        "3dgs_random": {
-          "type": "baseline",
-          "psnr": 20.67,
-          "ssim": 0.8242,
-          "lpips": 0.2049,
-          "selected_views": 10,
-          "backbone_changed": 0
-        },
-        "3dgs_activenerf": {
-          "type": "baseline",
-          "psnr": 22.979,
-          "ssim": 0.8756,
-          "lpips": 0.1109,
-          "selected_views": 10,
-          "backbone_changed": 0
-        },
-        "3dgs_manifold": {
-          "type": "baseline",
-          "psnr": 24.159,
-          "ssim": 0.8912,
-          "lpips": 0.0942,
-          "selected_views": 10,
-          "backbone_changed": 0
-        },
-        "3dgs_fisherrf": {
-          "type": "baseline",
-          "psnr": 24.943,
-          "ssim": 0.8962,
-          "lpips": 0.0867,
-          "selected_views": 10,
-          "backbone_changed": 0
-        },
-        "3dgs_warprf": {
-          "type": "proposed",
-          "psnr": 24.957,
-          "ssim": 0.9002,
-          "lpips": 0.0845,
-          "selected_views": 10,
-          "backbone_changed": 0
-        }
-      }
-    },
-    "active_view_tanks_temples_table5": {
-      "description": "Paper Table 5: active view selection for novel view synthesis on Tanks and Temples with SVRaster.",
-      "weight": 0.12,
-      "primary_metric": "psnr",
-      "metrics": {
-        "psnr": {
-          "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Novel-view image fidelity measured by peak signal-to-noise ratio."
-        },
-        "ssim": {
-          "higher_is_better": true,
-          "coefficient": 0.4,
-          "description": "Novel-view structural similarity."
-        },
-        "lpips": {
-          "higher_is_better": false,
-          "coefficient": 0.4,
-          "description": "Novel-view perceptual distance."
-        },
-        "selected_views": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of selected camera views used by the active-view procedure."
-        },
-        "backbone_changed": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that the fixed rendering backbone was changed."
-        }
-      },
-      "results": {
-        "svraster_random": {
-          "type": "baseline",
-          "psnr": 16.633,
-          "ssim": 0.5738,
-          "lpips": 0.3578,
-          "selected_views": 40,
-          "backbone_changed": 0
-        },
-        "svraster_farthest": {
-          "type": "baseline",
-          "psnr": 17.474,
-          "ssim": 0.6117,
-          "lpips": 0.3264,
-          "selected_views": 40,
-          "backbone_changed": 0
-        },
-        "svraster_warprf": {
-          "type": "proposed",
-          "psnr": 17.774,
-          "ssim": 0.6244,
-          "lpips": 0.3178,
-          "selected_views": 40,
-          "backbone_changed": 0
-        }
-      }
-    },
-    "active_mapping_3dgs_table7": {
-      "description": "Paper Table 7: active mapping with 3DGS on Tanks and Temples. F1 score is higher better.",
-      "weight": 0.1,
-      "primary_metric": "mean_f1",
-      "metrics": {
-        "mean_f1": {
-          "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Mean reconstruction F1 score across active-mapping scenes."
-        },
-        "selected_views": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of selected camera views used by the active-mapping procedure."
-        },
-        "backbone_changed": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that the fixed reconstruction backbone was changed."
-        }
-      },
-      "results": {
-        "3dgs_fisherrf": {
-          "type": "baseline",
-          "mean_f1": 0.29,
-          "selected_views": 40,
-          "backbone_changed": 0
-        },
-        "3dgs_warprf": {
-          "type": "proposed",
-          "mean_f1": 0.326,
-          "selected_views": 40,
-          "backbone_changed": 0
-        }
-      }
-    },
-    "tiny_nerf_depth_uncertainty": {
-      "description": "Scaled benchmark target generated by this reproduction, not paper-reported: uncertainty should rank held-out depth errors better than random uncertainty.",
-      "weight": 0.18,
+    "depth_uncertainty_sparse": {
+      "description": "Pixel-wise depth uncertainty of a radiance field trained on 3 views, scored by AUSE against held-out ground-truth depth error on 6 target views per hidden scene (scaled analogue of paper Table 1). Lower AUSE is better.",
+      "weight": 0.25,
       "primary_metric": "ause",
       "metrics": {
         "ause": {
           "higher_is_better": false,
           "coefficient": 1.0,
-          "description": "Area under the sparsification error curve for held-out depth uncertainty."
+          "description": "Area under the sparsification error curve of target-view depth error ordered by predicted uncertainty (paper protocol), averaged over target views."
         },
         "spearman_depth_error": {
           "higher_is_better": true,
           "coefficient": 0.5,
-          "description": "Rank correlation between predicted uncertainty and held-out depth error."
-        },
-        "mean_depth_error": {
-          "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."
-        },
-        "source_view_count": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views used before uncertainty scoring."
-        },
-        "used_ground_truth_for_uncertainty": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that ground-truth labels were used to construct uncertainty scores."
+          "description": "Spearman rank correlation between predicted uncertainty and true depth error, averaged over target views."
         }
       },
       "results": {
         "random_uncertainty": {
           "type": "baseline",
-          "ause": 0.13074142235091496,
-          "spearman_depth_error": -0.02578958659636379,
-          "mean_depth_error": 1.7156070470809937,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.0,
+          "spearman_depth_error": 0.0
         },
         "warprf": {
           "type": "proposed",
-          "ause": 0.094,
-          "spearman_depth_error": 0.15851205228737464,
-          "mean_depth_error": 1.7156070470809937,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.0,
+          "spearman_depth_error": 0.0
         }
       },
-      "notes": "Scaled reproduction-generated target, not a paper table value. The warprf AUSE reference is a representative split-calibrated value so scores.json, scores_train.json, and scores_test.json can all be compared for gross validation without treating any single split as the paper-reported value."
+      "notes": "Scaled setting generated by this gym (procedural scenes, 48x48 tiny NeRF); values are the reference method's hidden-test scores, not paper numbers."
     },
-    "tiny_nerf_active_view_proxy": {
-      "description": "Scaled benchmark target generated by this reproduction, not paper-reported: selected candidate view should expose more current model error than random candidate selection under the same budget.",
-      "weight": 0.12,
-      "primary_metric": "selected_error_lift",
-      "metrics": {
-        "selected_candidate_error": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Current rendering error exposed by the selected next-view candidate."
-        },
-        "selected_error_lift": {
-          "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Selected candidate exposed error divided by the candidate-pool mean exposed error."
-        },
-        "selection_regret": {
-          "higher_is_better": false,
-          "coefficient": 0.0,
-          "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."
-        },
-        "selection_regret_fraction": {
-          "higher_is_better": false,
-          "coefficient": 0.5,
-          "description": "Selection regret divided by the candidate-pool mean exposed error."
-        },
-        "candidate_score_spearman": {
-          "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."
-        },
-        "top_half_error_lift": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."
-        },
-        "view_budget": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views after adding the selected candidate."
-        }
-      },
-      "results": {
-        "random_view": {
-          "type": "baseline",
-          "selected_candidate_error": 0.19740960001945496,
-          "selection_regret": 0.21427825093269348,
-          "view_budget": 5,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 1.0854500029966936
-        },
-        "warprf": {
-          "type": "proposed",
-          "selected_candidate_error": 0.41168785095214844,
-          "selection_regret": 0.0,
-          "view_budget": 5,
-          "selected_error_lift": 2.085450002996694,
-          "selection_regret_fraction": 0.0
-        }
-      },
-      "notes": "Scaled reproduction-generated target, not a paper table value. Reference rows are seeded from the completed top-level reproduction run so primary metrics are present for validation."
-    },
-    "tiny_nerf_dense_depth_uncertainty": {
-      "description": "Scaled benchmark target generated by this reproduction, not paper-reported, with eight source views: uncertainty should rank held-out depth errors better than random uncertainty.",
-      "weight": 0.08,
+    "depth_uncertainty_dense": {
+      "description": "Same depth-uncertainty measurement for a radiance field trained on 8 views spread around the scene (closest to the paper's Table 1 protocol of alternating train/test views).",
+      "weight": 0.25,
       "primary_metric": "ause",
       "metrics": {
         "ause": {
           "higher_is_better": false,
           "coefficient": 1.0,
-          "description": "Area under the sparsification error curve for held-out depth uncertainty."
+          "description": "Area under the sparsification error curve of target-view depth error ordered by predicted uncertainty (paper protocol), averaged over target views."
         },
         "spearman_depth_error": {
           "higher_is_better": true,
           "coefficient": 0.5,
-          "description": "Rank correlation between predicted uncertainty and held-out depth error."
-        },
-        "mean_depth_error": {
-          "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."
-        },
-        "source_view_count": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views used before uncertainty scoring."
-        },
-        "used_ground_truth_for_uncertainty": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that ground-truth labels were used to construct uncertainty scores."
+          "description": "Spearman rank correlation between predicted uncertainty and true depth error, averaged over target views."
         }
       },
       "results": {
         "random_uncertainty": {
           "type": "baseline",
-          "ause": 0.3060368577689189,
-          "spearman_depth_error": 0.0010133194188346791,
-          "mean_depth_error": 1.1638996601104736,
-          "source_view_count": 8,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.0,
+          "spearman_depth_error": 0.0
         },
         "warprf": {
           "type": "proposed",
-          "ause": 0.05156773417970946,
-          "spearman_depth_error": 0.8008696260771929,
-          "mean_depth_error": 1.1638996601104736,
-          "source_view_count": 8,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.0,
+          "spearman_depth_error": 0.0
         }
-      }
+      },
+      "notes": "Scaled setting generated by this gym; values are the reference method's hidden-test scores, not paper numbers."
     },
-    "tiny_nerf_dense_active_view_proxy": {
-      "description": "Scaled benchmark target generated by this reproduction, not paper-reported, with eight source views: selected candidate view should expose more current model error than random candidate selection under the same budget.",
-      "weight": 0.07,
-      "primary_metric": "selected_error_lift",
+    "active_view_selection": {
+      "description": "Sequential active view selection (scaled analogue of paper Tables 2-7): from 3 initial views, acquire 2 of 8 candidate views one at a time, continuing radiance-field training after each acquisition; score novel-view quality and geometry of the final field on 8 held-out views.",
+      "weight": 0.5,
+      "primary_metric": "final_psnr",
       "metrics": {
-        "selected_candidate_error": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Current rendering error exposed by the selected next-view candidate."
-        },
-        "selected_error_lift": {
+        "final_psnr": {
           "higher_is_better": true,
           "coefficient": 1.0,
-          "description": "Selected candidate exposed error divided by the candidate-pool mean exposed error."
+          "description": "Mean PSNR (dB) of the final field's renderings of the held-out evaluation views."
         },
-        "selection_regret": {
-          "higher_is_better": false,
-          "coefficient": 0.0,
-          "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."
+        "final_ssim": {
+          "higher_is_better": true,
+          "coefficient": 0.5,
+          "description": "Mean SSIM of the final field's renderings of the held-out evaluation views."
         },
-        "selection_regret_fraction": {
+        "final_depth_mae": {
           "higher_is_better": false,
           "coefficient": 0.5,
-          "description": "Selection regret divided by the candidate-pool mean exposed error."
-        },
-        "candidate_score_spearman": {
-          "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."
-        },
-        "top_half_error_lift": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."
-        },
-        "view_budget": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views after adding the selected candidate."
+          "description": "Mean absolute camera-z depth error of the final field on the held-out evaluation views (reconstruction quality, the active-mapping analogue)."
         }
       },
       "results": {
         "random_view": {
           "type": "baseline",
-          "selected_candidate_error": 0.10720635950565338,
-          "selection_regret": 0.041164398193359375,
-          "view_budget": 9,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 0.3839734730586447
+          "final_psnr": 0.0,
+          "final_ssim": 0.0,
+          "final_depth_mae": 0.0
         },
-        "warprf": {
-          "type": "proposed",
-          "selected_candidate_error": 0.14307190477848053,
-          "selection_regret": 0.0052988529205322266,
-          "view_budget": 9,
-          "selected_error_lift": 1.3345468070943667,
-          "selection_regret_fraction": 0.04942666596427798
-        }
-      },
-      "notes": "Scaled reproduction-generated target, not a paper table value. Reference rows are seeded from the completed top-level reproduction run so primary metrics are present for validation."
-    },
-    "tiny_nerf_shifted_depth_uncertainty": {
-      "description": "Scaled diagnostic generated by this reproduction, not paper-reported, on a shifted camera split: current reproduced uncertainty does not beat random on this sparse split.",
-      "weight": 0.03,
-      "primary_metric": "ause",
-      "metrics": {
-        "ause": {
-          "higher_is_better": false,
-          "coefficient": 1.0,
-          "description": "Area under the sparsification error curve for held-out depth uncertainty."
-        },
-        "spearman_depth_error": {
-          "higher_is_better": true,
-          "coefficient": 0.5,
-          "description": "Rank correlation between predicted uncertainty and held-out depth error."
-        },
-        "mean_depth_error": {
-          "higher_is_better": false,
-          "coefficient": -0.2,
-          "description": "Mean held-out depth error, included to detect uncertainty gains that degrade rendering geometry."
-        },
-        "source_view_count": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views used before uncertainty scoring."
-        },
-        "used_ground_truth_for_uncertainty": {
-          "higher_is_better": false,
-          "coefficient": -1.0,
-          "description": "Indicator that ground-truth labels were used to construct uncertainty scores."
-        }
-      },
-      "results": {
-        "random_uncertainty": {
+        "farthest_view": {
           "type": "baseline",
-          "ause": 0.13704211599587574,
-          "spearman_depth_error": -0.02204279452321182,
-          "mean_depth_error": 1.7319464683532715,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "final_psnr": 0.0,
+          "final_ssim": 0.0,
+          "final_depth_mae": 0.0
         },
         "warprf": {
           "type": "proposed",
-          "ause": 0.17989042974553468,
-          "spearman_depth_error": -0.36074351067670546,
-          "mean_depth_error": 1.7319464683532715,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
-        }
-      }
-    },
-    "tiny_nerf_shifted_active_view_proxy": {
-      "description": "Scaled diagnostic generated by this reproduction, not paper-reported, on a shifted camera split: selected candidate view should expose more current model error than random candidate selection under the same budget.",
-      "weight": 0.02,
-      "primary_metric": "selected_error_lift",
-      "metrics": {
-        "selected_candidate_error": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Current rendering error exposed by the selected next-view candidate."
-        },
-        "selected_error_lift": {
-          "higher_is_better": true,
-          "coefficient": 1.0,
-          "description": "Selected candidate exposed error divided by the candidate-pool mean exposed error."
-        },
-        "selection_regret": {
-          "higher_is_better": false,
-          "coefficient": 0.0,
-          "description": "Gap between the best candidate's exposed error and the selected candidate's exposed error."
-        },
-        "selection_regret_fraction": {
-          "higher_is_better": false,
-          "coefficient": 0.5,
-          "description": "Selection regret divided by the candidate-pool mean exposed error."
-        },
-        "candidate_score_spearman": {
-          "higher_is_better": true,
-          "coefficient": 0.35,
-          "description": "Rank correlation between candidate scores and evaluator-computed candidate rendering errors."
-        },
-        "top_half_error_lift": {
-          "higher_is_better": true,
-          "coefficient": 0.25,
-          "description": "Mean exposed error in the top half of scored candidates divided by the full candidate mean."
-        },
-        "view_budget": {
-          "higher_is_better": false,
-          "coefficient": -0.1,
-          "description": "Number of source views after adding the selected candidate."
+          "final_psnr": 0.0,
+          "final_ssim": 0.0,
+          "final_depth_mae": 0.0
         }
       },
-      "results": {
-        "random_view": {
-          "type": "baseline",
-          "selected_candidate_error": 0.16191206872463226,
-          "selection_regret": 0.23288260400295258,
-          "view_budget": 5,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 1.4383276418944508
-        },
-        "warprf": {
-          "type": "proposed",
-          "selected_candidate_error": 0.39479467272758484,
-          "selection_regret": 0.0,
-          "view_budget": 5,
-          "selected_error_lift": 1.6,
-          "selection_regret_fraction": 0.0
-        }
-      },
-      "notes": "Scaled diagnostic generated by this reproduction, not a paper table value. The warprf selected_error_lift reference is a representative split-calibrated value so scores.json, scores_train.json, and scores_test.json can all be checked for gross consistency without treating one split as paper-reported."
+      "notes": "Scaled setting generated by this gym; values are the reference method's hidden-test scores, not paper numbers. Final quality of every acquisition sequence is precomputed with one fixed backbone recipe, so no method retrains anything."
     }
   }
 }

@@ -230,3 +230,9 @@ tmp/
 protocol.md
 *.egg-info
 core.[0-9]*
+
+# Frozen benchmark instances are agent-built data that fits in git: track them.
+!data/train_assets/
+!data/train_assets/**
+!eval/test/assets/
+!eval/test/assets/**

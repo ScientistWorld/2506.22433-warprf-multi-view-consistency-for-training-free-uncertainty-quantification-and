@@ -1,31 +1,15 @@
 #!/bin/bash
-# Evaluate the visible train slice of saved method artifacts.
+# Score every registered method on the visible train instances (data/train_assets/).
 #
-# Mirrors scripts/evaluate.sh's positional contract:
-#   ./evaluate_train.sh [artifact_or_outputs_dir] [scores_path] [experiment_prefix] [merge_existing]
+# Usage: bash scripts/evaluate_train.sh        (no arguments)
 #
-# With no artifact argument, all outputs/*/warprf_outputs.npz artifacts are
-# enumerated and scored. The evaluator reads artifacts only; it does not train
-# or import from method/.
+# Same protocol, metrics and baselines as the hidden test; writes
+# scoring/scores_train.json.
 
-set -e
+set -euo pipefail
 
 cd /home/user
-
-mkdir -p scoring
 export PYTHONPATH="/home/user:${PYTHONPATH:-}"
 
-ARTIFACT_INPUT="${1:-outputs}"
-SCORES="${2:-scoring/scores_train.json}"
-EXPERIMENT_PREFIX="${3:-}"
-MERGE="${4:-false}"
-
-CMD=(python eval/train/evaluate.py --artifact "$ARTIFACT_INPUT" --scores "$SCORES")
-if [ -n "$EXPERIMENT_PREFIX" ]; then
-  CMD+=(--experiment-prefix "$EXPERIMENT_PREFIX")
-fi
-if [ "$MERGE" = "true" ]; then
-  CMD+=(--merge-existing)
-fi
-
-"${CMD[@]}"
+rm -f scoring/scores_train.json
+python eval/train/evaluate.py

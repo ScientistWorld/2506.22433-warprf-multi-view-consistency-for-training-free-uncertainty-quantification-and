@@ -1,38 +1,14 @@
 #!/bin/bash
-# Evaluation script — the standard way to evaluate work in this environment.
+# Standard evaluation entry point: score every registered method
+# (outputs/<name>/predict.json) on the visible train instances and write
+# scoring/scores.json. Uses only code in eval/.
 #
-# This script must be SELF-CONTAINED using only code in eval/.
-# Do NOT import from method/ — evaluate.sh must work even when the
-# paper's method code is hidden from a scientist agent.
-#
-# Design it so that anyone following the same output format can run
-# this script to evaluate their results.
-#
-# OUTPUT CONTRACT: This script MUST write scoring/scores.json containing
-# a JSON dict nested by experiment, e.g.:
-#   {"imagenet_classification": {"top1_accuracy": 82.1, "top5_accuracy": 94.8}}
-# Experiment and metric names must match the keys in scoring/reference.json.
-# This file is read by the system for automated comparison.
-#
-# Example usage:
-#   ./evaluate.sh <method_and_run_name>                             # evaluate with defaults
-#   ./evaluate.sh <method_and_run_name> checkpoints/epoch_10.pt     # evaluate a specific checkpoint
-#
-# Called from run.sh after training, or independently.
+# Usage: bash scripts/evaluate.sh
 
-set -e
+set -euo pipefail
 
 cd /home/user
+export PYTHONPATH="/home/user:${PYTHONPATH:-}"
 
 mkdir -p scoring
-
-ARTIFACT="${1:-outputs/warprf/warprf_outputs.npz}"
-SCORES="${2:-scoring/scores.json}"
-PREFIX="${3:-tiny_nerf}"
-MERGE="${4:-false}"
-
-if [ "$MERGE" = "true" ]; then
-  python -m eval.metrics --artifact "$ARTIFACT" --scores "$SCORES" --experiment-prefix "$PREFIX" --merge-existing
-else
-  python -m eval.metrics --artifact "$ARTIFACT" --scores "$SCORES" --experiment-prefix "$PREFIX"
-fi
+python eval/train/evaluate.py --scores scoring/scores.json

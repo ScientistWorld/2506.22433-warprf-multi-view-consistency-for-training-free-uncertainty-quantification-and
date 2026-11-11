@@ -16,5 +16,9 @@
 
 set -e
 
-uv pip install --system --index-url https://download.pytorch.org/whl/cpu torch
+# CUDA build of torch: the frozen benchmark instances are built on a GPU
+# (scripts/build_assets.sh). Evaluation and the reference method need only numpy.
+if ! python -c "import torch, sys; sys.exit(0 if torch.version.cuda else 1)" 2>/dev/null; then
+  uv pip install --system --reinstall-package torch --index-url https://download.pytorch.org/whl/cu124 "torch==2.5.1"
+fi
 uv pip install --system numpy
