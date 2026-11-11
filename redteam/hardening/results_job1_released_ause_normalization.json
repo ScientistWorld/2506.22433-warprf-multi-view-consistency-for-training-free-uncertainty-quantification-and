@@ -1,0 +1,4890 @@
+{
+  "splits": {
+    "train": {
+      "scores": {
+        "depth_uncertainty_sparse": {
+          "results": {
+            "random_uncertainty": {
+              "ause": 0.49716631091464486,
+              "spearman_depth_error": 0.002976756864050972
+            },
+            "broken_registration": {
+              "ause": 0.3497782749204877,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_crash": {
+              "ause": 0.3497782749204877,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_fabricated_fields": {
+              "ause": 0.5001123764030769,
+              "spearman_depth_error": 0.0
+            },
+            "shortcut_generator_oracle": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_nonfinite": {
+              "ause": 0.3497782749204877,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_read_hidden_answers": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_wrong_shape": {
+              "ause": 0.3497782749204877,
+              "spearman_depth_error": -1.0
+            },
+            "warprf": {
+              "ause": 0.3696085457787674,
+              "spearman_depth_error": 0.19204064446595004
+            },
+            "warprf_depth_select": {
+              "ause": 0.3696085457787674,
+              "spearman_depth_error": 0.19204064446595004
+            },
+            "warprf_edge": {
+              "ause": 0.34774603683412075,
+              "spearman_depth_error": 0.25144301639336836
+            },
+            "warprf_masked": {
+              "ause": 0.3567543774490338,
+              "spearman_depth_error": 0.19862283199863273
+            },
+            "warprf_min": {
+              "ause": 0.41797296065235523,
+              "spearman_depth_error": 0.17161833344222158
+            },
+            "warprf_reference_copy": {
+              "ause": 0.3696085457787674,
+              "spearman_depth_error": 0.19204064446595004
+            },
+            "warprf_rgbd": {
+              "ause": 0.3549140288327666,
+              "spearman_depth_error": 0.10072103142209177
+            },
+            "warprf_rgbd_edge": {
+              "ause": 0.35925301928249165,
+              "spearman_depth_error": 0.12999056860888403
+            },
+            "warprf_rgbd_select": {
+              "ause": 0.3696085457787674,
+              "spearman_depth_error": 0.19204064446595004
+            },
+            "weak_constant": {
+              "ause": 0.5001123764030769,
+              "spearman_depth_error": 0.0
+            },
+            "weak_depth_prior": {
+              "ause": 0.27575969692777885,
+              "spearman_depth_error": 0.3363331563785792
+            }
+          }
+        },
+        "depth_uncertainty_dense": {
+          "results": {
+            "random_uncertainty": {
+              "ause": 0.5067647123283976,
+              "spearman_depth_error": 0.004394457229137136
+            },
+            "broken_registration": {
+              "ause": 0.21337533463595437,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_crash": {
+              "ause": 0.21337533463595437,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_fabricated_fields": {
+              "ause": 0.5156224943524462,
+              "spearman_depth_error": 0.0
+            },
+            "shortcut_generator_oracle": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_nonfinite": {
+              "ause": 0.21337533463595437,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_read_hidden_answers": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_wrong_shape": {
+              "ause": 0.21337533463595437,
+              "spearman_depth_error": -1.0
+            },
+            "warprf": {
+              "ause": 0.4099044592297642,
+              "spearman_depth_error": 0.09445830851721758
+            },
+            "warprf_depth_select": {
+              "ause": 0.4099044592297642,
+              "spearman_depth_error": 0.09445830851721758
+            },
+            "warprf_edge": {
+              "ause": 0.36411684489201807,
+              "spearman_depth_error": 0.19738727476381113
+            },
+            "warprf_masked": {
+              "ause": 0.4063885751460341,
+              "spearman_depth_error": 0.09815548689511595
+            },
+            "warprf_min": {
+              "ause": 0.39722686300970383,
+              "spearman_depth_error": 0.23631515542404938
+            },
+            "warprf_reference_copy": {
+              "ause": 0.4099044592297642,
+              "spearman_depth_error": 0.09445830851721758
+            },
+            "warprf_rgbd": {
+              "ause": 0.32355484773935367,
+              "spearman_depth_error": 0.3129189631174847
+            },
+            "warprf_rgbd_edge": {
+              "ause": 0.32355633216460733,
+              "spearman_depth_error": 0.3180505591000952
+            },
+            "warprf_rgbd_select": {
+              "ause": 0.4099044592297642,
+              "spearman_depth_error": 0.09445830851721758
+            },
+            "weak_constant": {
+              "ause": 0.5156224943524462,
+              "spearman_depth_error": 0.0
+            },
+            "weak_depth_prior": {
+              "ause": 0.4072091851410293,
+              "spearman_depth_error": 0.061781093831658716
+            }
+          }
+        },
+        "active_view_selection": {
+          "results": {
+            "random_view": {
+              "final_psnr": 22.533121049404144,
+              "final_ssim": 0.7973869052449507,
+              "final_depth_mae": 0.2537373502772035
+            },
+            "farthest_view": {
+              "final_psnr": 22.90389382839203,
+              "final_ssim": 0.8085440769791603,
+              "final_depth_mae": 0.24689893750473857
+            },
+            "broken_registration": {
+              "final_psnr": 20.963368773460388,
+              "final_ssim": 0.7450411915779114,
+              "final_depth_mae": 0.308685096912086
+            },
+            "shortcut_crash": {
+              "final_psnr": 20.963368773460388,
+              "final_ssim": 0.7450411915779114,
+              "final_depth_mae": 0.308685096912086
+            },
+            "shortcut_fabricated_fields": {
+              "final_psnr": 22.42595648765564,
+              "final_ssim": 0.7886150181293488,
+              "final_depth_mae": 0.26334446808323264
+            },
+            "shortcut_generator_oracle": {
+              "final_psnr": 24.282975554466248,
+              "final_ssim": 0.8416803367435932,
+              "final_depth_mae": 0.2297135880216956
+            },
+            "shortcut_nonfinite": {
+              "final_psnr": 20.963368773460388,
+              "final_ssim": 0.7450411915779114,
+              "final_depth_mae": 0.308685096912086
+            },
+            "shortcut_read_hidden_answers": {
+              "final_psnr": 24.282975554466248,
+              "final_ssim": 0.8416803367435932,
+              "final_depth_mae": 0.2297135880216956
+            },
+            "shortcut_wrong_shape": {
+              "final_psnr": 20.963368773460388,
+              "final_ssim": 0.7450411915779114,
+              "final_depth_mae": 0.308685096912086
+            },
+            "warprf": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_depth_select": {
+              "final_psnr": 22.51773250102997,
+              "final_ssim": 0.7913813367486,
+              "final_depth_mae": 0.2624815832823515
+            },
+            "warprf_edge": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_masked": {
+              "final_psnr": 22.934961438179016,
+              "final_ssim": 0.8073528595268726,
+              "final_depth_mae": 0.24915346782654524
+            },
+            "warprf_min": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_reference_copy": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_rgbd": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_rgbd_edge": {
+              "final_psnr": 22.946017026901245,
+              "final_ssim": 0.8172556012868881,
+              "final_depth_mae": 0.2373871896415949
+            },
+            "warprf_rgbd_select": {
+              "final_psnr": 22.834712147712708,
+              "final_ssim": 0.81292724609375,
+              "final_depth_mae": 0.2414894080720842
+            },
+            "weak_constant": {
+              "final_psnr": 22.42595648765564,
+              "final_ssim": 0.7886150181293488,
+              "final_depth_mae": 0.26334446808323264
+            },
+            "weak_depth_prior": {
+              "final_psnr": 22.703065156936646,
+              "final_ssim": 0.8001880161464214,
+              "final_depth_mae": 0.2529985662549734
+            }
+          }
+        }
+      },
+      "status": {
+        "broken_registration": {
+          "status": "failed",
+          "reason": "invalid predict.json: command must be a non-empty list of strings"
+        },
+        "shortcut_crash": {
+          "status": "failed",
+          "reason": "round 2 exited with code 1: "
+        },
+        "shortcut_fabricated_fields": {
+          "status": "ok"
+        },
+        "shortcut_generator_oracle": {
+          "status": "ok"
+        },
+        "shortcut_nonfinite": {
+          "status": "failed",
+          "reason": "scene_000.npz: 'sparse_uncertainty' contains non-finite values"
+        },
+        "shortcut_read_hidden_answers": {
+          "status": "ok"
+        },
+        "shortcut_wrong_shape": {
+          "status": "failed",
+          "reason": "scene_000.npz: 'candidate_scores' must be a real array of shape (8,), got float64 (9,)"
+        },
+        "warprf": {
+          "status": "ok"
+        },
+        "warprf_depth_select": {
+          "status": "ok"
+        },
+        "warprf_edge": {
+          "status": "ok"
+        },
+        "warprf_masked": {
+          "status": "ok"
+        },
+        "warprf_min": {
+          "status": "ok"
+        },
+        "warprf_reference_copy": {
+          "status": "ok"
+        },
+        "warprf_rgbd": {
+          "status": "ok"
+        },
+        "warprf_rgbd_edge": {
+          "status": "ok"
+        },
+        "warprf_rgbd_select": {
+          "status": "ok"
+        },
+        "weak_constant": {
+          "status": "ok"
+        },
+        "weak_depth_prior": {
+          "status": "ok"
+        }
+      },
+      "cohort_rank": {
+        "broken_registration": {
+          "rank": -2.3097247304286244,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.03862290183809322,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.24950531159749884,
+            "depth_uncertainty_dense/ause": 0.33720489329695635,
+            "depth_uncertainty_dense/spearman_depth_error": -0.23062064852232872,
+            "active_view_selection/final_psnr": -1.0111400258744212,
+            "active_view_selection/final_ssim": -0.5742523249656933,
+            "active_view_selection/final_depth_mae": -0.6200342146037319
+          }
+        },
+        "shortcut_crash": {
+          "rank": -2.3097247304286244,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.03862290183809322,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.24950531159749884,
+            "depth_uncertainty_dense/ause": 0.33720489329695635,
+            "depth_uncertainty_dense/spearman_depth_error": -0.23062064852232872,
+            "active_view_selection/final_psnr": -1.0111400258744212,
+            "active_view_selection/final_ssim": -0.5742523249656933,
+            "active_view_selection/final_depth_mae": -0.6200342146037319
+          }
+        },
+        "shortcut_fabricated_fields": {
+          "rank": -1.2143837764145127,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.2541789104001736,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.04019591199285657,
+            "depth_uncertainty_dense/ause": -0.18139112371658483,
+            "depth_uncertainty_dense/spearman_depth_error": -0.019903943529905807,
+            "active_view_selection/final_psnr": -0.2652280989310408,
+            "active_view_selection/final_ssim": -0.22775124151635617,
+            "active_view_selection/final_depth_mae": -0.22573454632759493
+          }
+        },
+        "shortcut_generator_oracle": {
+          "rank": 2.7259186652826157,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.7198769338126991,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.1691134876117857,
+            "depth_uncertainty_dense/ause": 0.70331453275538,
+            "depth_uncertainty_dense/spearman_depth_error": 0.1908127614625171,
+            "active_view_selection/final_psnr": 0.6818417123708075,
+            "active_view_selection/final_ssim": 0.19422662567220822,
+            "active_view_selection/final_depth_mae": 0.06673261159721829
+          }
+        },
+        "shortcut_nonfinite": {
+          "rank": -2.3097247304286244,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.03862290183809322,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.24950531159749884,
+            "depth_uncertainty_dense/ause": 0.33720489329695635,
+            "depth_uncertainty_dense/spearman_depth_error": -0.23062064852232872,
+            "active_view_selection/final_psnr": -1.0111400258744212,
+            "active_view_selection/final_ssim": -0.5742523249656933,
+            "active_view_selection/final_depth_mae": -0.6200342146037319
+          }
+        },
+        "shortcut_read_hidden_answers": {
+          "rank": 2.7259186652826157,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.7198769338126991,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.1691134876117857,
+            "depth_uncertainty_dense/ause": 0.70331453275538,
+            "depth_uncertainty_dense/spearman_depth_error": 0.1908127614625171,
+            "active_view_selection/final_psnr": 0.6818417123708075,
+            "active_view_selection/final_ssim": 0.19422662567220822,
+            "active_view_selection/final_depth_mae": 0.06673261159721829
+          }
+        },
+        "shortcut_wrong_shape": {
+          "rank": -2.3097247304286244,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.03862290183809322,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.24950531159749884,
+            "depth_uncertainty_dense/ause": 0.33720489329695635,
+            "depth_uncertainty_dense/spearman_depth_error": -0.23062064852232872,
+            "active_view_selection/final_psnr": -1.0111400258744212,
+            "active_view_selection/final_ssim": -0.5742523249656933,
+            "active_view_selection/final_depth_mae": -0.6200342146037319
+          }
+        },
+        "warprf": {
+          "rank": 0.0,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_depth_select": {
+          "rank": -0.642406735873476,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": -0.21842282201067958,
+            "active_view_selection/final_ssim": -0.20575334795047626,
+            "active_view_selection/final_depth_mae": -0.21823056591232018
+          }
+        },
+        "warprf_edge": {
+          "rank": 0.15526580666822432,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.04258103900537313,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.012433474803219585,
+            "depth_uncertainty_dense/ause": 0.0785624402438731,
+            "depth_uncertainty_dense/spearman_depth_error": 0.021688852615758508,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_masked": {
+          "rank": -0.1534844060860109,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.025035728717862568,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0013777137205509761,
+            "depth_uncertainty_dense/ause": 0.006032557870234461,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0007790572455599765,
+            "active_view_selection/final_psnr": -0.00563829123358167,
+            "active_view_selection/final_ssim": -0.07874706034627967,
+            "active_view_selection/final_depth_mae": -0.10232411206035755
+          }
+        },
+        "warprf_min": {
+          "rank": -0.046828851056402485,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.09419811062941008,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.004274581658915872,
+            "depth_uncertainty_dense/ause": 0.021752233871101284,
+            "depth_uncertainty_dense/spearman_depth_error": 0.029891607360822182,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_reference_copy": {
+          "rank": 0.0,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd": {
+          "rank": 0.20369814433058198,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.028620127764246786,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.019114053378338235,
+            "depth_uncertainty_dense/ause": 0.14815876063681732,
+            "depth_uncertainty_dense/spearman_depth_error": 0.04603330930785608,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd_edge": {
+          "rank": 0.20245236096523808,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.020169189125343517,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.012987664123064995,
+            "depth_uncertainty_dense/ause": 0.14815621365829543,
+            "depth_uncertainty_dense/spearman_depth_error": 0.04711462230466413,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd_select": {
+          "rank": -0.1268586550858726,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": -0.05676489424048232,
+            "active_view_selection/final_ssim": -0.03441928062492944,
+            "active_view_selection/final_depth_mae": -0.03567448022046085
+          }
+        },
+        "weak_constant": {
+          "rank": -1.2143837764145127,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.2541789104001736,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.04019591199285657,
+            "depth_uncertainty_dense/ause": -0.18139112371658483,
+            "depth_uncertainty_dense/spearman_depth_error": -0.019903943529905807,
+            "active_view_selection/final_psnr": -0.2652280989310408,
+            "active_view_selection/final_ssim": -0.22775124151635617,
+            "active_view_selection/final_depth_mae": -0.22573454632759493
+          }
+        },
+        "weak_depth_prior": {
+          "rank": -0.18466130429794902,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.1827869575102831,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0302017790358781,
+            "depth_uncertainty_dense/ause": 0.004624554316701726,
+            "depth_uncertainty_dense/spearman_depth_error": -0.006885635006870977,
+            "active_view_selection/final_psnr": -0.12390415680436899,
+            "active_view_selection/final_ssim": -0.13572222618672977,
+            "active_view_selection/final_depth_mae": -0.1357625771628422
+          }
+        }
+      },
+      "paired_vs_reference": {
+        "broken_registration": {},
+        "shortcut_crash": {},
+        "shortcut_fabricated_fields": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.13050383062430965,
+            "ci95": [
+              -0.1739008528780809,
+              -0.09295612641325297
+            ],
+            "scenes_better": 1,
+            "scenes_worse": 15
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": -0.10571803512268207,
+            "ci95": [
+              -0.1420051474450959,
+              -0.0717899726701003
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 16
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.5200605392456055,
+            "ci95": [
+              -1.0560822039842606,
+              -0.02406734824180647
+            ],
+            "scenes_better": 4,
+            "scenes_worse": 12
+          }
+        },
+        "shortcut_generator_oracle": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.36960854577876734,
+            "ci95": [
+              0.32415044104371593,
+              0.405642147096166
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.40990445922976426,
+            "ci95": [
+              0.36126803112334877,
+              0.4563592802492554
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 1.3369585275650024,
+            "ci95": [
+              0.961727973818779,
+              1.7182463794946667
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          }
+        },
+        "shortcut_nonfinite": {},
+        "shortcut_read_hidden_answers": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.36960854577876734,
+            "ci95": [
+              0.32415044104371593,
+              0.405642147096166
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.40990445922976426,
+            "ci95": [
+              0.36126803112334877,
+              0.4563592802492554
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 1.3369585275650024,
+            "ci95": [
+              0.961727973818779,
+              1.7182463794946667
+            ],
+            "scenes_better": 16,
+            "scenes_worse": 0
+          }
+        },
+        "shortcut_wrong_shape": {},
+        "warprf_depth_select": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.42828452587127686,
+            "ci95": [
+              -1.0412682563066482,
+              0.2210965812206267
+            ],
+            "scenes_better": 4,
+            "scenes_worse": 11
+          }
+        },
+        "warprf_edge": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.02186250894464658,
+            "ci95": [
+              -0.005343860302108191,
+              0.04537277882030991
+            ],
+            "scenes_better": 10,
+            "scenes_worse": 6
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.04578761433774615,
+            "ci95": [
+              0.0107423978372544,
+              0.07950543139753144
+            ],
+            "scenes_better": 12,
+            "scenes_worse": 4
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_masked": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.012854168329733493,
+            "ci95": [
+              -0.00042626965565352665,
+              0.0321434715875758
+            ],
+            "scenes_better": 9,
+            "scenes_worse": 7
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.003515884083730089,
+            "ci95": [
+              -0.001404658474310578,
+              0.010857037251198935
+            ],
+            "scenes_better": 11,
+            "scenes_worse": 5
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.011055588722229004,
+            "ci95": [
+              -0.34593349099159243,
+              0.36446706056594846
+            ],
+            "scenes_better": 4,
+            "scenes_worse": 9
+          }
+        },
+        "warprf_min": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.048364414873587884,
+            "ci95": [
+              -0.07591345665987263,
+              -0.020620933125695497
+            ],
+            "scenes_better": 4,
+            "scenes_worse": 12
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.012677596220060422,
+            "ci95": [
+              -0.024521683568741712,
+              0.04897280302813901
+            ],
+            "scenes_better": 10,
+            "scenes_worse": 6
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_reference_copy": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.01469451694600074,
+            "ci95": [
+              -0.031768255027015774,
+              0.05586498035045096
+            ],
+            "scenes_better": 9,
+            "scenes_worse": 7
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.08634961149041054,
+            "ci95": [
+              0.020990998652749306,
+              0.15231928620430937
+            ],
+            "scenes_better": 12,
+            "scenes_worse": 4
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd_edge": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.010355526496275726,
+            "ci95": [
+              -0.03321248531291928,
+              0.0501122428438559
+            ],
+            "scenes_better": 10,
+            "scenes_worse": 6
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0863481270651569,
+            "ci95": [
+              0.020144805815603663,
+              0.15241124766681208
+            ],
+            "scenes_better": 12,
+            "scenes_worse": 4
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd_select": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.1113048791885376,
+            "ci95": [
+              -0.4003590106964111,
+              0.09892059564590451
+            ],
+            "scenes_better": 3,
+            "scenes_worse": 3
+          }
+        },
+        "weak_constant": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.13050383062430965,
+            "ci95": [
+              -0.1739008528780809,
+              -0.09295612641325297
+            ],
+            "scenes_better": 1,
+            "scenes_worse": 15
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": -0.10571803512268207,
+            "ci95": [
+              -0.1420051474450959,
+              -0.0717899726701003
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 16
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.5200605392456055,
+            "ci95": [
+              -1.0560822039842606,
+              -0.02406734824180647
+            ],
+            "scenes_better": 4,
+            "scenes_worse": 12
+          }
+        },
+        "weak_depth_prior": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.09384884885098851,
+            "ci95": [
+              0.032611070571057145,
+              0.1482324693260784
+            ],
+            "scenes_better": 13,
+            "scenes_worse": 3
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0026952740887349474,
+            "ci95": [
+              -0.0568758050643432,
+              0.060330394397368224
+            ],
+            "scenes_better": 10,
+            "scenes_worse": 6
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.2429518699645996,
+            "ci95": [
+              -0.856721642613411,
+              0.30431786477565764
+            ],
+            "scenes_better": 6,
+            "scenes_worse": 10
+          }
+        }
+      },
+      "choices": {
+        "broken_registration": null,
+        "shortcut_crash": null,
+        "shortcut_fabricated_fields": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "shortcut_generator_oracle": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            3
+          ]
+        ],
+        "shortcut_nonfinite": null,
+        "shortcut_read_hidden_answers": [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            3
+          ]
+        ],
+        "shortcut_wrong_shape": null,
+        "warprf": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_depth_select": [
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            1,
+            7
+          ]
+        ],
+        "warprf_edge": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_masked": [
+          [
+            4,
+            7
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_min": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_reference_copy": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_rgbd": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_rgbd_edge": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "warprf_rgbd_select": [
+          [
+            4,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "weak_constant": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "weak_depth_prior": [
+          [
+            2,
+            4
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            5
+          ]
+        ]
+      },
+      "baseline_choices": [
+        [
+          4,
+          3
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "diagnostics": {
+        "final_psnr_best_pair_mean": 24.282975554466248,
+        "final_psnr_worst_pair_mean": 20.963368773460388,
+        "final_psnr_random_mean": 22.533121049404144,
+        "final_psnr_within_scene_std_mean": 0.7900605311169113,
+        "step1_psnr_best_mean": 21.949698567390442,
+        "step1_psnr_mean": 20.964801892638206,
+        "step0_psnr_mean": 19.368082642555237,
+        "chosen_pair_percentile": {
+          "shortcut_fabricated_fields": 0.4720982142857143,
+          "shortcut_generator_oracle": 0.9821428571428571,
+          "shortcut_read_hidden_answers": 0.9821428571428571,
+          "warprf": 0.6473214285714286,
+          "warprf_depth_select": 0.45982142857142855,
+          "warprf_edge": 0.6473214285714286,
+          "warprf_masked": 0.6383928571428571,
+          "warprf_min": 0.6473214285714286,
+          "warprf_reference_copy": 0.6473214285714286,
+          "warprf_rgbd": 0.6473214285714286,
+          "warprf_rgbd_edge": 0.6473214285714286,
+          "warprf_rgbd_select": 0.6060267857142857,
+          "weak_constant": 0.4720982142857143,
+          "weak_depth_prior": 0.5535714285714286,
+          "farthest_view": 0.6395089285714286
+        }
+      }
+    },
+    "test": {
+      "scores": {
+        "depth_uncertainty_sparse": {
+          "results": {
+            "random_uncertainty": {
+              "ause": 0.48587311076905365,
+              "spearman_depth_error": 0.0004641667452194775
+            },
+            "broken_registration": {
+              "ause": 0.3422229892356265,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_crash": {
+              "ause": 0.3422229892356265,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_fabricated_fields": {
+              "ause": 0.5005905764291178,
+              "spearman_depth_error": 0.0
+            },
+            "shortcut_generator_oracle": {
+              "ause": 0.3939542486561581,
+              "spearman_depth_error": 0.1479340628149257
+            },
+            "shortcut_nonfinite": {
+              "ause": 0.3422229892356265,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_read_hidden_answers": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_wrong_shape": {
+              "ause": 0.3422229892356265,
+              "spearman_depth_error": -1.0
+            },
+            "warprf": {
+              "ause": 0.3939542486561581,
+              "spearman_depth_error": 0.1479340628149257
+            },
+            "warprf_depth_select": {
+              "ause": 0.3939542486561581,
+              "spearman_depth_error": 0.1479340628149257
+            },
+            "warprf_edge": {
+              "ause": 0.3630320364089881,
+              "spearman_depth_error": 0.20660836976295824
+            },
+            "warprf_masked": {
+              "ause": 0.38667204521584625,
+              "spearman_depth_error": 0.1476679035339048
+            },
+            "warprf_min": {
+              "ause": 0.4252026874598828,
+              "spearman_depth_error": 0.16290918077547414
+            },
+            "warprf_reference_copy": {
+              "ause": 0.3939542486561581,
+              "spearman_depth_error": 0.1479340628149257
+            },
+            "warprf_rgbd": {
+              "ause": 0.3703258990084061,
+              "spearman_depth_error": 0.11572901003273157
+            },
+            "warprf_rgbd_edge": {
+              "ause": 0.3606122815800536,
+              "spearman_depth_error": 0.14155949297568549
+            },
+            "warprf_rgbd_select": {
+              "ause": 0.3939542486561581,
+              "spearman_depth_error": 0.1479340628149257
+            },
+            "weak_constant": {
+              "ause": 0.5005905764291178,
+              "spearman_depth_error": 0.0
+            },
+            "weak_depth_prior": {
+              "ause": 0.2954530666070603,
+              "spearman_depth_error": 0.26820628846321753
+            }
+          }
+        },
+        "depth_uncertainty_dense": {
+          "results": {
+            "random_uncertainty": {
+              "ause": 0.5236830455743591,
+              "spearman_depth_error": -0.000602313107398863
+            },
+            "broken_registration": {
+              "ause": 0.2060448118513145,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_crash": {
+              "ause": 0.2060448118513145,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_fabricated_fields": {
+              "ause": 0.5111630976011138,
+              "spearman_depth_error": 0.0
+            },
+            "shortcut_generator_oracle": {
+              "ause": 0.4154066373579009,
+              "spearman_depth_error": 0.10675839122495273
+            },
+            "shortcut_nonfinite": {
+              "ause": 0.2060448118513145,
+              "spearman_depth_error": -1.0
+            },
+            "shortcut_read_hidden_answers": {
+              "ause": 0.0,
+              "spearman_depth_error": 1.0
+            },
+            "shortcut_wrong_shape": {
+              "ause": 0.2060448118513145,
+              "spearman_depth_error": -1.0
+            },
+            "warprf": {
+              "ause": 0.4154066373579009,
+              "spearman_depth_error": 0.10675839122495273
+            },
+            "warprf_depth_select": {
+              "ause": 0.4154066373579009,
+              "spearman_depth_error": 0.10675839122495273
+            },
+            "warprf_edge": {
+              "ause": 0.36044842127128396,
+              "spearman_depth_error": 0.19090866432644207
+            },
+            "warprf_masked": {
+              "ause": 0.4155299984742015,
+              "spearman_depth_error": 0.10887286498627859
+            },
+            "warprf_min": {
+              "ause": 0.4010783939611762,
+              "spearman_depth_error": 0.23265965413885084
+            },
+            "warprf_reference_copy": {
+              "ause": 0.4154066373579009,
+              "spearman_depth_error": 0.10675839122495273
+            },
+            "warprf_rgbd": {
+              "ause": 0.3256028139520947,
+              "spearman_depth_error": 0.3172263545424095
+            },
+            "warprf_rgbd_edge": {
+              "ause": 0.31989358875210244,
+              "spearman_depth_error": 0.3230558311632042
+            },
+            "warprf_rgbd_select": {
+              "ause": 0.4154066373579009,
+              "spearman_depth_error": 0.10675839122495273
+            },
+            "weak_constant": {
+              "ause": 0.5111630976011138,
+              "spearman_depth_error": 0.0
+            },
+            "weak_depth_prior": {
+              "ause": 0.40894378018616173,
+              "spearman_depth_error": 0.09303859133008796
+            }
+          }
+        },
+        "active_view_selection": {
+          "results": {
+            "random_view": {
+              "final_psnr": 22.593536804829327,
+              "final_ssim": 0.7877786831730711,
+              "final_depth_mae": 0.23991768209296946
+            },
+            "farthest_view": {
+              "final_psnr": 22.969127535820007,
+              "final_ssim": 0.7990773841738701,
+              "final_depth_mae": 0.2304356878157705
+            },
+            "broken_registration": {
+              "final_psnr": 21.073137044906616,
+              "final_ssim": 0.7344210725277662,
+              "final_depth_mae": 0.2894266373477876
+            },
+            "shortcut_crash": {
+              "final_psnr": 21.073137044906616,
+              "final_ssim": 0.7344210725277662,
+              "final_depth_mae": 0.2894266373477876
+            },
+            "shortcut_fabricated_fields": {
+              "final_psnr": 22.701903700828552,
+              "final_ssim": 0.7938614916056395,
+              "final_depth_mae": 0.23286188824567944
+            },
+            "shortcut_generator_oracle": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "shortcut_nonfinite": {
+              "final_psnr": 21.073137044906616,
+              "final_ssim": 0.7344210725277662,
+              "final_depth_mae": 0.2894266373477876
+            },
+            "shortcut_read_hidden_answers": {
+              "final_psnr": 24.177013397216797,
+              "final_ssim": 0.8330544121563435,
+              "final_depth_mae": 0.21603132190648466
+            },
+            "shortcut_wrong_shape": {
+              "final_psnr": 21.073137044906616,
+              "final_ssim": 0.7344210725277662,
+              "final_depth_mae": 0.2894266373477876
+            },
+            "warprf": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_depth_select": {
+              "final_psnr": 22.226138651371002,
+              "final_ssim": 0.7691829670220613,
+              "final_depth_mae": 0.2600638776784763
+            },
+            "warprf_edge": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_masked": {
+              "final_psnr": 23.114494562149048,
+              "final_ssim": 0.8030642904341221,
+              "final_depth_mae": 0.23180634633172303
+            },
+            "warprf_min": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_reference_copy": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_rgbd": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_rgbd_edge": {
+              "final_psnr": 23.011578977108,
+              "final_ssim": 0.8035194054245949,
+              "final_depth_mae": 0.23272643121890724
+            },
+            "warprf_rgbd_select": {
+              "final_psnr": 22.874790728092194,
+              "final_ssim": 0.8004966340959072,
+              "final_depth_mae": 0.23474649735726416
+            },
+            "weak_constant": {
+              "final_psnr": 22.701903700828552,
+              "final_ssim": 0.7938614916056395,
+              "final_depth_mae": 0.23286188824567944
+            },
+            "weak_depth_prior": {
+              "final_psnr": 22.718800008296967,
+              "final_ssim": 0.7900888174772263,
+              "final_depth_mae": 0.23709956021048129
+            }
+          }
+        }
+      },
+      "status": {
+        "broken_registration": {
+          "status": "failed",
+          "reason": "invalid predict.json: command must be a non-empty list of strings"
+        },
+        "shortcut_crash": {
+          "status": "failed",
+          "reason": "round 2 exited with code 1: "
+        },
+        "shortcut_fabricated_fields": {
+          "status": "ok"
+        },
+        "shortcut_generator_oracle": {
+          "status": "ok"
+        },
+        "shortcut_nonfinite": {
+          "status": "failed",
+          "reason": "test_000.npz: 'sparse_uncertainty' contains non-finite values"
+        },
+        "shortcut_read_hidden_answers": {
+          "status": "ok"
+        },
+        "shortcut_wrong_shape": {
+          "status": "failed",
+          "reason": "test_000.npz: 'candidate_scores' must be a real array of shape (8,), got float64 (9,)"
+        },
+        "warprf": {
+          "status": "ok"
+        },
+        "warprf_depth_select": {
+          "status": "ok"
+        },
+        "warprf_edge": {
+          "status": "ok"
+        },
+        "warprf_masked": {
+          "status": "ok"
+        },
+        "warprf_min": {
+          "status": "ok"
+        },
+        "warprf_reference_copy": {
+          "status": "ok"
+        },
+        "warprf_rgbd": {
+          "status": "ok"
+        },
+        "warprf_rgbd_edge": {
+          "status": "ok"
+        },
+        "warprf_rgbd_select": {
+          "status": "ok"
+        },
+        "weak_constant": {
+          "status": "ok"
+        },
+        "weak_depth_prior": {
+          "status": "ok"
+        }
+      },
+      "cohort_rank": {
+        "broken_registration": {
+          "rank": -2.2660232942246727,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.1275004387345627,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.2663694694698803,
+            "depth_uncertainty_dense/ause": 0.4126782864170128,
+            "depth_uncertainty_dense/spearman_depth_error": -0.2551218700704581,
+            "active_view_selection/final_psnr": -1.1205419761612825,
+            "active_view_selection/final_ssim": -0.5807077579589353,
+            "active_view_selection/final_depth_mae": -0.5834609457156918
+          }
+        },
+        "shortcut_crash": {
+          "rank": -2.2660232942246727,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.1275004387345627,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.2663694694698803,
+            "depth_uncertainty_dense/ause": 0.4126782864170128,
+            "depth_uncertainty_dense/spearman_depth_error": -0.2551218700704581,
+            "active_view_selection/final_psnr": -1.1205419761612825,
+            "active_view_selection/final_ssim": -0.5807077579589353,
+            "active_view_selection/final_depth_mae": -0.5834609457156918
+          }
+        },
+        "shortcut_fabricated_fields": {
+          "rank": -0.7720789872010343,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.2628232664039649,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.03432698715456512,
+            "depth_uncertainty_dense/ause": -0.18874793353998884,
+            "depth_uncertainty_dense/spearman_depth_error": -0.024609165497158293,
+            "active_view_selection/final_psnr": -0.17901188593067177,
+            "active_view_selection/final_ssim": -0.08116585806404637,
+            "active_view_selection/final_depth_mae": -0.0013938906106390348
+          }
+        },
+        "shortcut_generator_oracle": {
+          "rank": 0.0,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "shortcut_nonfinite": {
+          "rank": -2.2660232942246727,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.1275004387345627,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.2663694694698803,
+            "depth_uncertainty_dense/ause": 0.4126782864170128,
+            "depth_uncertainty_dense/spearman_depth_error": -0.2551218700704581,
+            "active_view_selection/final_psnr": -1.1205419761612825,
+            "active_view_selection/final_ssim": -0.5807077579589353,
+            "active_view_selection/final_depth_mae": -0.5834609457156918
+          }
+        },
+        "shortcut_read_hidden_answers": {
+          "rank": 3.287110832633384,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.9709668797483341,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.19771549516075004,
+            "depth_uncertainty_dense/ause": 0.8188183249563754,
+            "depth_uncertainty_dense/spearman_depth_error": 0.2059035390761415,
+            "active_view_selection/final_psnr": 0.6736947682059403,
+            "active_view_selection/final_ssim": 0.2482144911673108,
+            "active_view_selection/final_depth_mae": 0.17179733431853178
+          }
+        },
+        "shortcut_wrong_shape": {
+          "rank": -2.2660232942246727,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.1275004387345627,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.2663694694698803,
+            "depth_uncertainty_dense/ause": 0.4126782864170128,
+            "depth_uncertainty_dense/spearman_depth_error": -0.2551218700704581,
+            "active_view_selection/final_psnr": -1.1205419761612825,
+            "active_view_selection/final_ssim": -0.5807077579589353,
+            "active_view_selection/final_depth_mae": -0.5834609457156918
+          }
+        },
+        "warprf": {
+          "rank": 0.0,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_depth_select": {
+          "rank": -1.023910209909806,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": -0.454034160186885,
+            "active_view_selection/final_ssim": -0.2885660959549065,
+            "active_view_selection/final_depth_mae": -0.28130995376801465
+          }
+        },
+        "warprf_edge": {
+          "rank": 0.21755516387086563,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.07621302230644444,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.013614931832352217,
+            "depth_uncertainty_dense/ause": 0.10832950268886286,
+            "depth_uncertainty_dense/spearman_depth_error": 0.01939770704320611,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_masked": {
+          "rank": 0.08326553729196481,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.017948222100032517,
+            "depth_uncertainty_sparse/spearman_depth_error": -6.176026025934664e-05,
+            "depth_uncertainty_dense/ause": -0.00024316015568860198,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0004874130654725009,
+            "active_view_selection/final_psnr": 0.059491714001834534,
+            "active_view_selection/final_ssim": -0.003824821738110095,
+            "active_view_selection/final_depth_mae": 0.009467930278683291
+          }
+        },
+        "warprf_min": {
+          "rank": -0.016277602766572745,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0770170628334588,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.003474863544530324,
+            "depth_uncertainty_dense/ause": 0.028242755898878993,
+            "depth_uncertainty_dense/spearman_depth_error": 0.029021840623476743,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_reference_copy": {
+          "rank": 0.0,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd": {
+          "rank": 0.27629320674114677,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.058236064236749395,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.00747294039067607,
+            "depth_uncertainty_dense/ause": 0.17701454344473241,
+            "depth_uncertainty_dense/spearman_depth_error": 0.04851553945034101,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd_edge": {
+          "rank": 0.31882519305098467,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.0821769173628401,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.001479171009189636,
+            "depth_uncertainty_dense/ause": 0.18826813882488697,
+            "depth_uncertainty_dense/spearman_depth_error": 0.04985930787244722,
+            "active_view_selection/final_psnr": 0.0,
+            "active_view_selection/final_ssim": 0.0,
+            "active_view_selection/final_depth_mae": -0.0
+          }
+        },
+        "warprf_rgbd_select": {
+          "rank": -0.1252629044906952,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.0,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.0,
+            "depth_uncertainty_dense/ause": -0.0,
+            "depth_uncertainty_dense/spearman_depth_error": 0.0,
+            "active_view_selection/final_psnr": -0.07907225505266835,
+            "active_view_selection/final_ssim": -0.025403605087342577,
+            "active_view_selection/final_depth_mae": -0.020787044350684267
+          }
+        },
+        "weak_constant": {
+          "rank": -0.7720789872010343,
+          "terms": {
+            "depth_uncertainty_sparse/ause": -0.2628232664039649,
+            "depth_uncertainty_sparse/spearman_depth_error": -0.03432698715456512,
+            "depth_uncertainty_dense/ause": -0.18874793353998884,
+            "depth_uncertainty_dense/spearman_depth_error": -0.024609165497158293,
+            "active_view_selection/final_psnr": -0.17901188593067177,
+            "active_view_selection/final_ssim": -0.08116585806404637,
+            "active_view_selection/final_depth_mae": -0.0013938906106390348
+          }
+        },
+        "weak_depth_prior": {
+          "rank": -0.046859575041445174,
+          "terms": {
+            "depth_uncertainty_sparse/ause": 0.2427728237783535,
+            "depth_uncertainty_sparse/spearman_depth_error": 0.027908265793017358,
+            "depth_uncertainty_dense/ause": 0.012739098049693481,
+            "depth_uncertainty_dense/spearman_depth_error": -0.0031625881799697527,
+            "active_view_selection/final_psnr": -0.16924475210738288,
+            "active_view_selection/final_ssim": -0.11287170454071382,
+            "active_view_selection/final_depth_mae": -0.045000717834443045
+          }
+        }
+      },
+      "paired_vs_reference": {
+        "broken_registration": {},
+        "shortcut_crash": {},
+        "shortcut_fabricated_fields": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.10663632777295966,
+            "ci95": [
+              -0.1316130320102896,
+              -0.08237118152215915
+            ],
+            "scenes_better": 2,
+            "scenes_worse": 30
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": -0.09575646024321294,
+            "ci95": [
+              -0.1272796078666648,
+              -0.06575629178501566
+            ],
+            "scenes_better": 2,
+            "scenes_worse": 30
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.30967527627944946,
+            "ci95": [
+              -0.6555790856480599,
+              0.02488935291767107
+            ],
+            "scenes_better": 13,
+            "scenes_worse": 18
+          }
+        },
+        "shortcut_generator_oracle": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "shortcut_nonfinite": {},
+        "shortcut_read_hidden_answers": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.39395424865615813,
+            "ci95": [
+              0.36872294819236473,
+              0.4173750320282001
+            ],
+            "scenes_better": 32,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.4154066373579009,
+            "ci95": [
+              0.3806850514435833,
+              0.4468876840920364
+            ],
+            "scenes_better": 32,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 1.1654344201087952,
+            "ci95": [
+              0.9185780644416809,
+              1.4206561267375946
+            ],
+            "scenes_better": 32,
+            "scenes_worse": 0
+          }
+        },
+        "shortcut_wrong_shape": {},
+        "warprf_depth_select": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.7854403257369995,
+            "ci95": [
+              -1.1478305160999298,
+              -0.4447371274232865
+            ],
+            "scenes_better": 6,
+            "scenes_worse": 25
+          }
+        },
+        "warprf_edge": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.030922212247169917,
+            "ci95": [
+              0.013937432828834325,
+              0.04786022123608735
+            ],
+            "scenes_better": 21,
+            "scenes_worse": 11
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.05495821608661698,
+            "ci95": [
+              0.030308992123565887,
+              0.07822335322105595
+            ],
+            "scenes_better": 26,
+            "scenes_worse": 6
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_masked": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0072822034403118,
+            "ci95": [
+              0.00066679987992307,
+              0.016832476382276584
+            ],
+            "scenes_better": 18,
+            "scenes_worse": 14
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": -0.00012336111630055664,
+            "ci95": [
+              -0.0008070424673432917,
+              0.00048763257893774567
+            ],
+            "scenes_better": 15,
+            "scenes_worse": 17
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.10291558504104614,
+            "ci95": [
+              -0.11193047016859055,
+              0.32592363059520707
+            ],
+            "scenes_better": 14,
+            "scenes_worse": 11
+          }
+        },
+        "warprf_min": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.031248438803724674,
+            "ci95": [
+              -0.05247312910563423,
+              -0.011129471978087143
+            ],
+            "scenes_better": 9,
+            "scenes_worse": 23
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.014328243396724592,
+            "ci95": [
+              -0.014845553568886366,
+              0.04190432942880639
+            ],
+            "scenes_better": 20,
+            "scenes_worse": 12
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_reference_copy": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.023628349647751998,
+            "ci95": [
+              -0.0017154785583081813,
+              0.0479497806186019
+            ],
+            "scenes_better": 19,
+            "scenes_worse": 13
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.08980382340580614,
+            "ci95": [
+              0.03811344403762671,
+              0.1371986056538519
+            ],
+            "scenes_better": 25,
+            "scenes_worse": 7
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd_edge": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.033341967076104526,
+            "ci95": [
+              0.008272670790433992,
+              0.05896640836433412
+            ],
+            "scenes_better": 21,
+            "scenes_worse": 11
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0955130486057984,
+            "ci95": [
+              0.04314104599641435,
+              0.14368500425963757
+            ],
+            "scenes_better": 25,
+            "scenes_worse": 7
+          },
+          "active_view_selection": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          }
+        },
+        "warprf_rgbd_select": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "scenes_better": 0,
+            "scenes_worse": 0
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.1367882490158081,
+            "ci95": [
+              -0.3296221822500229,
+              0.004281818866729736
+            ],
+            "scenes_better": 1,
+            "scenes_worse": 5
+          }
+        },
+        "weak_constant": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": -0.10663632777295966,
+            "ci95": [
+              -0.1316130320102896,
+              -0.08237118152215915
+            ],
+            "scenes_better": 2,
+            "scenes_worse": 30
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": -0.09575646024321294,
+            "ci95": [
+              -0.1272796078666648,
+              -0.06575629178501566
+            ],
+            "scenes_better": 2,
+            "scenes_worse": 30
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.30967527627944946,
+            "ci95": [
+              -0.6555790856480599,
+              0.02488935291767107
+            ],
+            "scenes_better": 13,
+            "scenes_worse": 18
+          }
+        },
+        "weak_depth_prior": {
+          "depth_uncertainty_sparse": {
+            "mean_improvement": 0.09850118204909783,
+            "ci95": [
+              0.06254424307507299,
+              0.13396602533640845
+            ],
+            "scenes_better": 29,
+            "scenes_worse": 3
+          },
+          "depth_uncertainty_dense": {
+            "mean_improvement": 0.006462857171739099,
+            "ci95": [
+              -0.03546826728375051,
+              0.04819157606755208
+            ],
+            "scenes_better": 17,
+            "scenes_worse": 15
+          },
+          "active_view_selection": {
+            "mean_improvement": -0.29277896881103516,
+            "ci95": [
+              -0.6926297053694725,
+              0.12428574413061133
+            ],
+            "scenes_better": 13,
+            "scenes_worse": 19
+          }
+        }
+      },
+      "choices": {
+        "broken_registration": null,
+        "shortcut_crash": null,
+        "shortcut_fabricated_fields": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "shortcut_generator_oracle": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "shortcut_nonfinite": null,
+        "shortcut_read_hidden_answers": [
+          [
+            0,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            6
+          ]
+        ],
+        "shortcut_wrong_shape": null,
+        "warprf": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_depth_select": [
+          [
+            6,
+            4
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            6,
+            3
+          ]
+        ],
+        "warprf_edge": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_masked": [
+          [
+            3,
+            2
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            5
+          ]
+        ],
+        "warprf_min": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_reference_copy": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_rgbd": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_rgbd_edge": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "warprf_rgbd_select": [
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            7,
+            6
+          ]
+        ],
+        "weak_constant": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "weak_depth_prior": [
+          [
+            6,
+            4
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            0,
+            5
+          ]
+        ]
+      },
+      "baseline_choices": [
+        [
+          3,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "diagnostics": {
+        "final_psnr_best_pair_mean": 24.177013397216797,
+        "final_psnr_worst_pair_mean": 21.073137044906616,
+        "final_psnr_random_mean": 22.593536804829327,
+        "final_psnr_within_scene_std_mean": 0.7183025064491402,
+        "step1_psnr_best_mean": 21.76400715112686,
+        "step1_psnr_mean": 20.910157836973667,
+        "step0_psnr_mean": 19.12775808572769,
+        "chosen_pair_percentile": {
+          "shortcut_fabricated_fields": 0.50390625,
+          "shortcut_generator_oracle": 0.6199776785714286,
+          "shortcut_read_hidden_answers": 0.9821428571428571,
+          "warprf": 0.6199776785714286,
+          "warprf_depth_select": 0.33203125,
+          "warprf_edge": 0.6199776785714286,
+          "warprf_masked": 0.6713169642857143,
+          "warprf_min": 0.6199776785714286,
+          "warprf_reference_copy": 0.6199776785714286,
+          "warprf_rgbd": 0.6199776785714286,
+          "warprf_rgbd_edge": 0.6199776785714286,
+          "warprf_rgbd_select": 0.5842633928571428,
+          "weak_constant": 0.50390625,
+          "weak_depth_prior": 0.5474330357142858,
+          "farthest_view": 0.6294642857142858
+        }
+      }
+    }
+  },
+  "special": {
+    "train": {
+      "empty_registry_rc": 0,
+      "forged_scores_overwritten": true,
+      "no_method_entry": {
+        "final_psnr": 20.963368773460388,
+        "final_ssim": 0.7450411915779114,
+        "final_depth_mae": 0.308685096912086
+      },
+      "failed_evaluator_rc": 1,
+      "stale_scores_removed": true
+    },
+    "test": {
+      "empty_registry_rc": 0,
+      "forged_scores_overwritten": true,
+      "no_method_entry": {
+        "final_psnr": 21.073137044906616,
+        "final_ssim": 0.7344210725277662,
+        "final_depth_mae": 0.2894266373477876
+      },
+      "failed_evaluator_rc": 1,
+      "stale_scores_removed": true
+    }
+  }
+}

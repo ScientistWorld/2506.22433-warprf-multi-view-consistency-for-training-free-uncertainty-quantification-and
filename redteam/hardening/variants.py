@@ -134,6 +134,18 @@ def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_
         elif kind == "rgbd_sum":
             pu = pixel_uncertainty(dep, pose, sdep, src_poses, k)
             s = float(image_uncertainty(img, dep, pose, srgb, src_poses, k)) / dep.size + float(np.mean(pu / (np.median(pu) + 1e-6))) * 0.05
+        elif kind == "coverage":
+            h, w = dep.shape
+            pts = backproject(dep, k)
+            best = None
+            for si, sp in zip(srgb, src_poses):
+                s_from_t, _ = _relative(pose, sp)
+                ins = transform(pts, s_from_t)
+                u, v = project(ins, k)
+                inb = (u >= 0) & (u <= w) & (v >= 0) & (v <= h) & (ins[..., 2] > 0)
+                diff = np.where(inb, np.abs(sample_bilinear(si.astype(np.float64), u, v) - img).sum(-1), 3.0)
+                best = diff if best is None else np.minimum(best, diff)
+            s = float(best.sum())
         elif kind == "constant":
             s = 0.0
         elif kind == "depth_prior":
@@ -142,6 +154,36 @@ def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_
             raise ValueError(kind)
         scores.append(s)
     return np.asarray(scores, dtype=np.float64)
+
+
+def _ranks(x):
+    return np.argsort(np.argsort(x)).astype(np.float64)
+
+
+def select_ensemble(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses):
+    """Rank-sum of Eq. 9 and the distance from each candidate camera to the nearest current camera."""
+    eq9 = select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses, "reference")
+    centers = cand_poses[:, :3, 3].astype(np.float64)
+    srcs = src_poses[:, :3, 3].astype(np.float64)
+    dist = np.array([np.min(np.linalg.norm(srcs - c, axis=1)) for c in centers])
+    return _ranks(eq9) + _ranks(dist) + 1e-3 * _ranks(eq9)
+
+
+def select_lookahead(k, src_rgb, src_poses, cand_rgb, cand_depth, cand_poses):
+    """Pair-aware first pick: Eq. 9 of a plus the best Eq. 9 of a second view once a's rendering is a source."""
+    srgb = ref._rgb(src_rgb)
+    crgb = ref._rgb(cand_rgb)
+    cdep = ref._depth(cand_depth)
+    single = np.array([image_uncertainty(crgb[i], cdep[i], cand_poses[i], srgb, src_poses, k) for i in range(len(crgb))])
+    out = np.empty(len(crgb))
+    for a in range(len(crgb)):
+        pseudo = np.concatenate([srgb, crgb[a : a + 1]])
+        pposes = np.concatenate([src_poses, cand_poses[a : a + 1]])
+        second = max(
+            image_uncertainty(crgb[b], cdep[b], cand_poses[b], pseudo, pposes, k) for b in range(len(crgb)) if b != a
+        )
+        out[a] = single[a] + second
+    return out
 
 
 VARIANTS = {
@@ -154,9 +196,30 @@ VARIANTS = {
     "warprf_rgbd_edge": ("rgbd_edge", "reference"),
     "warprf_depth_select": ("reference", "depth_sum"),
     "warprf_rgbd_select": ("reference", "rgbd_sum"),
+    "warprf_coverage_select": ("reference", "coverage"),
+    "warprf_ensemble_select": ("reference", "farthest_ensemble"),
+    "warprf_lookahead_select": ("reference", "lookahead"),
+    "warprf_plus": ("rgbd_edge", "lookahead"),
+    "depth_prior_hybrid": ("depth_prior", "reference"),
     "weak_depth_prior": ("depth_prior", "depth_prior"),
     "weak_constant": ("constant", "constant"),
 }
+
+
+def _select(sk, rnd, data):
+    if rnd == 1:
+        args = (data["intrinsics"], data["sparse_source_rgb"], data["sparse_source_depth"], data["sparse_source_poses"],
+                data["sparse_candidate_rgb"], data["sparse_candidate_depth"], data["candidate_poses"])
+    else:
+        args = (data["intrinsics"], data["source_rgb"], data["source_depth"], data["source_poses"],
+                data["candidate_rgb"], data["candidate_depth"], data["candidate_poses"])
+    if sk == "farthest_ensemble":
+        return select_ensemble(*args)
+    if sk == "lookahead":
+        if rnd == 1:
+            return select_lookahead(args[0], args[1], args[3], args[4], args[5], args[6])
+        return select_variant(*args, "reference")
+    return select_variant(*args, sk)
 
 
 def run_variant(name, rnd, data):
@@ -165,17 +228,9 @@ def run_variant(name, rnd, data):
         return {
             "sparse_uncertainty": depth_variant(data, "sparse", dk),
             "dense_uncertainty": depth_variant(data, "dense", dk),
-            "candidate_scores": select_variant(
-                data["intrinsics"], data["sparse_source_rgb"], data["sparse_source_depth"], data["sparse_source_poses"],
-                data["sparse_candidate_rgb"], data["sparse_candidate_depth"], data["candidate_poses"], sk,
-            ),
+            "candidate_scores": _select(sk, 1, data),
         }
-    return {
-        "candidate_scores": select_variant(
-            data["intrinsics"], data["source_rgb"], data["source_depth"], data["source_poses"],
-            data["candidate_rgb"], data["candidate_depth"], data["candidate_poses"], sk,
-        )
-    }
+    return {"candidate_scores": _select(sk, 2, data)}
 
 
 # --------------------------------------------------------------------------- shortcut payloads

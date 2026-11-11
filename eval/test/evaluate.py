@@ -59,17 +59,27 @@ def _trapezoid(y: np.ndarray, x: np.ndarray) -> float:
 
 
 def ause(uncertainty: np.ndarray, error: np.ndarray, tiebreak: np.ndarray) -> float:
-    """Area under the sparsification error curve (BayesRays / WarpRF protocol)."""
+    """Area under the sparsification error curve (BayesRays / WarpRF protocol).
+
+    Pixels are removed in decreasing order of predicted uncertainty (ties broken
+    by a fixed evaluator-owned key) and the mean absolute depth error of the
+    remaining pixels is compared with the oracle curve that removes pixels by
+    true error, over removal fractions 0, 0.01, ..., 0.99. Both curves are
+    divided by the view's full-set mean error, a constant that does not depend
+    on the prediction, so a better ordering always gives a lower AUSE. (The
+    released code divides by the larger curve's maximum, which depends on the
+    prediction and lets an anti-correlated ordering score below a random one.)
+    """
     n = error.size
     ratios = np.linspace(0.0, 1.0, 100, endpoint=False)
     keep = np.maximum(np.array([int((1.0 - r) * n) for r in ratios]), 1)
     oracle = np.cumsum(np.sort(error))[keep - 1] / keep
     order = np.lexsort((tiebreak, uncertainty))
     by_unc = np.cumsum(error[order])[keep - 1] / keep
-    top = max(float(oracle.max()), float(by_unc.max()))
-    if top <= 0.0:
+    scale = float(np.mean(error))
+    if scale <= 0.0:
         return 0.0
-    return _trapezoid((by_unc - oracle) / top, ratios)
+    return _trapezoid((by_unc - oracle) / scale, ratios)
 
 
 def _rankdata(a: np.ndarray) -> np.ndarray:
