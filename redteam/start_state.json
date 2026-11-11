@@ -1,0 +1,4 @@
+{
+  "commit": "c43f2a3eef1104374e740ecc8da3826600f48871",
+  "preexisting_status": " M README.md\n M manifest.json\n D trajectory/turn_0001_raw.jsonl\n D trajectory/turn_0002_raw.jsonl\n D trajectory/turn_0003_raw.jsonl\n D trajectory/turn_0004_raw.jsonl\n D trajectory/turn_0005_raw.jsonl\n D trajectory/turn_0006_raw.jsonl\n D trajectory/turn_0007_raw.jsonl\n D trajectory/turn_0008_raw.jsonl\n?? redteam/\n"
+}
