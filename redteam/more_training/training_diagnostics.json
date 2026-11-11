@@ -1,0 +1,23 @@
+{
+  "warprf_dense": {
+    "seed": 11,
+    "steps": 2700,
+    "seconds": 650.2230525016785,
+    "old_ray_distance_roundtrip_mae": 0.1635208374557647,
+    "fixed_ray_distance_roundtrip_mae": 2.3643587875641575e-08
+  },
+  "warprf": {
+    "seed": 11,
+    "steps": 2700,
+    "seconds": 750.6664111614227,
+    "old_ray_distance_roundtrip_mae": 0.06020553224550931,
+    "fixed_ray_distance_roundtrip_mae": 9.631912742133814e-09
+  },
+  "warprf_shifted": {
+    "seed": 11,
+    "steps": 2700,
+    "seconds": 755.0709552764893,
+    "old_ray_distance_roundtrip_mae": 0.06163597838681624,
+    "fixed_ray_distance_roundtrip_mae": 9.692527903317024e-09
+  }
+}

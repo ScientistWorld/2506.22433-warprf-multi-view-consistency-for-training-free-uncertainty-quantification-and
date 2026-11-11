@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/user/eval/test/evaluate.py", line 337, in <module>
+    main()
+  File "/home/user/eval/test/evaluate.py", line 324, in main
+    results = evaluate_artifacts(Path(args.artifact), args.experiment_prefix or None, expected_scores)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/eval/test/evaluate.py", line 301, in evaluate_artifacts
+    scored = _score_artifact(artifact, prefix, method)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/eval/test/evaluate.py", line 213, in _score_artifact
+    data = np.load(artifact)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py", line 489, in load
+    raise ValueError(
+ValueError: This file contains pickled (object) data. If you trust the file you can load it unsafely using the `allow_pickle=` keyword argument or `pickle.load()`.

@@ -9,14 +9,14 @@ import csv
 import json
 import math
 from pathlib import Path
-import numpy as np
+import statistics
 
 HERE=Path(__file__).resolve().parent
 
 def getmetrics(scores):
     return {(e,m):v for e,x in scores.get('experiments',{}).items()
             for m,v in x.get('results',{}).get('warprf',{}).items()
-            if isinstance(v,(int,float)) and np.isfinite(v)}
+            if isinstance(v,(int,float)) and math.isfinite(v)}
 
 def summarize():
     defs=json.loads((HERE/'reference/reference_definition.json').read_text())['experiments']
@@ -30,7 +30,7 @@ def summarize():
             continue
         data=json.loads(p.read_text())
         # Do not silently interpret NaN as an ordinary missing metric.
-        if any(not np.isfinite(v) for exp in data.get('experiments',{}).values()
+        if any(not math.isfinite(v) for exp in data.get('experiments',{}).values()
                for metrics in exp.get('results',{}).values() for v in metrics.values()
                if isinstance(v,(int,float))):
             statuses[name]['unrankable_nonfinite']=True
@@ -43,7 +43,7 @@ def summarize():
     scales={}
     for key in base:
         vals=[d[key] for d in flat.values() if key in d]
-        std=float(np.std(vals))
+        std=statistics.pstdev(vals)
         if std>0:
             scales[key]=std
     ranks={}
@@ -69,7 +69,10 @@ def summarize():
             'audit_cohort_rank_delta':ranks[name],
             'all_available_scored_metrics_nondecreasing':bool(changes) and all(v>=-1e-10 for v in changes),
             'strictly_improved_metric_count':sum(v>1e-10 for v in changes),
-            'metric_count':len(vals),
+            'raw_metric_count':len(vals),
+            'scored_metric_count':sum((e,m) in base and e in defs and m in defs[e]['metrics']
+                                      and abs(defs[e]['metrics'][m]['coefficient'])>0
+                                      for e,m in vals),
             'rank_contributions':contributions[name],
             'metrics':{e:data['experiments'][e]['results'].get('warprf',{}) for e in data.get('experiments',{})},
         }
@@ -89,18 +92,27 @@ def summarize():
                     depth.append(x['results']['warprf']['mean_depth_error'])
                 if e.endswith('_active_view_proxy') and 'random_view' in x['results']:
                     rgb.append(x['results']['random_view']['selected_candidate_error'])
-            comparison[n]={'rank_delta':ranks[n],'mean_test_depth_mae':float(np.mean(depth)),
-                           'mean_test_candidate_rgb_mae':float(np.mean(rgb))}
+            comparison[n]={'rank_delta':ranks[n],'mean_test_depth_mae':statistics.mean(depth),
+                           'mean_test_candidate_rgb_mae':statistics.mean(rgb)}
     bounds=[]
     for (e,m),v in base.items():
         if m not in defs[e]['metrics'] or abs(defs[e]['metrics'][m]['coefficient'])==0:
             continue
         if (m in ('ause','mean_depth_error','selection_regret_fraction','used_ground_truth_for_uncertainty') and v==0) or (m.endswith('spearman') or m=='spearman_depth_error') and v==1:
             bounds.append({'experiment':e,'metric':m,'value':v})
+    random_baseline_rank=0.0
+    for e,experiment in cohort['reference']['experiments'].items():
+        method='random_uncertainty' if e.endswith('_depth_uncertainty') else 'random_view'
+        for m,value in experiment['results'][method].items():
+            metric=defs[e]['metrics'][m]
+            if (e,m) in scales:
+                random_baseline_rank+=(defs[e]['weight']*abs(metric['coefficient'])*
+                    (1 if metric['higher_is_better'] else -1)*(value-base[e,m])/scales[e,m])
     report={
         'normalization':'population std across all successful finite audit cases; failed and nonfinite cases excluded; empty results skip all losses',
         'rank_formula':'sum(weight * abs(coefficient) * direction * (value - reference_hidden_test_value) / std)',
         'reference_rank':0,
+        'random_baseline_rank_delta':random_baseline_rank,
         'cohort':sorted(cohort),
         'scales':{e+'/'+m:v for (e,m),v in scales.items()},
         'case_results':details,
@@ -112,9 +124,9 @@ def summarize():
     }
     (HERE/'summary.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     with (HERE/'rank_table.csv').open('w') as out:
-        writer=csv.writer(out);writer.writerow(['case','audit_cohort_rank_delta','scored_metric_count','dominates_reference'])
+        writer=csv.writer(out,lineterminator='\n');writer.writerow(['case','audit_cohort_rank_delta','scored_metric_count','dominates_reference'])
         for name,d in sorted(details.items(),key=lambda item:-item[1]['audit_cohort_rank_delta']):
-            writer.writerow([name,d['audit_cohort_rank_delta'],d['metric_count'],d['all_available_scored_metrics_nondecreasing']])
+            writer.writerow([name,d['audit_cohort_rank_delta'],d['scored_metric_count'],d['all_available_scored_metrics_nondecreasing']])
     print(json.dumps({'ranks':ranks,'quality':comparison,'seed_rank_spread':report['reference_seed_rank_range']},indent=2),flush=True)
 
 if __name__=='__main__':

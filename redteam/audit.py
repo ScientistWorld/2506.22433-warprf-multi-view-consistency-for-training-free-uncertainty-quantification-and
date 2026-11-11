@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 import traceback
 import numpy as np
@@ -217,7 +218,9 @@ def main():
     args=parser.parse_args()
     names=CASES if args.all else [args.case]
     for name in names:
-        run_case(name)
+        info=run_case(name)
+        if not args.all and (info.get('exception') or info.get('test_exit')!=0):
+            sys.exit(info.get('test_exit') or 1)
     if args.all:
         from redteam.summarize import summarize
         summarize()

@@ -1,0 +1,240 @@
+[hive] This stdout log is managed by Hive.
+[hive] job_id: 776ab2ef
+[hive] host: node
+[hive] node_id: 5b56c1bb00c851f2c3f93b346fd15ddec87104a85e26c62af4985535
+[hive] user: nexus/user (remote)
+[hive] resource: gpu-cpu
+[hive] gpus: 0
+[hive] cpus: 1
+[hive] workdir: /home/user
+[hive] timeout_sec: 21600
+[hive] started_at: 2026-11-10 19:59:50 EST
+[hive] command: apptainer exec --containall --cleanenv --env HF_HOME=/home/user/shared/hf_cache --env TRANSFORMERS_CACHE=/home/user/shared/hf_cache --env HF_DATASETS_CACHE=/home/user/shared/hf_cache/datasets --env TORCH_HOME=/home/user/shared/hf_cache/torch --bind /home/user/scratch/AgentWorkspaces/workspaces/2506.22433:/home/user --overlay /home/user/scratch/AgentWorkspaces/workspaces/2506.22433/environment/overlay.img:ro --bind /home/user/scratch/AgentWorkspaces/shared/datasets:/home/user/shared/datasets:ro --bind /home/user/scratch/AgentWorkspaces/shared/models:/home/user/shared/models:ro --bind /home/user/scratch/AgentWorkspaces/shared/hf_cache:/home/user/shared/hf_cache /home/user/scratch/AgentWorkspaces/workspaces/2506.22433/environment/container.sif bash -c 'cd /home/user && bash /home/user/scripts/run.sh'
+{"name": "reference", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 4.803462266921997}
+{"name": "weak_no_warp", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 9.341326713562012}
+{"name": "weak_constant_predictions", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 8.66711711883545}
+{"name": "shortcut_oracle_enumeration", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 8.421674251556396}
+{"name": "shortcut_legacy_fabrication", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 9.188520431518555}
+{"name": "shortcut_false_budget", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 4.992530107498169}
+{"name": "shortcut_impossible_constraints", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 7.594358921051025}
+{"name": "shortcut_degenerate_images", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 9.171441316604614}
+{"name": "shortcut_impossible_images", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 7.419679880142212}
+{"name": "shortcut_replace_fixed_data", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 5.279460430145264}
+{"name": "shortcut_empty_results", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 7.361260414123535}
+{"name": "shortcut_omit_weaker_method", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/zz_shortcut_ignored/warprf_outputs.npz", "metadata": {"method": "shortcut_ignored", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 10.085094928741455}
+{"name": "shortcut_invalid_selection", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 9.024970293045044}
+{"name": "shortcut_direct_scores", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 6.436459302902222}
+{"name": "shortcut_nonfinite", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 5.8846142292022705}
+{"name": "shortcut_failed_stale", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 1, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "selected_candidate_view": 2}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "selected_candidate_view": 4}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "selected_candidate_view": 3}}], "seconds": 7.228911876678467}
+TRAINED redteam/.cache/train_900_seed_11/warprf {
+  "seed": 11,
+  "steps": 900,
+  "seconds": 211.2762050628662,
+  "old_ray_distance_roundtrip_mae": 0.06009293060203422,
+  "fixed_ray_distance_roundtrip_mae": 9.61591597581868e-09
+}
+
+TRAINED redteam/.cache/train_900_seed_11/warprf_dense {
+  "seed": 11,
+  "steps": 900,
+  "seconds": 210.2274649143219,
+  "old_ray_distance_roundtrip_mae": 0.14554456681545552,
+  "fixed_ray_distance_roundtrip_mae": 2.1366326624277485e-08
+}
+
+TRAINED redteam/.cache/train_900_seed_11/warprf_shifted {
+  "seed": 11,
+  "steps": 900,
+  "seconds": 234.39132142066956,
+  "old_ray_distance_roundtrip_mae": 0.06284054436062246,
+  "fixed_ray_distance_roundtrip_mae": 9.873478598765017e-09
+}
+
+{"name": "reference_seed_11", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 11}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 11}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 11}}], "seconds": 676.925669670105}
+{"name": "geometry_seed_11", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 11}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 11}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 11}}], "seconds": 8.157752990722656}
+TRAINED redteam/.cache/train_900_seed_12/warprf {
+  "seed": 12,
+  "steps": 900,
+  "seconds": 219.7865924835205,
+  "old_ray_distance_roundtrip_mae": 0.059280233815610234,
+  "fixed_ray_distance_roundtrip_mae": 9.488622810492138e-09
+}
+
+TRAINED redteam/.cache/train_900_seed_12/warprf_dense {
+  "seed": 12,
+  "steps": 900,
+  "seconds": 251.93402791023254,
+  "old_ray_distance_roundtrip_mae": 0.16403441115583528,
+  "fixed_ray_distance_roundtrip_mae": 2.4941647089396985e-08
+}
+
+TRAINED redteam/.cache/train_900_seed_12/warprf_shifted {
+  "seed": 12,
+  "steps": 900,
+  "seconds": 288.21412444114685,
+  "old_ray_distance_roundtrip_mae": 0.17068003633539597,
+  "fixed_ray_distance_roundtrip_mae": 2.6420496647797534e-08
+}
+
+{"name": "reference_seed_12", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 12}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 12}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 12}}], "seconds": 766.149144411087}
+{"name": "geometry_seed_12", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 12}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 12}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 12}}], "seconds": 7.533067226409912}
+TRAINED redteam/.cache/train_900_seed_13/warprf {
+  "seed": 13,
+  "steps": 900,
+  "seconds": 217.91778922080994,
+  "old_ray_distance_roundtrip_mae": 0.06188787090169962,
+  "fixed_ray_distance_roundtrip_mae": 9.894764759894465e-09
+}
+
+TRAINED redteam/.cache/train_900_seed_13/warprf_dense {
+  "seed": 13,
+  "steps": 900,
+  "seconds": 198.23425221443176,
+  "old_ray_distance_roundtrip_mae": 0.18574545384446584,
+  "fixed_ray_distance_roundtrip_mae": 2.6997566118372337e-08
+}
+
+TRAINED redteam/.cache/train_900_seed_13/warprf_shifted {
+  "seed": 13,
+  "steps": 900,
+  "seconds": 251.50938868522644,
+  "old_ray_distance_roundtrip_mae": 0.06053069641998654,
+  "fixed_ray_distance_roundtrip_mae": 9.6165035373695e-09
+}
+
+{"name": "reference_seed_13", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 13}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 13}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 13}}], "seconds": 673.540685415268}
+{"name": "geometry_seed_13", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 13}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 13}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 900, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 13}}], "seconds": 2.628883123397827}
+TRAINED redteam/.cache/train_2700_seed_11/warprf {
+  "seed": 11,
+  "steps": 2700,
+  "seconds": 750.6664111614227,
+  "old_ray_distance_roundtrip_mae": 0.06020553224550931,
+  "fixed_ray_distance_roundtrip_mae": 9.631912742133814e-09
+}
+
+TRAINED redteam/.cache/train_2700_seed_11/warprf_dense {
+  "seed": 11,
+  "steps": 2700,
+  "seconds": 650.2230525016785,
+  "old_ray_distance_roundtrip_mae": 0.1635208374557647,
+  "fixed_ray_distance_roundtrip_mae": 2.3643587875641575e-08
+}
+
+TRAINED redteam/.cache/train_2700_seed_11/warprf_shifted {
+  "seed": 11,
+  "steps": 2700,
+  "seconds": 755.0709552764893,
+  "old_ray_distance_roundtrip_mae": 0.06163597838681624,
+  "fixed_ray_distance_roundtrip_mae": 9.692527903317024e-09
+}
+
+{"name": "more_training", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 2700, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 11}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 2700, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 11}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 2700, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 11}}], "seconds": 2164.7980930805206}
+TRAINED redteam/.cache/train_90_seed_11/warprf {
+  "seed": 11,
+  "steps": 90,
+  "seconds": 28.712534427642822,
+  "old_ray_distance_roundtrip_mae": 0.07235853034758216,
+  "fixed_ray_distance_roundtrip_mae": 1.1337334003713439e-08
+}
+
+TRAINED redteam/.cache/train_90_seed_11/warprf_dense {
+  "seed": 11,
+  "steps": 90,
+  "seconds": 33.57373237609863,
+  "old_ray_distance_roundtrip_mae": 0.23435719417748058,
+  "fixed_ray_distance_roundtrip_mae": 3.605395673425144e-08
+}
+
+TRAINED redteam/.cache/train_90_seed_11/warprf_shifted {
+  "seed": 11,
+  "steps": 90,
+  "seconds": 19.09924030303955,
+  "old_ray_distance_roundtrip_mae": 0.08205050940599115,
+  "fixed_ray_distance_roundtrip_mae": 1.3021278829814485e-08
+}
+
+{"name": "less_training", "test_command": ["bash", "scripts/evaluate_test.sh"], "train_exit": 0, "test_exit": 0, "protected_evaluator_unchanged": true, "artifact_methods": [{"path": "outputs/warprf_dense/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 90, "width": 48, "height": 48, "split_offset": 0, "split_mode": "dense", "seed": 11}}, {"path": "outputs/warprf/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 90, "width": 48, "height": 48, "split_offset": 0, "split_mode": "sparse", "seed": 11}}, {"path": "outputs/warprf_shifted/warprf_outputs.npz", "metadata": {"method": "tiny_nerf_warprf", "device": "cpu", "steps": 90, "width": 48, "height": 48, "split_offset": 1, "split_mode": "sparse", "seed": 11}}], "seconds": 87.14152455329895}
+{
+  "ranks": {
+    "reference_seed_12": -0.4047802049530835,
+    "geometry_seed_13": -0.5694172176191927,
+    "shortcut_false_budget": 0.011551195285973781,
+    "shortcut_oracle_enumeration": 0.6314506594245849,
+    "shortcut_impossible_constraints": 1.5968151118273841,
+    "geometry_seed_11": -0.10103021365607301,
+    "reference_seed_11": -0.041748629150058884,
+    "more_training": -0.05984435704727366,
+    "shortcut_impossible_images": 0.9413075817126719,
+    "shortcut_invalid_selection": 0.0,
+    "shortcut_replace_fixed_data": 0.7661878244542136,
+    "geometry_seed_12": -0.5315582931365679,
+    "less_training": -1.134166478797483,
+    "reference_seed_13": -0.6488612844985399,
+    "shortcut_empty_results": 0,
+    "weak_no_warp": -1.5510717938090823,
+    "shortcut_legacy_fabrication": 1.4878847583446069,
+    "shortcut_direct_scores": 0.0,
+    "weak_constant_predictions": -0.973249118333737,
+    "reference": 0.0,
+    "shortcut_omit_weaker_method": 0.0,
+    "shortcut_degenerate_images": 0.3521193302932404
+  },
+  "quality": {
+    "reference_seed_12": {
+      "rank_delta": -0.4047802049530835,
+      "mean_test_depth_mae": 1.2094452579816182,
+      "mean_test_candidate_rgb_mae": 0.10952520370483398
+    },
+    "geometry_seed_13": {
+      "rank_delta": -0.5694172176191927,
+      "mean_test_depth_mae": 1.5194789568583171,
+      "mean_test_candidate_rgb_mae": 0.12530950208504996
+    },
+    "geometry_seed_11": {
+      "rank_delta": -0.10103021365607301,
+      "mean_test_depth_mae": 1.58102019627889,
+      "mean_test_candidate_rgb_mae": 0.13131003081798553
+    },
+    "reference_seed_11": {
+      "rank_delta": -0.041748629150058884,
+      "mean_test_depth_mae": 1.58102019627889,
+      "mean_test_candidate_rgb_mae": 0.13131003081798553
+    },
+    "more_training": {
+      "rank_delta": -0.05984435704727366,
+      "mean_test_depth_mae": 1.5544439951578777,
+      "mean_test_candidate_rgb_mae": 0.1255969579021136
+    },
+    "geometry_seed_12": {
+      "rank_delta": -0.5315582931365679,
+      "mean_test_depth_mae": 1.2094452579816182,
+      "mean_test_candidate_rgb_mae": 0.10952520370483398
+    },
+    "less_training": {
+      "rank_delta": -1.134166478797483,
+      "mean_test_depth_mae": 1.1585779041051865,
+      "mean_test_candidate_rgb_mae": 0.09641214460134506
+    },
+    "reference_seed_13": {
+      "rank_delta": -0.6488612844985399,
+      "mean_test_depth_mae": 1.5194789568583171,
+      "mean_test_candidate_rgb_mae": 0.12530950208504996
+    },
+    "weak_no_warp": {
+      "rank_delta": -1.5510717938090823,
+      "mean_test_depth_mae": 1.5873075723648071,
+      "mean_test_candidate_rgb_mae": 0.1312558501958847
+    },
+    "weak_constant_predictions": {
+      "rank_delta": -0.973249118333737,
+      "mean_test_depth_mae": 2.3396805922190347,
+      "mean_test_candidate_rgb_mae": 0.1329369693994522
+    },
+    "reference": {
+      "rank_delta": 0.0,
+      "mean_test_depth_mae": 1.5873075723648071,
+      "mean_test_candidate_rgb_mae": 0.1312558501958847
+    }
+  },
+  "seed_rank_spread": 0.607112655348481
+}
