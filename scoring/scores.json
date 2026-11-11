@@ -1,112 +1,54 @@
 {
+  "slice": "train",
+  "num_scenes": 16,
   "experiments": {
-    "tiny_nerf_depth_uncertainty": {
+    "depth_uncertainty_sparse": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.13074142235091496,
-          "spearman_depth_error": -0.02578958659636379,
-          "mean_depth_error": 1.7156070470809937,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.49716631091464486,
+          "spearman_depth_error": 0.002976756864050972
         },
         "warprf": {
-          "ause": 0.10979708769810403,
-          "spearman_depth_error": 0.15851205228737464,
-          "mean_depth_error": 1.7156070470809937,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.3696085457787674,
+          "spearman_depth_error": 0.19204064446595004
         }
       }
     },
-    "tiny_nerf_active_view_proxy": {
-      "results": {
-        "random_view": {
-          "selected_candidate_error": 0.19740960001945496,
-          "selection_regret": 0.21427825093269348,
-          "view_budget": 5,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 1.0854500029966936
-        },
-        "warprf": {
-          "selected_candidate_error": 0.41168785095214844,
-          "selection_regret": 0.0,
-          "view_budget": 5,
-          "selected_error_lift": 2.085450002996694,
-          "selection_regret_fraction": 0.0
-        }
-      }
-    },
-    "tiny_nerf_shifted_depth_uncertainty": {
+    "depth_uncertainty_dense": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.13704211599587574,
-          "spearman_depth_error": -0.02204279452321182,
-          "mean_depth_error": 1.7319464683532715,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.5067647123283976,
+          "spearman_depth_error": 0.004394457229137136
         },
         "warprf": {
-          "ause": 0.17989042974553468,
-          "spearman_depth_error": -0.36074351067670546,
-          "mean_depth_error": 1.7319464683532715,
-          "source_view_count": 4,
-          "used_ground_truth_for_uncertainty": 0
+          "ause": 0.4099044592297642,
+          "spearman_depth_error": 0.09445830851721758
         }
       }
     },
-    "tiny_nerf_shifted_active_view_proxy": {
+    "active_view_selection": {
       "results": {
         "random_view": {
-          "selected_candidate_error": 0.16191206872463226,
-          "selection_regret": 0.23288260400295258,
-          "view_budget": 5,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 1.4383276418944508
+          "final_psnr": 22.533121049404144,
+          "final_ssim": 0.7973869052449507,
+          "final_depth_mae": 0.2537373502772035
+        },
+        "farthest_view": {
+          "final_psnr": 22.90389382839203,
+          "final_ssim": 0.8085440769791603,
+          "final_depth_mae": 0.24689893750473857
         },
         "warprf": {
-          "selected_candidate_error": 0.39479467272758484,
-          "selection_regret": 0.0,
-          "view_budget": 5,
-          "selected_error_lift": 2.4383276418944506,
-          "selection_regret_fraction": 0.0
+          "final_psnr": 22.946017026901245,
+          "final_ssim": 0.8172556012868881,
+          "final_depth_mae": 0.2373871896415949
         }
       }
-    },
-    "tiny_nerf_dense_depth_uncertainty": {
-      "results": {
-        "random_uncertainty": {
-          "ause": 0.3060368577689189,
-          "spearman_depth_error": 0.0010133194188346791,
-          "mean_depth_error": 1.1638996601104736,
-          "source_view_count": 8,
-          "used_ground_truth_for_uncertainty": 0
-        },
-        "warprf": {
-          "ause": 0.05156773417970946,
-          "spearman_depth_error": 0.8008696260771929,
-          "mean_depth_error": 1.1638996601104736,
-          "source_view_count": 8,
-          "used_ground_truth_for_uncertainty": 0
-        }
-      }
-    },
-    "tiny_nerf_dense_active_view_proxy": {
-      "results": {
-        "random_view": {
-          "selected_candidate_error": 0.10720635950565338,
-          "selection_regret": 0.041164398193359375,
-          "view_budget": 9,
-          "selected_error_lift": 1.0,
-          "selection_regret_fraction": 0.3839734730586447
-        },
-        "warprf": {
-          "selected_candidate_error": 0.14307190477848053,
-          "selection_regret": 0.0052988529205322266,
-          "view_budget": 9,
-          "selected_error_lift": 1.3345468070943667,
-          "selection_regret_fraction": 0.04942666596427798
-        }
-      }
+    }
+  },
+  "_methods": {
+    "warprf": {
+      "status": "ok"
     }
   }
 }

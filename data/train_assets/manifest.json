@@ -1,0 +1,36 @@
+{
+  "scenes": [
+    "scene_000",
+    "scene_001",
+    "scene_002",
+    "scene_003",
+    "scene_004",
+    "scene_005",
+    "scene_006",
+    "scene_007",
+    "scene_008",
+    "scene_009",
+    "scene_010",
+    "scene_011",
+    "scene_012",
+    "scene_013",
+    "scene_014",
+    "scene_015"
+  ],
+  "counts": {
+    "source": 3,
+    "dense_source": 8,
+    "target": 6,
+    "candidate": 8,
+    "eval": 8,
+    "acquisitions": 2
+  },
+  "width": 48,
+  "height": 48,
+  "steps": {
+    "m0": 1500,
+    "m1": 500,
+    "m2": 1000,
+    "dense": 3000
+  }
+}
