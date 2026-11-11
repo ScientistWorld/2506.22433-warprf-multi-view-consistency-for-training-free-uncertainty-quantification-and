@@ -1,0 +1,131 @@
+{
+  "slice": "test",
+  "experiments": {
+    "tiny_nerf_depth_uncertainty": {
+      "_slice": "test",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.1296274386298377,
+          "spearman_depth_error": 0.01570760855118169,
+          "mean_depth_error": 1.7741392850875854,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.05730594313155036,
+          "spearman_depth_error": 0.5334315396403367,
+          "mean_depth_error": 1.7741392850875854,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_active_view_proxy": {
+      "_slice": "test",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.15605203807353973,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.07533463835716248,
+          "selection_regret_fraction": 0.4827533128510691,
+          "candidate_score_spearman": -0.8,
+          "top_half_error_lift": 0.5545700192451477,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.21973790228366852,
+          "selected_error_lift": 1.4081065841646794,
+          "selection_regret": 0.011648774147033691,
+          "selection_regret_fraction": 0.0746467286863898,
+          "candidate_score_spearman": 0.8,
+          "top_half_error_lift": 1.4454299211502075,
+          "view_budget": 5
+        }
+      }
+    },
+    "tiny_nerf_dense_depth_uncertainty": {
+      "_slice": "test",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.5419904202584946,
+          "spearman_depth_error": -0.02082255467182304,
+          "mean_depth_error": 0.7835528254508972,
+          "source_view_count": 8,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.118109010239656,
+          "spearman_depth_error": 0.8693747849074227,
+          "mean_depth_error": 0.7835528254508972,
+          "source_view_count": 8,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_dense_active_view_proxy": {
+      "_slice": "test",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.09181813895702362,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.034497037529945374,
+          "selection_regret_fraction": 0.3757104851154961,
+          "candidate_score_spearman": -0.4,
+          "top_half_error_lift": 0.9112224578857422,
+          "view_budget": 9
+        },
+        "warprf": {
+          "selected_candidate_error": 0.0736239030957222,
+          "selected_error_lift": 0.8018448634662764,
+          "selection_regret": 0.052691273391246796,
+          "selection_regret_fraction": 0.5738656216492197,
+          "candidate_score_spearman": 0.4,
+          "top_half_error_lift": 1.0887776613235474,
+          "view_budget": 9
+        }
+      }
+    },
+    "tiny_nerf_shifted_depth_uncertainty": {
+      "_slice": "test",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.36887203530455864,
+          "spearman_depth_error": 0.009872697964140755,
+          "mean_depth_error": 1.070643663406372,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.18503396005634612,
+          "spearman_depth_error": 0.6574816731031498,
+          "mean_depth_error": 1.070643663406372,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_shifted_active_view_proxy": {
+      "_slice": "test",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.0807054340839386,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.03447706997394562,
+          "selection_regret_fraction": 0.4271963885119229,
+          "candidate_score_spearman": -0.6,
+          "top_half_error_lift": 0.7511695027351379,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.05158409848809242,
+          "selected_error_lift": 0.6391651203367767,
+          "selection_regret": 0.0635984055697918,
+          "selection_regret_fraction": 0.7880312681751461,
+          "candidate_score_spearman": -0.8,
+          "top_half_error_lift": 0.7511695027351379,
+          "view_budget": 5
+        }
+      }
+    }
+  }
+}

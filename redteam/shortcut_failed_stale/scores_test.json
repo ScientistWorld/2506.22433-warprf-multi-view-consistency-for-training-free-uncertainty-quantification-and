@@ -1,0 +1,12 @@
+{
+  "experiments": {
+    "tiny_nerf_depth_uncertainty": {
+      "results": {
+        "warprf": {
+          "ause": -999999,
+          "spearman_depth_error": 1
+        }
+      }
+    }
+  }
+}

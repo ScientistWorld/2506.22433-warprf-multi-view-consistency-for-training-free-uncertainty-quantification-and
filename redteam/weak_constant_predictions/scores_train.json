@@ -1,0 +1,131 @@
+{
+  "slice": "train",
+  "experiments": {
+    "tiny_nerf_depth_uncertainty": {
+      "_slice": "train",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.08886484915011389,
+          "spearman_depth_error": -0.028722617565056424,
+          "mean_depth_error": 2.3003180027008057,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.04998023100965741,
+          "spearman_depth_error": -0.47992134751531357,
+          "mean_depth_error": 2.3003180027008057,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_active_view_proxy": {
+      "_slice": "train",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.13363826274871826,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.032422006130218506,
+          "selection_regret_fraction": 0.24261020357008098,
+          "candidate_score_spearman": -0.8,
+          "top_half_error_lift": 0.8687354922294617,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.16606026887893677,
+          "selected_error_lift": 1.242610203570081,
+          "selection_regret": 0.0,
+          "selection_regret_fraction": 0.0,
+          "candidate_score_spearman": -0.4,
+          "top_half_error_lift": 0.9411280751228333,
+          "view_budget": 5
+        }
+      }
+    },
+    "tiny_nerf_dense_depth_uncertainty": {
+      "_slice": "train",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.08772501051800903,
+          "spearman_depth_error": -0.010968065317417945,
+          "mean_depth_error": 2.2565646171569824,
+          "source_view_count": 8,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.04744486586129667,
+          "spearman_depth_error": -0.5322166493236498,
+          "mean_depth_error": 2.2565646171569824,
+          "source_view_count": 8,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_dense_active_view_proxy": {
+      "_slice": "train",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.13694164156913757,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.03199872374534607,
+          "selection_regret_fraction": 0.23366686260432265,
+          "candidate_score_spearman": -0.4,
+          "top_half_error_lift": 0.946426510810852,
+          "view_budget": 9
+        },
+        "warprf": {
+          "selected_candidate_error": 0.16894036531448364,
+          "selected_error_lift": 1.2336668626043226,
+          "selection_regret": 0.0,
+          "selection_regret_fraction": 0.0,
+          "candidate_score_spearman": -0.8,
+          "top_half_error_lift": 0.8615341186523438,
+          "view_budget": 9
+        }
+      }
+    },
+    "tiny_nerf_shifted_depth_uncertainty": {
+      "_slice": "train",
+      "results": {
+        "random_uncertainty": {
+          "ause": 0.09621646449003968,
+          "spearman_depth_error": -0.026767186743725167,
+          "mean_depth_error": 2.234990358352661,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        },
+        "warprf": {
+          "ause": 0.05357690712484194,
+          "spearman_depth_error": -0.42531719356184333,
+          "mean_depth_error": 2.234990358352661,
+          "source_view_count": 4,
+          "used_ground_truth_for_uncertainty": 0
+        }
+      }
+    },
+    "tiny_nerf_shifted_active_view_proxy": {
+      "_slice": "train",
+      "results": {
+        "random_view": {
+          "selected_candidate_error": 0.13403373956680298,
+          "selected_error_lift": 1.0,
+          "selection_regret": 0.022667914628982544,
+          "selection_regret_fraction": 0.16912095941100533,
+          "candidate_score_spearman": -0.8,
+          "top_half_error_lift": 0.872502863407135,
+          "view_budget": 5
+        },
+        "warprf": {
+          "selected_candidate_error": 0.15670165419578552,
+          "selected_error_lift": 1.1691209594110052,
+          "selection_regret": 0.0,
+          "selection_regret_fraction": 0.0,
+          "candidate_score_spearman": -0.4,
+          "top_half_error_lift": 0.9740633964538574,
+          "view_budget": 5
+        }
+      }
+    }
+  }
+}

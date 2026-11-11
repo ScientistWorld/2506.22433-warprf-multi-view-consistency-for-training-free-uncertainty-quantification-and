@@ -1,0 +1,52 @@
+{
+  "name": "less_training",
+  "test_command": [
+    "bash",
+    "scripts/evaluate_test.sh"
+  ],
+  "train_exit": 0,
+  "test_exit": 0,
+  "protected_evaluator_unchanged": true,
+  "artifact_methods": [
+    {
+      "path": "outputs/warprf_dense/warprf_outputs.npz",
+      "metadata": {
+        "method": "tiny_nerf_warprf",
+        "device": "cpu",
+        "steps": 90,
+        "width": 48,
+        "height": 48,
+        "split_offset": 0,
+        "split_mode": "dense",
+        "seed": 11
+      }
+    },
+    {
+      "path": "outputs/warprf/warprf_outputs.npz",
+      "metadata": {
+        "method": "tiny_nerf_warprf",
+        "device": "cpu",
+        "steps": 90,
+        "width": 48,
+        "height": 48,
+        "split_offset": 0,
+        "split_mode": "sparse",
+        "seed": 11
+      }
+    },
+    {
+      "path": "outputs/warprf_shifted/warprf_outputs.npz",
+      "metadata": {
+        "method": "tiny_nerf_warprf",
+        "device": "cpu",
+        "steps": 90,
+        "width": 48,
+        "height": 48,
+        "split_offset": 1,
+        "split_mode": "sparse",
+        "seed": 11
+      }
+    }
+  ],
+  "seconds": 87.14152455329895
+}
