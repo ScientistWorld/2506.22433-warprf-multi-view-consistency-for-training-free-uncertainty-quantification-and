@@ -15,26 +15,38 @@ The paper studies uncertainty estimation for radiance fields and its use in acti
 - On active view selection for Mip-NeRF360, 3DGS + WarpRF reports 20.715 PSNR, 0.6174 SSIM, and 0.3487 LPIPS.
 - On SVRaster active view selection, WarpRF improves over random and farthest-view baselines on NeRF Synthetic with 20 views and Tanks and Temples.
 
+## This Gym
+
+A scaled, controlled version of the paper's two evaluations. The first is
+per-pixel depth uncertainty (AUSE) for frozen tiny-NeRF fields trained from 3
+or 8 views. The second is sequential acquisition of 2 of 8 candidate views,
+scored by the final field's held-out PSNR/SSIM/depth error. Both run on
+procedurally generated scenes with hidden test instances. See
+`briefing/evaluation.md`.
+
 ---
 
 # Problem Definition
 
 ## Research Question
 
-How can a radiance-field system estimate which rendered pixels, depths, or unseen camera views are unreliable, and use that uncertainty to choose additional training views that improve novel-view synthesis and 3D reconstruction? The benchmark should evaluate uncertainty estimates for already trained radiance fields and downstream active data acquisition under limited-view settings.
+How can a radiance-field system estimate which rendered pixels, depths, or unseen camera views are unreliable, and use that uncertainty to choose additional training views that improve novel-view synthesis and 3D reconstruction? The benchmark evaluates uncertainty estimates for already trained radiance fields and downstream sequential view acquisition under limited-view settings.
 
 ## Why It Matters
 
 Radiance fields such as NeRF, 3D Gaussian Splatting, and related renderers can fail when trained from too few or poorly placed images. A reliable uncertainty signal lets an autonomous system identify uncertain regions or viewpoints, capture the most informative new images, and improve rendering or mapping without wasting acquisition budget.
 
+## Setting in This Benchmark
+
+A fixed, frozen NeRF-style radiance field is trained by the benchmark on a few captured views of each scene. A method sees only what such a system would have: camera poses, the captured photographs used for training, and renderings (colour and depth) of the trained field at the views it needs. It never sees the ground truth of held-out views, and it never sees a candidate view's photograph until that view has been acquired.
+
 ## Success Criteria
 
 A successful solution should:
 
-- Produce uncertainty scores that correlate with true depth/rendering error on held-out views.
-- Select useful next views from a candidate pool when only a small initial set of training views is available.
-- Improve held-out novel-view synthesis quality and, for mapping, reconstructed surface quality.
-- Remain applicable under fixed dataset splits, view budgets, and radiance-field backbones, so gains reflect better uncertainty or selection strategy rather than more data or larger models.
+- Produce per-pixel uncertainty whose ordering matches the true depth error of held-out views, both when the field was trained from very few views and from more views.
+- Choose, one at a time, the next views to acquire from a fixed candidate pool so that the field trained with them renders held-out views better and with more accurate geometry.
+- Work from the provided renderings and poses alone, under a fixed view budget and a fixed radiance-field backbone, so that gains reflect better uncertainty or selection rather than more data or a different model.
 
 ---
 
@@ -46,18 +58,26 @@ WarpRF introduces training-free uncertainty quantification for radiance fields u
 
 ## Approach
 
-For pixel-level depth uncertainty, WarpRF renders depth at a target camera and at source training cameras. It projects each source depth map into the target camera and averages the absolute difference between the target depth and valid projected depths per pixel. Pixels whose rendered geometry is inconsistent across views receive higher uncertainty.
+For pixel-level depth uncertainty (paper Eq. 8), WarpRF renders depth at a target camera and at the source training cameras. Each target pixel is back-projected with its rendered depth, moved into a source camera and projected; the source rendered depth at that location is lifted to 3D and moved back into the target camera. The uncertainty is the mean absolute difference of camera-z between the two, over the source views whose projection has positive depth; pixels with no such source take the view's maximum.
 
-For image-level uncertainty, WarpRF renders source images and warps them into a candidate target view. It sums per-pixel photometric disagreement between the target rendering and the best matching warped source rendering, using a minimum across sources to reduce occlusion sensitivity. Candidate views with larger image-level uncertainty are selected as next views for active view selection or active mapping.
+For image-level uncertainty (paper Eq. 9), WarpRF backward-warps every rendered source image into the candidate view with the candidate's rendered depth, takes the per-pixel minimum over sources of the channel-summed absolute difference to the candidate's rendering (robust to occlusions), and sums over all pixels. Candidates with the largest image-level uncertainty are acquired next for active view selection or active mapping.
+
+Sampling follows the authors' released code: nearest sampling for depth, bilinear for colour, border padding outside the source image.
 
 The method is applied without changing the radiance-field training objective or model internals. The paper demonstrates it on NeRF, 3D Gaussian Splatting, and SVRaster.
 
+## Implementation in This Gym
+
+- `method/warprf.py`: Eq. 8 and Eq. 9 on rendered RGB-D and poses (numpy).
+- `method/predict.py`: the two-round prediction interface (`briefing/evaluation.md`).
+- `scripts/method.sh` registers it as `outputs/warprf/predict.json`.
+
 ## Code Availability
 
-The paper markdown states that code will be released. As of the final
-reproduction audit, the project page links to the official repository at
+The project page links to the official repository at
 `https://github.com/sadrasafa/WarpRF`, which provides the 3DGS experiment
-implementation and notes that NeRF/SVRaster code is forthcoming.
+implementation (selection in `active/warprf.py`, AUSE evaluation in
+`evaluate_uncertainty.py`).
 
 ## Main Claims
 
@@ -70,29 +90,121 @@ implementation and notes that NeRF/SVRaster code is forthcoming.
 
 # Evaluation
 
-## Metrics
+## What is measured
 
-- **AUSE**: Area Under the Sparsification Error curve for depth uncertainty. Pixels are progressively removed according to predicted uncertainty, mean absolute depth error is recomputed on the remaining pixels, and the area is measured against an oracle curve that removes pixels by true depth error. Lower is better.
-- **PSNR**: Peak signal-to-noise ratio for held-out novel-view synthesis. Higher is better.
-- **SSIM**: Structural similarity for held-out novel-view synthesis. Higher is better.
-- **LPIPS**: Learned perceptual image patch similarity for held-out novel-view synthesis. Lower is better.
-- **Surface reconstruction metrics**: Accuracy and Completion are lower-is-better mesh distances; Completion Ratio and F1 score are higher-is-better reconstruction quality metrics.
+The paper evaluates uncertainty for trained radiance fields in two ways: how
+well per-pixel uncertainty ranks the true depth error of held-out views (AUSE on
+ScanNet++/ETH3D), and how much better a field becomes when that uncertainty
+chooses which new views to acquire (novel-view PSNR/SSIM/LPIPS and
+reconstruction quality after active view selection or active mapping).
 
-## Baselines and Targets
+This gym measures the same two quantities in a scaled, fully controlled
+setting:
 
-Uncertainty calibration should be compared against paper-reported AUSE values on ScanNet++ and ETH3D for both NeRF and 3DGS backbones when the full datasets and backbones are available. Active view selection should be compared against fixed-budget selection baselines such as random, farthest-view, ActiveNeRF, Manifold, and FisherRF where available. Mapping should compare against prior active mapping or uncertainty-based view selection baselines under the same view budget.
+| Experiment | Weight | Metrics (direction, coefficient) |
+|---|---:|---|
+| `depth_uncertainty_sparse` | 0.25 | `ause` (lower, 1.0), `spearman_depth_error` (higher, 0.5) |
+| `depth_uncertainty_dense` | 0.25 | `ause` (lower, 1.0), `spearman_depth_error` (higher, 0.5) |
+| `active_view_selection` | 0.50 | `final_psnr` (higher, 1.0), `final_ssim` (higher, 0.5), `final_depth_mae` (lower, 0.5) |
 
-This packaged gym also contains a scaled analytic posed-view protocol so the core uncertainty and view-selection claims can be exercised without large external datasets. For those targets, `eval/` reads method artifacts, reconstructs the tracked ground truth from `data/`, and reports AUSE, rank correlation, selected-candidate error, regret, and fixed-budget constraints.
+- **AUSE**: per target view, pixels with ground-truth surface depth are removed
+  in decreasing order of predicted uncertainty (fractions 0, 0.01, ..., 0.99);
+  the mean absolute camera-z depth error of the remaining pixels is compared with
+  the oracle curve that removes pixels by true error. Both curves are divided by
+  the view's full-set mean error, so a better ordering always scores lower. Ties
+  in the prediction are broken by a fixed evaluator-owned key. Averaged over all
+  target views.
+- **Spearman**: rank correlation between predicted uncertainty and true depth
+  error over the same pixels, averaged over target views.
+- **Final PSNR / SSIM / depth MAE**: quality of the radiance field after the
+  two acquisitions, rendered at 8 held-out evaluation views that are never shown
+  to the method (PSNR in dB, SSIM with an 11x11 Gaussian window, depth MAE in
+  scene units over surface pixels). Averaged over scenes.
 
-## Evaluation Protocol
+## Instances
 
-Evaluate uncertainty on held-out test views with ground-truth depth. For ScanNet++, use the six scenes named in the paper supplement and train/evaluate on the first 40 images using alternating train/test images. For ETH3D, use the high-resolution scenes with alternating train/test images.
+Each instance is one procedurally generated textured scene (a floor plate and
+several boxes/ellipsoids with procedural textures and shading) observed at
+48x48 pixels. A fixed NeRF-style backbone recipe (`data/backbone.py`) is trained
+by the benchmark itself; methods never train or modify it.
 
-For active view selection, begin from the same small initial camera set as the reference protocol, select one view at each acquisition step from the candidate pool, retrain or continue training according to the fixed backbone schedule, and evaluate final held-out renderings using PSNR, SSIM, and LPIPS. Report averages over the same scene sets and repeated runs when the protocol uses stochastic selection.
+- *Sparse field*: trained on 3 captured views spread over ~150 degrees.
+- *Dense field*: trained on 8 captured views spread around the scene.
+- *Targets*: 6 held-out views per scene for the depth-uncertainty experiments.
+- *Candidates*: 8 possible next views for acquisition.
+- *Acquisition*: starting from the sparse field, the evaluator acquires the
+  candidate with the highest score, continues training with it, asks for
+  scores again from the updated field, and acquires a second candidate. The
+  final quality of every possible ordered pair was computed once, with one
+  fixed training schedule and initialisation, when the instances were built.
 
-For active mapping, keep the initial views, acquisition budget, candidate-pose generation, training iterations, and reconstruction evaluation fixed. Report both rendering quality and surface reconstruction quality so that a method cannot improve images while degrading geometry, or vice versa.
+The train split (`data/train_assets/`, 16 scenes) is public, including its
+answers, for development. The hidden test split has 32 different scenes from the
+same generator family, built and scored with the same protocol.
 
-For the scaled analytic protocol, evaluate held-out pixel uncertainty on the fixed test views and evaluate candidate-view selection on the fixed candidate pool. The evaluator computes true depth and RGB errors from the tracked scene labels; submitted method artifacts should provide predictions, uncertainty scores, view indices, and candidate scores rather than precomputed error labels.
+## Interface
+
+A method is registered by writing `outputs/<name>/predict.json`:
+
+```json
+{"command": ["python", "-m", "my_package.predict"]}
+```
+
+The evaluators run, from the workspace root and with the workspace on
+`PYTHONPATH`:
+
+```
+<command> --round 1 --input <dir> --output <dir>
+<command> --round 2 --input <dir> --output <dir>
+```
+
+`<input>/manifest.json` lists the scene names; each `<input>/<scene>.npz` holds
+the arrays below. The method writes `<output>/<scene>.npz` for every scene.
+
+Conventions: OpenCV cameras (x right, y down, z forward), 4x4 camera-to-world
+poses, intrinsics `K` with principal point at the image centre, pixel (row i,
+col j) centred at (j + 0.5, i + 0.5). Depth is camera-space z. RGB arrays are
+uint8; depth arrays are float16. `*_images` are captured photographs, `*_rgb` /
+`*_depth` are renderings of the radiance field.
+
+**Round 1 input**: `intrinsics`; `sparse_source_poses/_images/_rgb/_depth` (3
+views); `target_poses` (6); `sparse_target_rgb/_depth`;
+`candidate_poses` (8); `sparse_candidate_rgb/_depth`;
+`dense_source_poses/_images/_rgb/_depth` (8); `dense_target_rgb/_depth`.
+
+**Round 1 output**: `sparse_uncertainty` [6, H, W], `dense_uncertainty`
+[6, H, W] (higher = less reliable depth), `candidate_scores` [8] (the highest
+is acquired; ties go to the lowest index).
+
+**Round 2 input** (field after continued training with the first acquisition):
+`intrinsics`; `selected_candidates` [1]; `candidate_available` [8] bool;
+`source_poses/_images/_rgb/_depth` (4 views: the 3 initial views plus the
+acquired one, whose photograph is now available); `candidate_poses`;
+`candidate_rgb/_depth` (8, rendered by the updated field).
+
+**Round 2 output**: `candidate_scores` [8]; the highest-scored available
+candidate is acquired.
+
+## Rules enforced by the evaluator
+
+- Every registered method is scored; nothing reported by a method other than the
+  arrays above is read, and the evaluator derives each acquisition itself.
+- A run fails if the command cannot start, exits non-zero, exceeds 1800 s per
+  round, or returns a missing, misshapen, non-real or non-finite array. A failed
+  run receives the worst achievable value of every metric of every experiment
+  (anti-oracle AUSE, Spearman -1, worst acquisition pair).
+- Baselines are computed by the evaluator on the same instances:
+  `random_uncertainty` (fixed pseudo-random pixel ordering), `random_view`
+  (exact expectation of uniformly random sequential acquisition) and
+  `farthest_view` (acquire the candidate camera farthest from all current cameras).
+
+## Running
+
+- `bash scripts/evaluate_train.sh` -> `scoring/scores_train.json` (train split)
+- `bash scripts/evaluate_test.sh` -> `scoring/scores_test.json` (hidden split)
+- `bash scripts/evaluate.sh` -> `scoring/scores.json` (train split)
+
+All three take no arguments and score every method registered under `outputs/`.
 
 ---
 
@@ -498,6 +610,68 @@ For the scaled analytic protocol, evaluate held-out pixel uncertainty on the fix
 
 <details>
 <summary>Progress Log</summary>
+
+### [2026-06-04 22:13] - core_claim_plus
+- Completed final verifier audit of folder structure, method/eval separation, scoring weights and coefficients, train/test split behavior, download portability, and method-agnostic documentation.
+- Re-ran `python validate.py --compare`; all checks pass.
+- Kept milestone `core_claim_plus`; the main limitation remains the scaled analytic benchmark rather than the full paper-scale dataset/backbone matrix.
+
+### [2026-06-04 22:10] - core_claim_plus
+- Revalidated the packaged WarpRF reproduction with `python validate.py --compare`; all scoring, method/eval separation, train/test, and structure checks pass.
+- Updated `scripts/run.sh` to regenerate the scaled reproduction before scoring, so submitted jobs do not depend on pre-existing ignored `outputs/` artifacts.
+- Removed stale tracked trajectory and job logs from the git index so runtime traces remain ignored artifacts.
+- Kept the completed `core_claim_plus` milestone; full paper-scale 3DGS/SVRaster and benchmark-dataset reproduction remains outside this scaled gym.
+
+### [2026-06-04 22:07] - core_claim_plus
+- Completed final verification of folder structure, method/eval separation, scoring contract, train/test artifacts, and documentation.
+- Rebalanced reproduced experiment weights so primary sparse and dense targets dominate the effective gym score while shifted diagnostics remain lower-weight stress tests.
+- Re-ran `python validate.py --compare`; all checks pass.
+
+### [2026-06-04 22:03] - core_claim_plus
+- Re-audited the existing WarpRF reproduction after reactivation.
+- Verified `python validate.py --compare` passes and a sub-agent audit found no blockers in method integrity, evaluator separation, or scoring consistency.
+- Kept the completed `core_claim_plus` milestone without submitting redundant compute.
+
+### [2026-06-02 22:52] - core_claim_plus
+- Implemented and ran WarpRF's actual multi-view RGB/depth warping uncertainty on a scaled tiny-NeRF benchmark.
+- Reproduced the core claim on the original sparse split and an additional dense source-view split.
+- Verified reusable evaluation with `python validate.py --compare`.
+
+### [2026-06-02 22:59] - core_claim
+- Continuation audit accepted the core WarpRF implementation but found benchmark packaging issues before restoring `core_claim_plus`.
+- Fixed evaluator independence by making `eval/` compute ground-truth depth and candidate errors from tracked `data/` labels and saved predictions.
+- Demoted the shifted sparse split to a diagnostic partial negative and submitted a CPU rerun to refresh scores under the stricter artifact contract.
+
+### [2026-06-02 23:07] - core_claim_plus
+- Job `8aa25908-8cb` completed successfully and regenerated all scaled benchmark artifacts under the stricter prediction-only artifact contract.
+- Verified that artifacts no longer contain method-supplied `depth_error` or `candidate_oracle_errors`; `eval/` computes those labels from tracked `data/`.
+- `python validate.py --compare` passes, with the core sparse split and dense source-view split supporting the WarpRF uncertainty and active-view claims.
+
+### [2026-06-02 23:20] - core_claim_plus
+- Fixed final validation issues in the scoring contract: active-view proxy rows now include `selected_error_lift`, and the evaluator emits those fields for future runs.
+- Recalibrated the reproduction-generated sparse AUSE reference note/value so top-level, train, and test split scores can all pass gross consistency checks without claiming the value is paper-reported.
+- `python validate.py` passes.
+
+### [2026-06-02 23:31] - core_claim_plus
+- Fixed the remaining split-consistency validation issue on the shifted active-view diagnostic by using a representative reproduction-generated `selected_error_lift` reference.
+- Re-ran `python validate.py`; all checks pass.
+
+</details>
+
+### Iteration 11: claude-opus-5-5 (hardener)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 35m | **GPU**: 1.6h
+- **Jobs**: 12 total (10 completed, 2 failed)
+
+<details>
+<summary>Progress Log</summary>
+
+### [2026-11-11] - core_claim_plus (iteration 11, hardening)
+- Rebuilt the gym on frozen tiny-NeRF instances: 16 public and 32 hidden procedurally generated scenes. The paper's sequential active view selection is scored by final held-out quality, with every acquisition branch retrained at build time.
+- Restored WarpRF to the paper and official-code semantics.
+- On the hidden test, WarpRF beats random uncertainty: AUSE 0.463 vs 0.564 (3 views), 0.462 vs 0.626 (8 views).
+- WarpRF's acquisitions beat random (+0.42 dB PSNR, CI [0.16, 0.69]) and tie farthest-camera selection (+0.04 dB).
+- Shortcut fixes, headroom and limitations are recorded in `HARDENING.md`.
 
 ### [2026-06-04 22:13] - core_claim_plus
 - Completed final verifier audit of folder structure, method/eval separation, scoring weights and coefficients, train/test split behavior, download portability, and method-agnostic documentation.
