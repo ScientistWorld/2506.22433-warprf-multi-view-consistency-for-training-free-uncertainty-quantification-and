@@ -5,11 +5,11 @@
     "depth_uncertainty_sparse": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.48587311076905365,
+          "ause": 0.5643428881465087,
           "spearman_depth_error": 0.0004641667452194775
         },
         "warprf": {
-          "ause": 0.3939542486561581,
+          "ause": 0.46325837591885727,
           "spearman_depth_error": 0.1479340628149257
         }
       }
@@ -17,11 +17,11 @@
     "depth_uncertainty_dense": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.5236830455743591,
+          "ause": 0.6258198457407421,
           "spearman_depth_error": -0.000602313107398863
         },
         "warprf": {
-          "ause": 0.4154066373579009,
+          "ause": 0.46183381006733343,
           "spearman_depth_error": 0.10675839122495273
         }
       }

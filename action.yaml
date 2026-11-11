@@ -1,5 +1,5 @@
 action: submit
-gpus: 1
+gpus: 0
 test: false
 milestone: core_claim_plus
-notes: "Hardening: smoke-test pipeline, build frozen train (16) + hidden test (32) instances on GPU, score WarpRF reference, run variant/shortcut audit through both evaluators."
+notes: "CPU rescoring: fixed (monotone) AUSE normalization; rerun reference on train/test and the hardening audit with new acquisition variants. Assets already built; no retraining."
