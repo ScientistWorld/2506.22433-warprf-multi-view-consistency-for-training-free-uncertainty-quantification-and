@@ -4,6 +4,13 @@
 
 ## Progress Log
 
+### [2026-11-11] - core_claim_plus (iteration 11, hardening)
+- Rebuilt the gym on frozen tiny-NeRF instances: 16 public and 32 hidden procedurally generated scenes. The paper's sequential active view selection is scored by final held-out quality, with every acquisition branch retrained at build time.
+- Restored WarpRF to the paper and official-code semantics.
+- On the hidden test, WarpRF beats random uncertainty: AUSE 0.463 vs 0.564 (3 views), 0.462 vs 0.626 (8 views).
+- WarpRF's acquisitions beat random (+0.42 dB PSNR, CI [0.16, 0.69]) and tie farthest-camera selection (+0.04 dB).
+- Shortcut fixes, headroom and limitations are recorded in `HARDENING.md`.
+
 ### [2026-06-04 22:13] - core_claim_plus
 - Completed final verifier audit of folder structure, method/eval separation, scoring weights and coefficients, train/test split behavior, download portability, and method-agnostic documentation.
 - Re-ran `python validate.py --compare`; all checks pass.

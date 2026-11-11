@@ -1,43 +1,41 @@
 # Scientist Constraints
 
-## Backbones
+## Backbone
 
-For the runnable scaled benchmark targets in `scoring/TARGETS.md`, use the
-provided tiny NeRF-style radiance-field backbone and the same training budget
-unless an experiment explicitly changes one of those quantities. Do not replace
-the renderer with a larger model family, an ensemble, a pretrained scene prior,
-or a direct predictor of the evaluation labels. The benchmark is about
-uncertainty estimation and view selection, not changing the renderer being
-evaluated.
+The radiance fields are trained by the benchmark with one fixed recipe and are
+frozen. Methods receive their renderings and may not replace, retrain or
+fine-tune them, and may not substitute renderings from another model. The
+uncertainty must describe the provided renderings.
 
 ## Data
 
-Use only the tracked analytic posed-view scene from `data/` for the runnable
-scaled benchmark targets. Do not add external images, depth maps, meshes,
-learned priors, or manually curated views beyond the fixed initial, candidate,
-and held-out view sets. Paper-scale reference entries in
-`scoring/reference.json` document the original ScanNet++, ETH3D, NeRF
-Synthetic, Mip-NeRF360, Tanks and Temples, 3DGS, and SVRaster results; those are
-not claimed as reproduced by this scaled gym.
+Use only the arrays the evaluator passes to the method for each instance, plus
+general knowledge and the public development split (`data/train_assets/`) for
+designing and tuning the method. Do not read evaluator files (`eval/`), score
+files, or anything else on disk at prediction time, and do not add external
+images, depth maps, meshes or pretrained scene priors.
 
 ## View Budget
 
-Keep the initial views, candidate pool, and final selected-view count fixed for
-each experiment. A method may change how it scores or selects among allowed
-candidate views, but it may not improve scores by using extra views, held-out
-views, denser camera trajectories, or additional pose optimization outside the
-protocol.
+The initial views, the candidate pool and the two-acquisition budget are fixed.
+A method changes only how candidates are scored; the evaluator performs every
+acquisition from those scores.
+
+## Compute
+
+Each prediction round over all scenes must finish within 1800 s; slower runs
+fail. The hidden test never retrains anything on behalf of a method.
 
 ## Evaluation
 
-Held-out test views and ground-truth depths or meshes may only be used for evaluation. They must not influence uncertainty scores, view selection, training, hyperparameter tuning for a specific scene, or early stopping. Report all listed metrics for each target so image quality, uncertainty ranking, and geometry constraints remain visible.
+Held-out views, ground-truth depth and unacquired candidate photographs are
+used only by the evaluator. Report through the registration interface only;
+anything else a method writes is ignored.
 
 ## Compliance Checklist
 
-- [ ] The evaluated backbone family matches the required tiny NeRF-style
-      backbone for each runnable scaled experiment.
-- [ ] No external scene data, labels, depths, meshes, or pretrained scene priors are used.
-- [ ] Final selected view counts match the protocol budget.
-- [ ] Candidate views come only from the allowed candidate pool.
-- [ ] Test views and ground truth are used only for final metric computation.
-- [ ] All metrics listed in `scoring/TARGETS.md` are reported for the corresponding experiment.
+- [ ] The method is registered as `outputs/<name>/predict.json` and runs through `scripts/evaluate_train.sh` and `scripts/evaluate_test.sh` without errors.
+- [ ] Predictions are computed only from the arrays passed for the current instance.
+- [ ] No evaluator files, answers or score files are read at prediction time.
+- [ ] No radiance field is retrained or replaced.
+- [ ] Every round finishes within the time limit.

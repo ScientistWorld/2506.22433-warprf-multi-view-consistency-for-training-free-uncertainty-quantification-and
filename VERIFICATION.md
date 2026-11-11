@@ -1,3 +1,5 @@
+> **Superseded (iteration 11):** this report describes the pre-hardening gym (analytic two-sphere scene, artifact-based evaluator). The current design and its audit are in `HARDENING.md`.
+
 # Verification Report
 
 ## Initial Assessment

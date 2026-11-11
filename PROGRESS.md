@@ -162,3 +162,17 @@ shifted sparse, and dense eight-source-view splits and passed
   3DGS implementation with dataset-specific scripts. The local method code
   preserves WarpRF's core computation in a compact benchmark that can run in
   this environment without downloading large scene datasets.
+
+## Iteration 11 (hardening)
+
+- Rebuilt the benchmark around frozen radiance-field instances. There are 16
+  public train scenes and 32 hidden test scenes, procedurally generated. Every
+  acquisition branch is retrained at build time, so the paper's sequential
+  active-view-selection procedure is scored by final held-out PSNR/SSIM/depth
+  error.
+- Restored WarpRF to the paper and official-code semantics (z-depth, border
+  padding, Eq. 9 summed per-pixel minimum).
+- The evaluators now run registered methods, own every answer and baseline, and
+  fail invalid runs to worst values. AUSE is normalised by the per-view mean
+  error so it is monotone.
+- See `HARDENING.md` for the variant and shortcut audit.

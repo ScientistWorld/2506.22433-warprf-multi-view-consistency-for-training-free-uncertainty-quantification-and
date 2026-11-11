@@ -6,18 +6,26 @@ WarpRF introduces training-free uncertainty quantification for radiance fields u
 
 ## Approach
 
-For pixel-level depth uncertainty, WarpRF renders depth at a target camera and at source training cameras. It projects each source depth map into the target camera and averages the absolute difference between the target depth and valid projected depths per pixel. Pixels whose rendered geometry is inconsistent across views receive higher uncertainty.
+For pixel-level depth uncertainty (paper Eq. 8), WarpRF renders depth at a target camera and at the source training cameras. Each target pixel is back-projected with its rendered depth, moved into a source camera and projected; the source rendered depth at that location is lifted to 3D and moved back into the target camera. The uncertainty is the mean absolute difference of camera-z between the two, over the source views whose projection has positive depth; pixels with no such source take the view's maximum.
 
-For image-level uncertainty, WarpRF renders source images and warps them into a candidate target view. It sums per-pixel photometric disagreement between the target rendering and the best matching warped source rendering, using a minimum across sources to reduce occlusion sensitivity. Candidate views with larger image-level uncertainty are selected as next views for active view selection or active mapping.
+For image-level uncertainty (paper Eq. 9), WarpRF backward-warps every rendered source image into the candidate view with the candidate's rendered depth, takes the per-pixel minimum over sources of the channel-summed absolute difference to the candidate's rendering (robust to occlusions), and sums over all pixels. Candidates with the largest image-level uncertainty are acquired next for active view selection or active mapping.
+
+Sampling follows the authors' released code: nearest sampling for depth, bilinear for colour, border padding outside the source image.
 
 The method is applied without changing the radiance-field training objective or model internals. The paper demonstrates it on NeRF, 3D Gaussian Splatting, and SVRaster.
 
+## Implementation in This Gym
+
+- `method/warprf.py`: Eq. 8 and Eq. 9 on rendered RGB-D and poses (numpy).
+- `method/predict.py`: the two-round prediction interface (`briefing/evaluation.md`).
+- `scripts/method.sh` registers it as `outputs/warprf/predict.json`.
+
 ## Code Availability
 
-The paper markdown states that code will be released. As of the final
-reproduction audit, the project page links to the official repository at
+The project page links to the official repository at
 `https://github.com/sadrasafa/WarpRF`, which provides the 3DGS experiment
-implementation and notes that NeRF/SVRaster code is forthcoming.
+implementation (selection in `active/warprf.py`, AUSE evaluation in
+`evaluate_uncertainty.py`).
 
 ## Main Claims
 

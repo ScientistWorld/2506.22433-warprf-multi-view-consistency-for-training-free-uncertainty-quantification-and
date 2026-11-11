@@ -14,3 +14,12 @@ The paper studies uncertainty estimation for radiance fields and its use in acti
 - On Table 1 AUSE, 3DGS + WarpRF reports 0.337 on ScanNet++ and 0.227 on ETH3D, better than 3DGS + FisherRF at 0.355 and 0.295.
 - On active view selection for Mip-NeRF360, 3DGS + WarpRF reports 20.715 PSNR, 0.6174 SSIM, and 0.3487 LPIPS.
 - On SVRaster active view selection, WarpRF improves over random and farthest-view baselines on NeRF Synthetic with 20 views and Tanks and Temples.
+
+## This Gym
+
+A scaled, controlled version of the paper's two evaluations. The first is
+per-pixel depth uncertainty (AUSE) for frozen tiny-NeRF fields trained from 3
+or 8 views. The second is sequential acquisition of 2 of 8 candidate views,
+scored by the final field's held-out PSNR/SSIM/depth error. Both run on
+procedurally generated scenes with hidden test instances. See
+`briefing/evaluation.md`.

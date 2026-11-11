@@ -1,42 +1,33 @@
 # Experiment Overview
 
-## tiny_nerf_depth_uncertainty
+All experiments run on procedurally generated scenes observed by a fixed,
+frozen radiance field. The public train split has 16 scenes; the hidden test
+split has 32 different scenes of the same kind. Every method sees exactly the
+same inputs, and all ground truth stays with the evaluator.
 
-Tests whether predicted pixel uncertainty ranks held-out depth errors in a
-posed-view radiance-field scene. The purpose is to verify the paper's central
-uncertainty-quantification claim under a small reproducible setting with fixed
-training views, fixed held-out views, and ground-truth depth available only to
-the evaluator.
+## depth_uncertainty_sparse
 
-## tiny_nerf_active_view_proxy
+Can a method tell which rendered depths of a radiance field are wrong when the
+field was trained from only three captured views? For six held-out views per
+scene, the method's per-pixel uncertainty is compared with the true depth
+error: AUSE asks whether discarding the most uncertain pixels first removes the
+largest errors, and the rank correlation asks how well the two orderings agree.
+This is the regime where large parts of the scene were never observed.
 
-Tests whether the uncertainty signal can choose a useful next camera from a
-candidate pool under a fixed view budget. The selected view is scored by how
-much current rendering error it exposes compared with a deterministic random
-candidate baseline.
+## depth_uncertainty_dense
 
-## tiny_nerf_dense_depth_uncertainty
+The same measurement for a field trained from eight views spread around the
+scene, the regime closest to the paper's uncertainty benchmark. Errors here are
+smaller and more localised, so the question is whether the uncertainty still
+singles them out.
 
-Repeats the held-out pixel uncertainty test with eight source views instead of
-four. This checks whether the uncertainty-ranking behavior holds when the same
-scene has denser multi-view support.
+## active_view_selection
 
-## tiny_nerf_dense_active_view_proxy
-
-Repeats the fixed-budget candidate-selection test with eight source views. This
-checks whether the candidate ranking remains useful when the initial
-reconstruction has more observed cameras.
-
-## tiny_nerf_shifted_depth_uncertainty
-
-Repeats the held-out pixel uncertainty test on a shifted camera split. This
-is reported as a diagnostic stress test: the current sparse shifted result is a
-partial negative result, so it should not be treated as evidence for the
-milestone claim unless a future method improves it under the same constraints.
-
-## tiny_nerf_shifted_active_view_proxy
-
-Repeats the fixed-budget candidate-selection test on the shifted camera split.
-This records whether the active-view conclusion survives a different set of
-initial, candidate, and held-out camera poses, even though the companion depth
-uncertainty diagnostic is currently negative.
+Does uncertainty pick useful views to capture next? Starting from the
+three-view field, the method scores eight candidate cameras; the best-scored one
+is captured and the field keeps training with it; the method then scores the
+candidates again for the updated field and a second view is captured. The
+outcome is the final field's novel-view quality (PSNR, SSIM) and geometry
+(depth error) at eight held-out views it was never shown, under a fixed
+two-view budget. Random and farthest-camera acquisition are the reference
+points.

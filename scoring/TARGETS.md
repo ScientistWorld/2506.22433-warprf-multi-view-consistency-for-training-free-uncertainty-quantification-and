@@ -1,60 +1,42 @@
 # Evaluation Targets
 
-## Primary: tiny_nerf_depth_uncertainty
+All targets are scored by `bash scripts/evaluate_train.sh` (public split) and
+`bash scripts/evaluate_test.sh` (hidden split) for every method registered under
+`outputs/<name>/predict.json`. Reference values are the paper's method (WarpRF)
+on the hidden split, stored in `scoring/reference.json`.
 
-Tests whether uncertainty scores rank pixels by true held-out depth error.
+## Primary: depth_uncertainty_sparse (weight 0.25)
 
-- **Metric**: AUSE (lower is better)
-- **Constraint metrics**: source_view_count and used_ground_truth_for_uncertainty
-- **How to run**: Run `bash scripts/method.sh`, then `bash scripts/evaluate.sh`.
+Per-pixel depth uncertainty of a field trained on 3 views, on 6 held-out views per scene.
 
-## Primary: tiny_nerf_active_view_proxy
+- **Primary metric**: `ause` (lower is better; reference 0.463, random 0.564)
+- **Secondary metric**: `spearman_depth_error` (higher is better; reference 0.148, random 0.000)
+- **Control**: `random_uncertainty`, computed by the evaluator.
 
-Tests whether fixed-budget active view selection chooses a candidate view that
-exposes more current model error than a random candidate.
+## Primary: depth_uncertainty_dense (weight 0.25)
 
-- **Primary metric**: selected_error_lift (higher is better)
-- **Constraint metrics**: view_budget and selection_regret_fraction
-- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
-  by definition of the candidate-pool mean.
-- **How to run**: Run `bash scripts/method.sh`, then `bash scripts/evaluate.sh`.
+Same measurement for a field trained on 8 views.
 
-## Primary: tiny_nerf_dense_depth_uncertainty
+- **Primary metric**: `ause` (lower is better; reference 0.462, random 0.626)
+- **Secondary metric**: `spearman_depth_error` (higher is better; reference 0.107, random -0.001)
+- **Control**: `random_uncertainty`, computed by the evaluator.
 
-Tests the pixel uncertainty target with eight source views instead of four.
+## Primary: active_view_selection (weight 0.50)
 
-- **Metric**: AUSE (lower is better)
-- **Constraint metrics**: source_view_count and used_ground_truth_for_uncertainty
-- **How to run**: Run `bash scripts/reproduce.sh`.
+Sequential acquisition of 2 of 8 candidate views from a 3-view start; final
+field scored on 8 held-out views.
 
-## Primary: tiny_nerf_dense_active_view_proxy
+- **Primary metric**: `final_psnr` (higher is better; reference 23.01 dB, random 22.59 dB, farthest 22.97 dB)
+- **Benefit metric**: `final_ssim` (higher is better; reference 0.804)
+- **Constraint metric**: `final_depth_mae` (lower is better; reference 0.233): image gains must not come from views that degrade the reconstructed geometry.
+- **Controls**: `random_view` (exact expectation of random acquisition) and `farthest_view` (farthest-camera acquisition), computed by the evaluator.
 
-Tests fixed-budget active view selection with eight source views instead of
-four.
+## Constraints enforced by construction
 
-- **Primary metric**: selected_error_lift (higher is better)
-- **Constraint metrics**: view_budget and selection_regret_fraction
-- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
-  by definition of the candidate-pool mean.
-- **How to run**: Run `bash scripts/reproduce.sh`.
-
-## Diagnostic: tiny_nerf_shifted_depth_uncertainty
-
-Reports the same pixel uncertainty target on a shifted sparse camera split.
-The current reproduction keeps this partial negative result visible, but it is
-not used as a primary milestone target because the reproduced method is worse
-than the random uncertainty control on this split.
-
-- **Metric**: AUSE (lower is better)
-- **Constraint metrics**: source_view_count and used_ground_truth_for_uncertainty
-- **How to run**: Run `bash scripts/reproduce.sh`.
-
-## Diagnostic: tiny_nerf_shifted_active_view_proxy
-
-Reports the same active-view target on the shifted sparse camera split.
-
-- **Primary metric**: selected_error_lift (higher is better)
-- **Constraint metrics**: view_budget and selection_regret_fraction
-- **Ablation/control**: random_view, whose selected_error_lift is fixed at 1.0
-  by definition of the candidate-pool mean.
-- **How to run**: Run `bash scripts/reproduce.sh`.
+- View budget, initial views, candidate pool, backbone and training schedule are
+  fixed by the evaluator: the method only returns scores, and the evaluator
+  performs the acquisitions and looks up the resulting field.
+- Ground-truth depth, held-out views and unacquired candidate photographs never
+  reach the method on the hidden split.
+- Any failed, invalid or non-finite run scores the worst achievable value in
+  every metric of every experiment.
