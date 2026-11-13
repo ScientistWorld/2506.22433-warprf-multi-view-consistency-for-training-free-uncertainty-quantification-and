@@ -5,43 +5,43 @@
     "depth_uncertainty_sparse": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.5620611877215183,
-          "spearman_depth_error": 0.002976756864050972
+          "ause": 0.5870518224681192,
+          "spearman_depth_error": 0.0024106472425911604
         },
         "warprf": {
-          "ause": 0.43009250276401056,
-          "spearman_depth_error": 0.19204064446595004
+          "ause": 0.27860650157491024,
+          "spearman_depth_error": 0.45653095935832394
         }
       }
     },
     "depth_uncertainty_dense": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.6006463681807173,
-          "spearman_depth_error": 0.004394457229137136
+          "ause": 0.6794735406480727,
+          "spearman_depth_error": 0.004355471669834859
         },
         "warprf": {
-          "ause": 0.4489316680777085,
-          "spearman_depth_error": 0.09445830851721758
+          "ause": 0.32481337555277673,
+          "spearman_depth_error": 0.26854555953357195
         }
       }
     },
     "active_view_selection": {
       "results": {
         "random_view": {
-          "final_psnr": 22.533121049404144,
-          "final_ssim": 0.7973869052449507,
-          "final_depth_mae": 0.2537373502772035
+          "final_psnr": 22.687332497537135,
+          "final_ssim": 0.7973568128732343,
+          "final_depth_mae": 0.3858794603283362
         },
         "farthest_view": {
-          "final_psnr": 22.90389382839203,
-          "final_ssim": 0.8085440769791603,
-          "final_depth_mae": 0.24689893750473857
+          "final_psnr": 23.157384991645813,
+          "final_ssim": 0.8181280121207237,
+          "final_depth_mae": 0.36466762609779835
         },
         "warprf": {
-          "final_psnr": 22.946017026901245,
-          "final_ssim": 0.8172556012868881,
-          "final_depth_mae": 0.2373871896415949
+          "final_psnr": 23.30342698097229,
+          "final_ssim": 0.8185440003871918,
+          "final_depth_mae": 0.36342726089060307
         }
       }
     }
@@ -50,5 +50,6 @@
     "warprf": {
       "status": "ok"
     }
-  }
+  },
+  "_isolation": "namespace"
 }

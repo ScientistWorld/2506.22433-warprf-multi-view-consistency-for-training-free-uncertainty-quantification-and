@@ -2,7 +2,7 @@
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
 action: submit
-gpus: 1
-test: true
+gpus: 2
+test: false
 milestone: core_claim_plus
-notes: "Design study: acquisition pose design / depth convention / throughput on 24 public scenes, plus namespace-isolation probe in the job container"
+notes: "Smoke test, then rebuild 16 train + 40 hidden test scenes (16 candidates, Eq. 2 depth, all 240 ordered acquisition pairs) on 2 GPUs, rerun reference/baselines through both evaluators with namespace isolation, and the full variant/shortcut audit"
