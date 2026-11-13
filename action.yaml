@@ -1,3 +1,8 @@
-action: done
+# Once you set action to 'submit' or 'done', STOP immediately.
+# Do NOT sleep, poll, or wait for jobs. The system reads this file
+# only after your turn ends.
+action: submit
+gpus: 1
+test: true
 milestone: core_claim_plus
-notes: "Gym rebuilt on frozen hidden instances with paper-faithful WarpRF and real sequential acquisition; evaluator owns answers/baselines/selection, fails invalid runs to worst; major shortcuts closed except reading hidden files at test time (see HARDENING.md)."
+notes: "Design study: acquisition pose design / depth convention / throughput on 24 public scenes, plus namespace-isolation probe in the job container"
