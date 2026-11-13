@@ -21,6 +21,13 @@ retraining table in ``answers.npz``.
 A method that crashes, times out, or returns a missing, misshapen or
 non-finite array fails the whole run and receives the worst achievable value
 of every metric in every experiment.
+
+Each method command runs through ``isolate.py`` in fresh Linux user, mount and
+PID namespaces in which ``eval/test/`` (the hidden instances, their answers and
+seeds) and the git object store are covered by empty mounts, so nothing the
+method executes can read the test answers. If the kernel refuses the
+namespaces, the evaluator instead removes all permissions from the hidden
+instances while the method runs.
 """
 
 from __future__ import annotations
@@ -29,6 +36,7 @@ import argparse
 import json
 import os
 import re
+import signal
 import subprocess
 import sys
 import tempfile
@@ -41,8 +49,8 @@ WORKSPACE = HERE.parents[1]
 ASSETS = HERE / "assets"
 SLICE = "test"
 DEFAULT_SCORES = WORKSPACE / "scoring" / "scores_test.json"
-EXPECTED_SCENES = 32
-EXPECTED_COUNTS = {"source": 3, "dense_source": 8, "target": 6, "candidate": 8, "eval": 8, "acquisitions": 2}
+EXPECTED_SCENES = 40
+EXPECTED_COUNTS = {"source": 3, "dense_source": 8, "target": 6, "candidate": 16, "eval": 8, "acquisitions": 2}
 TIMEOUT = int(os.environ.get("GYM_METHOD_TIMEOUT", "1800"))
 DEPTH_EXPERIMENTS = {"depth_uncertainty_sparse": "sparse", "depth_uncertainty_dense": "dense"}
 ACTIVE = "active_view_selection"
@@ -50,6 +58,10 @@ BASELINES = {"random_uncertainty", "random_view", "farthest_view"}
 NO_METHOD = "no_method_registered"
 ROUND2_ONLY = ("step2_source_rgb", "step2_source_depth", "step2_candidate_rgb", "step2_candidate_depth")
 GOLDEN = 0.6180339887498949
+ISOLATE = HERE / "isolate.py"
+HIDDEN_DIR = HERE
+HIDE = (HIDDEN_DIR, WORKSPACE / ".git")
+LOCKED = (HIDDEN_DIR / "assets", HIDDEN_DIR / "scene_seeds.json")
 
 
 # ----------------------------------------------------------------------------- metrics
@@ -245,22 +257,87 @@ def discover_methods(methods_dir: Path) -> list[tuple[str, list[str] | None, str
     return found
 
 
+_ISOLATION: dict = {}
+
+
+def _hide_args() -> list[str]:
+    out = []
+    for path in HIDE:
+        out += ["--hide", str(path)]
+    return out
+
+
+def isolation_mode() -> str:
+    """'namespace' if a probe run through isolate.py really sees the hidden folder empty, else 'lock'."""
+    if "mode" not in _ISOLATION:
+        probe = "import os, sys; sys.exit(0 if not os.path.exists(sys.argv[1]) or not os.listdir(sys.argv[1]) else 3)"
+        cmd = [sys.executable, "-I", str(ISOLATE), *_hide_args(), "--", sys.executable, "-I", "-c", probe, str(HIDDEN_DIR)]
+        try:
+            rc = subprocess.run(cmd, cwd=str(WORKSPACE), capture_output=True, text=True, timeout=120).returncode
+        except (OSError, subprocess.SubprocessError):
+            rc = -1
+        _ISOLATION["mode"] = "namespace" if rc == 0 else "lock"
+        if rc != 0:
+            print(f"[evaluate:{SLICE}] namespace isolation unavailable (probe rc={rc}); locking hidden files instead",
+                  file=sys.stderr, flush=True)
+    return _ISOLATION["mode"]
+
+
+def _set_lock(locked: bool) -> None:
+    for path in LOCKED:
+        if path.exists():
+            os.chmod(path, 0 if locked else (0o755 if path.is_dir() else 0o644))
+
+
+def unlock_stale() -> None:
+    """Restore permissions a killed run may have left locked."""
+    for path in LOCKED:
+        try:
+            if path.exists() and (os.stat(path).st_mode & 0o700) == 0:
+                _set_lock(False)
+        except OSError:
+            pass
+
+
+def _kill_group(proc: subprocess.Popen) -> None:
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)
+    except (ProcessLookupError, PermissionError, OSError):
+        pass
+
+
 def _invoke(cmd: list[str], rnd: int, inp: Path, out: Path) -> None:
     env = dict(os.environ)
     env["PYTHONPATH"] = str(WORKSPACE) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     out.mkdir(parents=True, exist_ok=True)
-    try:
-        proc = subprocess.run(
-            cmd + ["--round", str(rnd), "--input", str(inp), "--output", str(out)],
-            cwd=str(WORKSPACE), env=env, capture_output=True, text=True, timeout=TIMEOUT,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise MethodFailure(f"round {rnd} timed out after {TIMEOUT}s") from exc
-    except OSError as exc:
-        raise MethodFailure(f"round {rnd} could not start: {exc}") from exc
-    if proc.returncode != 0:
-        tail = (proc.stderr or "").strip().splitlines()[-5:]
-        raise MethodFailure(f"round {rnd} exited with code {proc.returncode}: {' | '.join(tail)}")
+    full = cmd + ["--round", str(rnd), "--input", str(inp), "--output", str(out)]
+    mode = isolation_mode()
+    if mode == "namespace":
+        full = [sys.executable, "-I", str(ISOLATE), *_hide_args(), "--", *full]
+    with tempfile.TemporaryFile() as log:
+        if mode == "lock":
+            _set_lock(True)
+        try:
+            try:
+                proc = subprocess.Popen(full, cwd=str(WORKSPACE), env=env, stdin=subprocess.DEVNULL, stdout=log,
+                                        stderr=log, start_new_session=True)
+            except OSError as exc:
+                raise MethodFailure(f"round {rnd} could not start: {exc}") from exc
+            try:
+                rc = proc.wait(timeout=TIMEOUT)
+            except subprocess.TimeoutExpired as exc:
+                _kill_group(proc)
+                proc.wait()
+                raise MethodFailure(f"round {rnd} timed out after {TIMEOUT}s") from exc
+            finally:
+                _kill_group(proc)
+        finally:
+            if mode == "lock":
+                _set_lock(False)
+        if rc != 0:
+            log.seek(0)
+            tail = log.read().decode("utf-8", "replace").strip().splitlines()[-5:]
+            raise MethodFailure(f"round {rnd} exited with code {rc}: {' | '.join(tail)}")
 
 
 def _read_output(path: Path, spec: dict[str, tuple[int, ...]]) -> dict[str, np.ndarray]:
@@ -353,6 +430,7 @@ def evaluate(methods_dir: Path, scores_path: Path, details_path: Path | None,
              assets: Path = ASSETS, expected_scenes: int = EXPECTED_SCENES) -> dict:
     if scores_path.exists():
         scores_path.unlink()
+    unlock_stale()
     scenes = load_suite(assets, expected_scenes)
     base_results, base_details = baselines(scenes)
     worst, worst_depth, worst_active = worst_values(scenes)
@@ -375,7 +453,8 @@ def evaluate(methods_dir: Path, scores_path: Path, details_path: Path | None,
             print(f"[evaluate:{SLICE}] {name}: FAILED - {exc}", file=sys.stderr, flush=True)
         for exp, metrics in agg.items():
             experiments[exp]["results"][name] = metrics
-    out = {"slice": SLICE, "num_scenes": len(scenes), "experiments": experiments, "_methods": status}
+    out = {"slice": SLICE, "num_scenes": len(scenes), "experiments": experiments, "_methods": status,
+           "_isolation": _ISOLATION.get("mode", "not_needed")}
     scores_path.parent.mkdir(parents=True, exist_ok=True)
     tmp_path = scores_path.with_suffix(".tmp")
     tmp_path.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")

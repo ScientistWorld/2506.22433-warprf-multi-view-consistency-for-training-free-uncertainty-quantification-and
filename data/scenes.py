@@ -8,8 +8,15 @@ scene for five fixed roles:
 * ``sparse_source``  - 3 initial training views spread over a ~150 degree arc
 * ``dense_extra``    - 5 extra training views (dense setting = sparse + extra)
 * ``target``         - 6 held-out views used to score pixel uncertainty
-* ``candidate``      - 8 candidate next views for active view selection
+* ``candidate``      - 16 candidate next views for active view selection
 * ``eval``           - 8 held-out views used to score novel-view quality
+
+Candidate and held-out (eval) cameras are drawn from one pose law (radius
+2.8-3.2, elevation 15-35 degrees, look-at jitter 0.1): candidates i.i.d. with
+uniform azimuth, held-out views stratified in azimuth around the scene. As in
+the paper's benchmarks, where the candidate pool and the test views come from
+the same capture, the views a method may acquire are the kind of views it is
+judged on.
 
 Camera convention (OpenCV): camera-to-world 4x4 poses, camera x right, y down,
 z forward. Pixel (row i, col j) has its centre at continuous image coordinates
@@ -25,7 +32,8 @@ import numpy as np
 
 BOUND_RADIUS = 1.9  # every primitive lies inside this sphere around the origin
 BACKGROUND_RGB = np.array([0.08, 0.08, 0.08], dtype=np.float32)
-ROLE_COUNTS = {"sparse_source": 3, "dense_extra": 5, "target": 6, "candidate": 8, "eval": 8}
+ROLE_COUNTS = {"sparse_source": 3, "dense_extra": 5, "target": 6, "candidate": 16, "eval": 8}
+VIEW_LAW = {"radius": (2.8, 3.2), "elevation_deg": (15.0, 35.0), "jitter": 0.1}  # candidates and eval views
 ROLE_ORDER = ("sparse_source", "dense_extra", "target", "candidate", "eval")
 PATTERNS = ("stripes", "checker", "rings", "gradient")
 
@@ -162,13 +170,12 @@ def make_scene(seed: int, width: int = 48, height: int = 48) -> dict:
     poses["target"] = [
         _sample_camera(rng, rng.uniform(0.0, 2.0 * math.pi), (2.5, 3.6), (5.0, 45.0), 0.25) for _ in range(6)
     ]
+    law = (VIEW_LAW["radius"], VIEW_LAW["elevation_deg"], VIEW_LAW["jitter"])
     poses["candidate"] = [
-        _sample_camera(rng, rng.uniform(0.0, 2.0 * math.pi), (2.3, 3.9), (0.0, 60.0), 0.35) for _ in range(8)
+        _sample_camera(rng, rng.uniform(0.0, 2.0 * math.pi), *law) for _ in range(ROLE_COUNTS["candidate"])
     ]
-    eval_offsets = np.arange(8) * 45.0 + rng.uniform(-15.0, 15.0, size=8)
-    poses["eval"] = [
-        _sample_camera(rng, base_az + math.radians(a), (2.8, 3.2), (15.0, 35.0), 0.1) for a in eval_offsets
-    ]
+    eval_offsets = np.arange(ROLE_COUNTS["eval"]) * (360.0 / ROLE_COUNTS["eval"]) + rng.uniform(-15.0, 15.0, size=ROLE_COUNTS["eval"])
+    poses["eval"] = [_sample_camera(rng, base_az + math.radians(a), *law) for a in eval_offsets]
     return {
         "seed": int(seed),
         "width": int(width),

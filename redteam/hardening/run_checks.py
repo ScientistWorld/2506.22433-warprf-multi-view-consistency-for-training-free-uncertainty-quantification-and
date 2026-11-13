@@ -105,31 +105,73 @@ def _boot(diffs: np.ndarray, rng, n_boot: int) -> dict:
 
 
 def diagnostics(assets: Path, choices: dict) -> dict:
-    """Bounds of the acquisition table and the percentile of each method's chosen pair."""
+    """Bounds of the acquisition table, oracle selectors, and the percentile of each method's chosen pair.
+
+    ``oracle_uncertainty`` acquires, at each step, the candidate whose current rendering is
+    farthest from its (hidden) photograph: the selection rule every uncertainty method
+    approximates, with a perfect uncertainty. ``greedy_oracle`` acquires the candidate with
+    the best held-out quality after one step, then the best second view.
+    """
     manifest = json.loads((assets / "manifest.json").read_text())
-    tables = []
+    tables, unc_oracle, greedy = [], [], []
     for name in manifest["scenes"]:
         with np.load(assets / name / "answers.npz") as f:
-            tables.append((f["final_psnr"].astype(np.float64), f["step1_psnr"].astype(np.float64), f["step0_quality"].astype(np.float64)))
+            a = {k: f[k] for k in f.files}
+        with np.load(assets / name / "inputs.npz") as f:
+            x = {k: f[k] for k in ("sparse_candidate_rgb", "step2_candidate_rgb")}
+        P = a["final_psnr"].astype(np.float64)
+        tables.append((P, a["step1_psnr"].astype(np.float64), a["step0_quality"].astype(np.float64)))
+        photo = a["candidate_images"].astype(np.float64)
+        e1 = np.abs(x["sparse_candidate_rgb"].astype(np.float64) - photo).sum(axis=(1, 2, 3))
+        f1 = int(np.argmax(e1))
+        e2 = np.abs(x["step2_candidate_rgb"][f1].astype(np.float64) - photo).sum(axis=(1, 2, 3))
+        e2[f1] = -np.inf
+        unc_oracle.append(P[f1, int(np.argmax(e2))])
+        g1 = int(np.argmax(a["step1_psnr"]))
+        row = P[g1].copy()
+        row[g1] = -np.inf
+        greedy.append(float(row.max()))
     off = ~np.eye(tables[0][0].shape[0], dtype=bool)
     out = {
         "final_psnr_best_pair_mean": float(np.mean([t[0][off].max() for t in tables])),
         "final_psnr_worst_pair_mean": float(np.mean([t[0][off].min() for t in tables])),
         "final_psnr_random_mean": float(np.mean([t[0][off].mean() for t in tables])),
+        "final_psnr_oracle_uncertainty_mean": float(np.mean(unc_oracle)),
+        "final_psnr_greedy_oracle_mean": float(np.mean(greedy)),
         "final_psnr_within_scene_std_mean": float(np.mean([t[0][off].std() for t in tables])),
         "step1_psnr_best_mean": float(np.mean([t[1].max() for t in tables])),
         "step1_psnr_mean": float(np.mean([t[1].mean() for t in tables])),
         "step0_psnr_mean": float(np.mean([t[2][0] for t in tables])),
         "chosen_pair_percentile": {},
+        "per_scene": {"oracle_uncertainty": [float(v) for v in unc_oracle], "greedy_oracle": greedy,
+                      "best_pair": [float(t[0][off].max()) for t in tables]},
     }
     for name, ch in choices.items():
         if not ch:
             continue
         pct = []
-        for (a, b), t in zip(ch, tables):
+        for (a_, b_), t in zip(ch, tables):
             vals = t[0][off]
-            pct.append(float((vals < t[0][a, b]).mean()))
+            pct.append(float((vals < t[0][a_, b_]).mean()))
         out["chosen_pair_percentile"][name] = float(np.mean(pct))
+    return out
+
+
+def reference_vs_baselines(details: dict, diag: dict) -> dict:
+    """Paired per-scene gain of the reference over each baseline and of the oracles over the reference."""
+    rng = np.random.default_rng(1)
+    ref = details[REFERENCE]
+    base = details["baselines"]
+    out = {}
+    for exp, setting in (("depth_uncertainty_sparse", "sparse"), ("depth_uncertainty_dense", "dense")):
+        diffs = np.array([np.mean([b[0] - r[0] for r, b in zip(rs, bs)])
+                          for rs, bs in zip(ref["depth"][setting], base["random_uncertainty"][setting])])
+        out[f"{exp}: reference AUSE gain over random_uncertainty"] = _boot(diffs, rng, 2000)
+    ref_psnr = np.array([r["psnr"] for r in ref["active"]])
+    out["active: reference PSNR gain over random_view"] = _boot(ref_psnr - np.array([r["psnr"] for r in base["random_view"]]), rng, 2000)
+    out["active: reference PSNR gain over farthest_view"] = _boot(ref_psnr - np.array([r["psnr"] for r in base["farthest_view"]["active"]]), rng, 2000)
+    for key in ("oracle_uncertainty", "greedy_oracle", "best_pair"):
+        out[f"active: {key} PSNR gain over reference"] = _boot(np.array(diag["per_scene"][key]) - ref_psnr, rng, 2000)
     return out
 
 
@@ -184,6 +226,8 @@ def main() -> None:
         chosen = dict(report["splits"][split]["choices"])
         chosen["farthest_view"] = report["splits"][split]["baseline_choices"]
         report["splits"][split]["diagnostics"] = diagnostics(assets, chosen)
+        report["splits"][split]["reference_vs_baselines"] = reference_vs_baselines(det, report["splits"][split]["diagnostics"])
+        report["splits"][split]["isolation"] = sc.get("_isolation")
 
         # Special cases on the same evaluator.
         empty = work / f"empty_{split}"
@@ -203,6 +247,17 @@ def main() -> None:
             "failed_evaluator_rc": rc_stale,
             "stale_scores_removed": not stale.exists(),
         }
+
+    esc = work / "escape_report.jsonl"
+    routes = {}
+    if esc.is_file():
+        for line in esc.read_text().splitlines():
+            r = json.loads(line)
+            key = "test" if r["scene"].startswith("test_") else "train"
+            routes.setdefault(key, {}).setdefault(str(r["route"]), 0)
+            routes[key][str(r["route"])] += 1
+            routes.setdefault(f"{key}_example_attempts", r["tried"])
+    report["escape_routes"] = routes
 
     out = Path(args.out)
     (out / "results.json").write_text(json.dumps(report, indent=2) + "\n")
@@ -226,19 +281,28 @@ def main() -> None:
             r = res["active_view_selection"]["results"][bname]
             lines.append(f"| {bname} (eval) | {split} | | | {r['final_psnr']:.3f} | {r['final_ssim']:.4f} | {r['final_depth_mae']:.4f} | | baseline |")
     lines.append("")
-    lines.append("Paired improvement over the reference (test split; AUSE: reference minus variant, PSNR: variant minus reference; 95% scene-bootstrap CI):")
-    lines.append("")
-    lines.append("| case | sparse AUSE gain [CI] | dense AUSE gain [CI] | PSNR gain dB [CI] |")
-    lines.append("|---|---|---|---|")
-    for name, pv in sorted(report["splits"]["test"]["paired_vs_reference"].items()):
-        if not pv:
-            continue
-        f = lambda e: f"{pv[e]['mean_improvement']:+.4f} [{pv[e]['ci95'][0]:+.4f}, {pv[e]['ci95'][1]:+.4f}]"
-        lines.append(f"| {name} | {f('depth_uncertainty_sparse')} | {f('depth_uncertainty_dense')} | {f('active_view_selection')} |")
-    lines.append("")
-    for split, rep in report["splits"].items():
-        lines.append(f"Diagnostics ({split}): " + json.dumps(rep["diagnostics"]))
+    for split in ("test", "train"):
+        lines.append(f"Paired improvement over the reference ({split} split; AUSE: reference minus variant, PSNR: variant minus reference; 95% scene-bootstrap CI):")
         lines.append("")
+        lines.append("| case | sparse AUSE gain [CI] | dense AUSE gain [CI] | PSNR gain dB [CI] |")
+        lines.append("|---|---|---|---|")
+        for name, pv in sorted(report["splits"][split]["paired_vs_reference"].items()):
+            if not pv:
+                continue
+            f = lambda e: f"{pv[e]['mean_improvement']:+.4f} [{pv[e]['ci95'][0]:+.4f}, {pv[e]['ci95'][1]:+.4f}]"
+            lines.append(f"| {name} | {f('depth_uncertainty_sparse')} | {f('depth_uncertainty_dense')} | {f('active_view_selection')} |")
+        lines.append("")
+    for split, rep in report["splits"].items():
+        lines.append(f"Reference vs baselines and oracles ({split}; mean [95% CI], scenes better/worse):")
+        lines.append("")
+        for k, v in rep["reference_vs_baselines"].items():
+            lines.append(f"- {k}: {v['mean_improvement']:+.4f} [{v['ci95'][0]:+.4f}, {v['ci95'][1]:+.4f}] ({v['scenes_better']}/{v['scenes_worse']})")
+        lines.append("")
+        diag = {k: v for k, v in rep["diagnostics"].items() if k != "per_scene"}
+        lines.append(f"Diagnostics ({split}, isolation={rep['isolation']}): " + json.dumps(diag))
+        lines.append("")
+    lines.append("Escape routes taken by shortcut_escape (None = no route worked): " + json.dumps(report["escape_routes"]))
+    lines.append("")
     lines.append("Special cases: " + json.dumps(report["special"]))
     (out / "results.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines), flush=True)

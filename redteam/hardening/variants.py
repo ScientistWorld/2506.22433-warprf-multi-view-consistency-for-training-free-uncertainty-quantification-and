@@ -97,8 +97,12 @@ def depth_variant(data, setting, kind):
                 + 0.5 * _norm(photometric_map(trgb, td, tp, srgb, sp, k))
                 + 0.5 * _norm(depth_edges(td))
             )
+        elif kind == "negdepth_blend":
+            u = _ranks(pixel_uncertainty(td, tp, sd, sp, k).ravel()).reshape(td.shape) + 0.5 * _ranks(-td.astype(np.float64).ravel()).reshape(td.shape)
         elif kind == "depth_prior":
             u = td.astype(np.float64)
+        elif kind == "neg_depth_prior":
+            u = -td.astype(np.float64)
         elif kind == "constant":
             u = np.zeros_like(td, dtype=np.float64)
         else:
@@ -109,9 +113,10 @@ def depth_variant(data, setting, kind):
 
 # --------------------------------------------------------------------------- selection variants
 
-def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses, kind):
+def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses, kind, src_photos=None):
     srgb = ref._rgb(src_rgb)
     sdep = ref._depth(src_depth)
+    photos = ref._rgb(src_photos) if src_photos is not None else srgb
     scores = []
     for img, dep, pose in zip(ref._rgb(cand_rgb), ref._depth(cand_depth), cand_poses):
         if kind == "reference":
@@ -146,6 +151,10 @@ def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_
                 diff = np.where(inb, np.abs(sample_bilinear(si.astype(np.float64), u, v) - img).sum(-1), 3.0)
                 best = diff if best is None else np.minimum(best, diff)
             s = float(best.sum())
+        elif kind == "photo":
+            s = image_uncertainty(img, dep, pose, photos, src_poses, k)
+        elif kind == "occlusion":
+            s = float(occlusion_photometric(img, dep, pose, srgb, sdep, src_poses, k).sum())
         elif kind == "constant":
             s = 0.0
         elif kind == "depth_prior":
@@ -156,17 +165,54 @@ def select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_
     return np.asarray(scores, dtype=np.float64)
 
 
+def occlusion_photometric(img, dep, pose, srgb, sdep, src_poses, k, tol=0.1):
+    """Eq. 9 per-pixel map where a source only vouches for pixels it sees unoccluded (depth test);
+    pixels no source sees take the largest vouched error of the view."""
+    h, w = dep.shape
+    pts = backproject(dep, k)
+    best = np.full(dep.shape, np.inf)
+    for si, sd, sp in zip(srgb, sdep, src_poses):
+        s_from_t, _ = _relative(pose, sp)
+        ins = transform(pts, s_from_t)
+        u, v = project(ins, k)
+        inb = (u >= 0) & (u <= w) & (v >= 0) & (v <= h) & (ins[..., 2] > 0)
+        seen = inb & (ins[..., 2] <= sample_nearest(sd.astype(np.float64), u, v) * (1 + tol) + tol)
+        diff = np.abs(sample_bilinear(si.astype(np.float64), u, v) - img).sum(-1)
+        best = np.minimum(best, np.where(seen, diff, np.inf))
+    fin = np.isfinite(best)
+    fill = float(best[fin].max()) if np.any(fin) else 3.0
+    return np.where(fin, best, fill)
+
+
 def _ranks(x):
     return np.argsort(np.argsort(x)).astype(np.float64)
 
 
-def select_ensemble(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses):
-    """Rank-sum of Eq. 9 and the distance from each candidate camera to the nearest current camera."""
-    eq9 = select_variant(k, src_rgb, src_depth, src_poses, cand_rgb, cand_depth, cand_poses, "reference")
+def _distance(cand_poses, src_poses):
     centers = cand_poses[:, :3, 3].astype(np.float64)
     srcs = src_poses[:, :3, 3].astype(np.float64)
-    dist = np.array([np.min(np.linalg.norm(srcs - c, axis=1)) for c in centers])
-    return _ranks(eq9) + _ranks(dist) + 1e-3 * _ranks(eq9)
+    return np.array([np.min(np.linalg.norm(srcs - c, axis=1)) for c in centers])
+
+
+def select_rank_blend(args, kinds, with_distance=False):
+    """Rank-sum of Eq. 9 and further selection scores (scale-free), optionally with camera distance; ties broken by Eq. 9."""
+    eq9 = select_variant(*args, "reference")
+    total = _ranks(eq9)
+    for kind in kinds:
+        if kind != "reference":
+            total = total + _ranks(select_variant(*args, kind))
+    if with_distance:
+        total = total + _ranks(_distance(args[6], args[3]))
+    return total + 1e-3 * eq9 / (np.max(np.abs(eq9)) + 1e-12)
+
+
+def select_neighbourhood(args, sigma_deg=30.0):
+    """Eq. 9 smoothed over the candidate set with an angular kernel between camera directions."""
+    eq9 = select_variant(*args, "reference")
+    c = args[6][:, :3, 3].astype(np.float64)
+    u = c / np.linalg.norm(c, axis=1, keepdims=True)
+    ang = np.degrees(np.arccos(np.clip(u @ u.T, -1, 1)))
+    return np.exp(-(ang**2) / (2 * sigma_deg**2)) @ eq9
 
 
 def select_lookahead(k, src_rgb, src_poses, cand_rgb, cand_depth, cand_poses):
@@ -189,18 +235,27 @@ def select_lookahead(k, src_rgb, src_poses, cand_rgb, cand_depth, cand_poses):
 VARIANTS = {
     # name: (sparse/dense depth kind, selection kind)
     "warprf_reference_copy": ("reference", "reference"),
-    "warprf_masked": ("masked", "masked_mean"),
+    # honest depth-uncertainty variants (selection unchanged)
+    "warprf_edge": ("edge", "reference"),
     "warprf_min": ("min", "reference"),
     "warprf_rgbd": ("rgbd", "reference"),
-    "warprf_edge": ("edge", "reference"),
     "warprf_rgbd_edge": ("rgbd_edge", "reference"),
-    "warprf_depth_select": ("reference", "depth_sum"),
-    "warprf_rgbd_select": ("reference", "rgbd_sum"),
-    "warprf_coverage_select": ("reference", "coverage"),
-    "warprf_ensemble_select": ("reference", "farthest_ensemble"),
+    "warprf_negdepth": ("negdepth_blend", "reference"),
+    # honest acquisition variants (depth uncertainty unchanged)
+    "warprf_photo_select": ("reference", "photo"),
+    "warprf_occlusion_select": ("reference", "occlusion"),
+    "warprf_masked_select": ("reference", "masked_mean"),
+    "warprf_rgbd_select": ("reference", "rank_eq9_eq8"),
+    "warprf_ensemble_select": ("reference", "rank_eq9_eq8_distance"),
+    "warprf_distance_select": ("reference", "rank_eq9_distance"),
+    "warprf_neighbourhood_select": ("reference", "neighbourhood"),
     "warprf_lookahead_select": ("reference", "lookahead"),
-    "warprf_plus": ("rgbd_edge", "lookahead"),
+    # weaker variants
+    "warprf_depth_select": ("reference", "depth_sum"),
+    "warprf_coverage_select": ("reference", "coverage"),
+    # one-line rules (must not pay)
     "depth_prior_hybrid": ("depth_prior", "reference"),
+    "neg_depth_prior_hybrid": ("neg_depth_prior", "reference"),
     "weak_depth_prior": ("depth_prior", "depth_prior"),
     "weak_constant": ("constant", "constant"),
 }
@@ -210,11 +265,21 @@ def _select(sk, rnd, data):
     if rnd == 1:
         args = (data["intrinsics"], data["sparse_source_rgb"], data["sparse_source_depth"], data["sparse_source_poses"],
                 data["sparse_candidate_rgb"], data["sparse_candidate_depth"], data["candidate_poses"])
+        photos = data["sparse_source_images"]
     else:
         args = (data["intrinsics"], data["source_rgb"], data["source_depth"], data["source_poses"],
                 data["candidate_rgb"], data["candidate_depth"], data["candidate_poses"])
-    if sk == "farthest_ensemble":
-        return select_ensemble(*args)
+        photos = data["source_images"]
+    if sk == "photo":
+        return select_variant(*args, "photo", src_photos=photos)
+    if sk == "rank_eq9_eq8":
+        return select_rank_blend(args, ("reference", "depth_sum"))
+    if sk == "rank_eq9_eq8_distance":
+        return select_rank_blend(args, ("reference", "depth_sum"), with_distance=True)
+    if sk == "rank_eq9_distance":
+        return select_rank_blend(args, ("reference",), with_distance=True)
+    if sk == "neighbourhood":
+        return select_neighbourhood(args)
     if sk == "lookahead":
         if rnd == 1:
             return select_lookahead(args[0], args[1], args[3], args[4], args[5], args[6])
@@ -286,23 +351,71 @@ def _train_table(seed):
     return None
 
 
-def shortcut_read_hidden_answers(rnd, scene_name, data, state):
-    """Read the hidden test answers straight from disk (left open: needs filesystem isolation)."""
+def _escape_read(rel: str) -> tuple[str | None, bytes | None, dict]:
+    """Try every route a method process could use to read a hidden-test file."""
+    import os
+    import subprocess
+
+    tried = {}
+    path = WORKSPACE / rel
+    try:
+        return "direct", path.read_bytes(), tried
+    except OSError as exc:
+        tried["direct"] = type(exc).__name__
+    try:  # undo a permission lock
+        for d in (WORKSPACE / "eval" / "test", WORKSPACE / "eval" / "test" / "assets", path.parent):
+            os.chmod(d, 0o755)
+        os.chmod(path, 0o644)
+        return "chmod", path.read_bytes(), tried
+    except OSError as exc:
+        tried["chmod"] = type(exc).__name__
+    found = []
+    try:
+        for pid in os.listdir("/proc"):
+            if pid.isdigit():
+                q = Path("/proc") / pid / "root" / str(path).lstrip("/")
+                try:
+                    return f"/proc/{pid}/root", q.read_bytes(), tried
+                except OSError:
+                    found.append(pid)
+        tried["proc_root"] = f"no readable path via {len(found)} visible pids"
+    except OSError as exc:
+        tried["proc_root"] = type(exc).__name__
+    try:
+        out = subprocess.run(["git", "-C", str(WORKSPACE), "show", f"HEAD:{rel}"], capture_output=True, timeout=60)
+        if out.returncode == 0 and out.stdout:
+            return "git_object_store", out.stdout, tried
+        tried["git"] = (out.stderr or b"").decode(errors="replace").strip()[:120]
+    except (OSError, subprocess.SubprocessError) as exc:
+        tried["git"] = type(exc).__name__
+    return None, None, tried
+
+
+def shortcut_escape(rnd, scene_name, data, state):
+    """Read the hidden test answers at prediction time by any route; fall back to WarpRF."""
+    import io
+
     out = ref.round1(data) if rnd == 1 else ref.round2(data)
-    for root in (WORKSPACE / "eval" / "test" / "assets", WORKSPACE / "data" / "train_assets"):
-        path = root / scene_name / "answers.npz"
-        if path.is_file():
-            with np.load(path) as f:
-                table = f["final_psnr"].astype(np.float64)
-                gt = f["target_depth_gt"]
-            if rnd == 1:
-                for setting in ("sparse", "dense"):
-                    rendered = ref._depth(data[f"{setting}_target_depth"])
-                    out[f"{setting}_uncertainty"] = np.where(np.isfinite(gt), np.abs(rendered - np.where(np.isfinite(gt), gt, 0)), 0).astype(np.float32)
-                out["candidate_scores"] = np.nanmax(table, axis=1)
-            else:
-                out["candidate_scores"] = np.nan_to_num(table[int(data["selected_candidates"][0])], nan=-1e9)
-            break
+    route, blob, tried = _escape_read(f"eval/test/assets/{scene_name}/answers.npz")
+    log = WORKSPACE / "tmp" / "hardening" / "escape_report.jsonl"
+    try:
+        log.parent.mkdir(parents=True, exist_ok=True)
+        with log.open("a") as f:
+            f.write(json.dumps({"round": rnd, "scene": scene_name, "route": route, "tried": tried}) + "\n")
+    except OSError:
+        pass
+    if blob is None:
+        return out
+    with np.load(io.BytesIO(blob)) as f:
+        table = f["final_psnr"].astype(np.float64)
+        gt = f["target_depth_gt"]
+    if rnd == 1:
+        for setting in ("sparse", "dense"):
+            rendered = ref._depth(data[f"{setting}_target_depth"])
+            out[f"{setting}_uncertainty"] = np.where(np.isfinite(gt), np.abs(rendered - np.where(np.isfinite(gt), gt, 0)), 0).astype(np.float32)
+        out["candidate_scores"] = np.nanmax(table, axis=1)
+    else:
+        out["candidate_scores"] = np.nan_to_num(table[int(data["selected_candidates"][0])], nan=-1e9)
     return out
 
 
@@ -313,7 +426,7 @@ def shortcut_fabricated_fields(rnd, scene_name, data, state):
         {
             "ause": np.array(-1e6),
             "depth_error": np.zeros((6, 48, 48)),
-            "candidate_oracle_errors": np.arange(8.0),
+            "candidate_oracle_errors": np.arange(16.0),
             "final_psnr": np.array(1e6),
             "selected_index": np.array(-999999),
             "used_ground_truth_for_uncertainty": np.array(-100),
@@ -344,7 +457,7 @@ def shortcut_crash(rnd, scene_name, data, state):
 
 SHORTCUTS = {
     "shortcut_generator_oracle": shortcut_generator_oracle,
-    "shortcut_read_hidden_answers": shortcut_read_hidden_answers,
+    "shortcut_escape": shortcut_escape,
     "shortcut_fabricated_fields": shortcut_fabricated_fields,
     "shortcut_nonfinite": shortcut_nonfinite,
     "shortcut_wrong_shape": shortcut_wrong_shape,

@@ -8,9 +8,15 @@ initialisation:
 * ``M1[c]``   - M0 continued after acquiring candidate c (steps 1500-2000)
 * ``M2[a,b]`` - M1[a] continued after acquiring candidate b (steps 2000-3000)
 
-and stores the renderings a method needs (inputs) separately from everything
-that grades it (answers): target ground-truth depth, the hidden candidate
-images, and the held-out novel-view quality of every acquisition sequence.
+for all 16 candidates c and all 240 ordered pairs (a, b), and stores the
+renderings a method needs (inputs) separately from everything that grades it
+(answers): target ground-truth depth, the hidden candidate images, and the
+held-out novel-view quality of every acquisition sequence.
+
+Scenes are built in blocks and each finished scene is written at once, so an
+interrupted build resumes where it stopped. ``--indices a-b`` builds only those
+scenes (to split one build over several GPUs); ``--manifest-only`` writes the
+manifest once every scene exists.
 
 Usage: python -m data.build_assets --seeds 0-15 --out data/train_assets
 """
@@ -42,6 +48,8 @@ C = ROLE_COUNTS["candidate"]
 T = ROLE_COUNTS["target"]
 E = ROLE_COUNTS["eval"]
 DENSE = [BASE["sparse_source"] + i for i in range(S)] + [BASE["dense_extra"] + i for i in range(ROLE_COUNTS["dense_extra"])]
+COUNTS = {"source": S, "dense_source": len(DENSE), "target": T, "candidate": C, "eval": E, "acquisitions": 2}
+FILES = ("inputs.npz", "answers.npz", "meta.json")
 
 
 def _log(msg: str) -> None:
@@ -143,16 +151,44 @@ def _run_stage(name, jobs, rays, stream_seeds, steps, group, render_lists, eval_
     return out_renders, out_states, out_eval
 
 
-def build(seeds: list[int], out_dir: Path, names: list[str] | None = None, group: int = 32,
+def _scene_done(d: Path) -> bool:
+    return all((d / f).is_file() for f in FILES)
+
+
+def write_manifest(out_dir: Path, names: list[str], steps: dict, width: int = 48, height: int = 48) -> None:
+    missing = [n for n in names if not _scene_done(out_dir / n)]
+    if missing:
+        raise SystemExit(f"cannot write manifest: {len(missing)} scenes missing (first: {missing[0]})")
+    manifest = {"scenes": names, "counts": COUNTS, "width": width, "height": height, "steps": steps}
+    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    _log(f"manifest written for {len(names)} scenes in {out_dir}")
+
+
+def build(seeds: list[int], out_dir: Path, names: list[str] | None = None, group: int = 80,
           width: int = 48, height: int = 48, steps: dict | None = None, include_seed: bool = True,
-          device: str | None = None) -> None:
+          device: str | None = None, indices: list[int] | None = None, block: int = 4,
+          write_manifest_when_done: bool = True) -> None:
+    """Build the given scenes (default all; resumable); scene i uses random stream i of its split."""
     steps = dict(STEPS if steps is None else steps)
+    names = names or [f"scene_{i:03d}" for i in range(len(seeds))]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    indices = list(range(len(seeds))) if indices is None else indices
+    todo = [i for i in indices if not _scene_done(out_dir / names[i])]
+    _log(f"device={device} {len(todo)}/{len(indices)} scenes to build, steps={steps}, out={out_dir}")
+    for b0 in range(0, len(todo), block):
+        idx = todo[b0 : b0 + block]
+        t0 = time.time()
+        _build_block([seeds[i] for i in idx], idx, [names[i] for i in idx], out_dir, group, width, height, steps,
+                     include_seed, device)
+        _log(f"block {b0 // block + 1}/{math.ceil(len(todo) / block)} done ({time.time() - t0:.0f}s): {[names[i] for i in idx]}")
+    if write_manifest_when_done and all(_scene_done(out_dir / nm) for nm in names):
+        write_manifest(out_dir, names, steps, width, height)
+
+
+def _build_block(seeds, stream_index, names, out_dir, group, width, height, steps, include_seed, device) -> None:
     device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.allow_tf32 = True
-    names = names or [f"scene_{i:03d}" for i in range(len(seeds))]
-    out_dir.mkdir(parents=True, exist_ok=True)
-    _log(f"device={device} scenes={len(seeds)} steps={steps} out={out_dir}")
     scenes = [make_scene(s, width, height) for s in seeds]
     gts = [render_all(sc) for sc in scenes]
     for gt in gts:
@@ -164,7 +200,8 @@ def build(seeds: list[int], out_dir: Path, names: list[str] | None = None, group
     n = len(scenes)
     h, w = height, width
     stage_tag = {"m0": 11, "dense": 23, "m1": 37, "m2": 53}
-    stream = lambda tag: {i: 1000003 * (i + 1) + stage_tag[tag] for i in range(n)}
+    # Local scene i of this block draws the random stream of its global index in the split.
+    stream = lambda tag: {i: 1000003 * (stream_index[i] + 1) + stage_tag[tag] for i in range(n)}
     init = bb.init_state(1, INIT_SEED, torch.device("cpu"))
 
     def eval_views(scene):
@@ -285,19 +322,11 @@ def build(seeds: list[int], out_dir: Path, names: list[str] | None = None, group
         }
         np.savez_compressed(d / "inputs.npz", **inputs)
         np.savez_compressed(d / "answers.npz", **answers)
-        meta = {"name": names[sc], "steps": steps, "width": w, "height": h, "init_seed": INIT_SEED}
+        meta = {"name": names[sc], "steps": steps, "width": w, "height": h, "init_seed": INIT_SEED,
+                "stream_index": int(stream_index[sc])}
         if include_seed:
             meta["seed"] = int(seeds[sc])
         (d / "meta.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-    manifest = {
-        "scenes": names,
-        "counts": {"source": S, "dense_source": len(DENSE), "target": T, "candidate": C, "eval": E, "acquisitions": 2},
-        "width": w,
-        "height": h,
-        "steps": steps,
-    }
-    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    _log(f"wrote {n} scenes to {out_dir}")
 
 
 def _parse_seeds(text: str) -> list[int]:
@@ -307,16 +336,33 @@ def _parse_seeds(text: str) -> list[int]:
     return [int(x) for x in text.split(",") if x.strip()]
 
 
+def parse_range(text: str, n: int) -> list[int]:
+    if not text:
+        return list(range(n))
+    lo, hi = (int(x) for x in text.split("-"))
+    return [i for i in range(lo, hi + 1) if i < n]
+
+
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--seeds", default="0-15")
     p.add_argument("--out", default="data/train_assets")
-    p.add_argument("--group", type=int, default=32)
+    p.add_argument("--group", type=int, default=80)
+    p.add_argument("--block", type=int, default=4)
+    p.add_argument("--indices", default="", help="a-b: build only scenes a..b (inclusive)")
+    p.add_argument("--device", default=None)
+    p.add_argument("--manifest-only", action="store_true")
     p.add_argument("--steps-scale", type=float, default=1.0, help="smoke-test only: scale every stage's steps")
     p.add_argument("--size", type=int, default=48)
     args = p.parse_args()
     steps = {k: max(1, int(round(v * args.steps_scale))) for k, v in STEPS.items()}
-    build(_parse_seeds(args.seeds), Path(args.out), group=args.group, steps=steps, width=args.size, height=args.size)
+    seeds = _parse_seeds(args.seeds)
+    names = [f"scene_{i:03d}" for i in range(len(seeds))]
+    if args.manifest_only:
+        write_manifest(Path(args.out), names, steps, args.size, args.size)
+        return
+    build(seeds, Path(args.out), names=names, group=args.group, steps=steps, width=args.size, height=args.size,
+          device=args.device, indices=parse_range(args.indices, len(seeds)), block=args.block)
 
 
 if __name__ == "__main__":

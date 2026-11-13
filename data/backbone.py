@@ -8,8 +8,10 @@ can be trained cheaply on one GPU. Models are fully independent (separate
 weights and Adam moments); the only thing they share is the ray-sampling random
 stream of their scene, which makes branch-to-branch comparisons paired.
 
-Rendered depth is the expected ray-termination distance (Eq. 2) converted to
-camera-space z, matching the ground-truth convention in ``data/scenes.py``.
+Rendered depth is paper Eq. 2, D(r) = sum_i alpha_i T_i t_i (no background
+term: where the field is not opaque the depth falls short of the surface),
+converted to camera-space z to match the ground-truth convention in
+``data/scenes.py``.
 """
 
 from __future__ import annotations
@@ -114,7 +116,7 @@ def query(params: dict, points: torch.Tensor, dirs: torch.Tensor) -> tuple[torch
 
 
 def render_rays(params: dict, origins, dirs, cosines, jitter=None):
-    """Volume-render rays [M, R, 3]; returns rgb [M,R,3], camera-z depth [M,R], opacity [M,R]."""
+    """Volume-render rays [M, R, 3]; returns rgb [M,R,3], camera-z Eq. 2 depth [M,R], opacity [M,R]."""
     b = torch.sum(origins * dirs, dim=-1)
     c = torch.sum(origins * origins, dim=-1) - BOUND_RADIUS**2
     disc = b * b - c
@@ -143,7 +145,7 @@ def render_rays(params: dict, origins, dirs, cosines, jitter=None):
     acc = weights.sum(dim=-1)
     bg = torch.as_tensor(BACKGROUND_RGB, device=origins.device, dtype=origins.dtype)
     color = torch.sum(weights[..., None] * rgb, dim=-2) + (1.0 - acc)[..., None] * bg
-    distance = torch.sum(weights * t, dim=-1) + (1.0 - acc) * t_far
+    distance = torch.sum(weights * t, dim=-1)  # paper Eq. 2
     return color, distance * cosines, acc
 
 
