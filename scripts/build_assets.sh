@@ -1,7 +1,7 @@
 #!/bin/bash
-# Build the frozen benchmark instances (GPU job; ~2.5 h on two A100s, ~5 h on one).
+# Build the frozen benchmark instances (GPU job; ~1.8 h on two A100s, ~3.5 h on one).
 #   data/train_assets/ - 16 public development scenes (seeds 0-15)
-#   eval/test/assets/  - 40 hidden test scenes (seeds held only in eval/test/)
+#   eval/test/assets/  - 56 hidden test scenes (seeds held only in eval/test/)
 # Resumable: finished scenes are kept, so rerunning continues an interrupted
 # build. FORCE=1 deletes both instance sets first.
 
@@ -17,11 +17,11 @@ mkdir -p logs
 
 NGPU=$(python -c "import torch; print(torch.cuda.device_count())")
 if [ "$NGPU" -ge 2 ]; then
-  # GPU 0: the 16 train scenes, then test scenes 28-39; GPU 1: test scenes 0-27.
+  # GPU 0: the 16 train scenes, then test scenes 36-55; GPU 1: test scenes 0-35.
   ( python -m data.build_assets --seeds 0-15 --out data/train_assets --device cuda:0 \
-    && python eval/test/build_assets.py --indices 28-39 --device cuda:0 ) > logs/build_gpu0.log 2>&1 &
+    && python eval/test/build_assets.py --indices 36-55 --device cuda:0 ) > logs/build_gpu0.log 2>&1 &
   PID0=$!
-  python eval/test/build_assets.py --indices 0-27 --device cuda:1 > logs/build_gpu1.log 2>&1 &
+  python eval/test/build_assets.py --indices 0-35 --device cuda:1 > logs/build_gpu1.log 2>&1 &
   PID1=$!
   STATUS=0
   wait "$PID0" || STATUS=1
