@@ -19,7 +19,7 @@ The paper studies uncertainty estimation for radiance fields and its use in acti
 
 A scaled, controlled version of the paper's two evaluations. The first is
 per-pixel depth uncertainty (AUSE) for frozen tiny-NeRF fields trained from 3
-or 8 views. The second is sequential acquisition of 2 of 8 candidate views,
-scored by the final field's held-out PSNR/SSIM/depth error. Both run on
-procedurally generated scenes with hidden test instances. See
-`briefing/evaluation.md`.
+or 8 views. The second is sequential acquisition of 2 of 16 candidate views,
+scored by the final field's PSNR/SSIM/depth error on 32 held-out views drawn
+from the same pose distribution as the candidates. Both run on procedurally
+generated scenes, with 56 hidden test instances. See `briefing/evaluation.md`.

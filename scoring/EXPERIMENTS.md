@@ -2,7 +2,7 @@
 
 All experiments run on procedurally generated scenes observed by a fixed,
 frozen radiance field. The public train split has 16 scenes; the hidden test
-split has 32 different scenes of the same kind. Every method sees exactly the
+split has 56 different scenes of the same kind. Every method sees exactly the
 same inputs, and all ground truth stays with the evaluator.
 
 ## depth_uncertainty_sparse
@@ -24,10 +24,13 @@ singles them out.
 ## active_view_selection
 
 Does uncertainty pick useful views to capture next? Starting from the
-three-view field, the method scores eight candidate cameras; the best-scored one
-is captured and the field keeps training with it; the method then scores the
-candidates again for the updated field and a second view is captured. The
+three-view field, the method scores sixteen candidate cameras; the best-scored
+one is captured and the field keeps training with it; the method then scores
+the candidates again for the updated field and a second view is captured. The
 outcome is the final field's novel-view quality (PSNR, SSIM) and geometry
-(depth error) at eight held-out views it was never shown, under a fixed
-two-view budget. Random and farthest-camera acquisition are the reference
-points.
+(depth error) at 32 held-out views it was never shown, under a fixed two-view
+budget. The candidates are drawn from the same camera distribution as the
+held-out views, so a view worth capturing is one that improves the kind of view
+the field will be judged on. Random and farthest-camera acquisition are the
+reference points; the depth error guards against image gains bought with worse
+geometry.

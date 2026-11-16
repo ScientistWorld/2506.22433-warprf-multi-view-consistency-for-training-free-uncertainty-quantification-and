@@ -13,7 +13,10 @@ Use only the arrays the evaluator passes to the method for each instance, plus
 general knowledge and the public development split (`data/train_assets/`) for
 designing and tuning the method. Do not read evaluator files (`eval/`), score
 files, or anything else on disk at prediction time, and do not add external
-images, depth maps, meshes or pretrained scene priors.
+images, depth maps, meshes or pretrained scene priors. The evaluators run the
+method with `eval/test/` and the git object store hidden; attempting to get
+around that isolation (or copying hidden-test files into the method beforehand)
+is a violation.
 
 ## View Budget
 

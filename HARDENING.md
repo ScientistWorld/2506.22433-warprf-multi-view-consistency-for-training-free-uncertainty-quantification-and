@@ -1,225 +1,241 @@
-# Hardening report (iteration 11)
+# Hardening report (final iteration)
 
-## Summary
+This iteration started from the hardened gym of iteration 11 and the two
+weaknesses `REVIEW.md` found in it:
 
-The red-team audit found that the old gym did not reward better research:
-its answers could be regenerated from public code, it trusted method-written
-labels and constraint flags, its acquisition metric rewarded deliberately
-corrupted images, retraining noise (rank spread 0.61) exceeded every honest
-effect, half the weight sat on paper tables the test never scored, and the
-reference lost to random on one split. These were structural, so the gym was
-rebuilt rather than patched:
+1. WarpRF only tied farthest-camera acquisition (+0.04 dB, CI [-0.27, +0.36]),
+   and no honest acquisition variant beat it, so the acquisition experiment had
+   no demonstrated headroom.
+2. A method that read `eval/test/assets` at prediction time scored +2.21.
 
-- **Instances**: procedurally generated textured scenes (`data/scenes.py`) with
-  camera-z ground truth. The 32 hidden test scenes come from 128-bit seeds that
-  exist only in `eval/test/scene_seeds.json`; their inputs and answers are built
-  once and frozen in `eval/test/assets/` (16 public train scenes in
-  `data/train_assets/`).
-- **Frozen backbones**: one fixed tiny-NeRF recipe (`data/backbone.py`,
-  position-only density, view-dependent colour) is trained by the builder with
-  identical initialisation and paired per-scene ray-sampling streams. Every
-  method sees the same renderings, so comparisons are paired and the test has
-  zero run-to-run noise (`warprf_reference_copy` reproduces the reference
-  exactly).
-- **The paper's procedure, scaled**: the acquisition experiment now does what the
-  paper does. From 3 views it acquires 2 of 8 candidates one at a time,
-  continues training after each, and scores final novel-view PSNR/SSIM and depth
-  error at 8 held-out views. All 8 first-step fields and all 56 ordered
-  second-step fields were trained at build time (3,168 fields over 48 scenes), so the hidden test
-  only looks results up and never retrains.
-- **Paper-faithful reference**: WarpRF was rewritten from the paper and the
-  authors' released code (`sadrasafa/WarpRF`, `active/warprf.py`,
-  `evaluate_uncertainty.py`). Changes: z-depth (the old version fed ray
-  distances into z reprojection), nearest/bilinear sampling with border padding
-  (no in-bounds mask, no 95th-percentile fill), max-fill only where no source has
-  positive depth, and Eq. 9 summed over pixels of the per-pixel minimum.
-- **Evaluator owns everything on the far side**: methods register a command
-  (`outputs/<name>/predict.json`). The evaluator runs it in two rounds on the
-  inputs, derives both acquisitions from the returned scores, computes all
-  errors from its own answers, and computes the baselines itself. It reads
-  nothing else a method writes. Any crash, timeout, missing, misshapen or
-  non-finite array fails the run, and a failed run gets the worst achievable
-  value of every metric of every experiment. The test evaluator imports only
-  numpy and the standard library (nothing from `data/` or `method/`).
-- **Scoring**: `reference.json` has three runnable experiments (sparse depth
-  uncertainty 0.25, dense 0.25, acquisition 0.5; all coefficients positive). The
-  paper's tables are kept verbatim under `_paper_reported`, not scored.
+A third flaw was flagged by the hardening rules rather than by the review: a
+one-line rule, "uncertainty = rendered depth" (`depth_prior_hybrid`), ranked
++0.080 above the reference. Iteration 11 had disclosed it but left it open.
 
-Audit code: `redteam/hardening/` (`variants.py` holds every variant and
-shortcut payload; `run_checks.py` scores them through both unmodified
-evaluators). Raw results: `redteam/hardening/results.{json,md}`. The first
-build-and-audit job used the released code's AUSE normalisation; its tables are
-kept in `redteam/hardening/results_job1_released_ause_normalization.*` (see
-"AUSE normalisation" below).
+All three trace back to setup choices that departed from the paper, so the
+instances were rebuilt rather than patched. The evaluator was isolated from the
+method at the same time.
 
-**Cohort ranks.** Ranks below use the same formula as the red team:
+## What changed
+
+- **Methods run isolated** (`eval/{train,test}/isolate.py`, one copy per split).
+  - Each method command runs in fresh Linux user, mount and PID namespaces.
+  - `eval/test/` (hidden instances, answers, seeds) and the git object store are
+    covered by empty read-only tmpfs mounts.
+  - `/proc` is remounted, so only the method's own processes are visible. That
+    blocks `/proc/<pid>/root` access to the evaluator's view of the files.
+  - The method runs without capabilities, so it cannot unmount the covers.
+  - Before running any method, the evaluator checks with a probe that the hidden
+    folder really appears empty. If the kernel refuses namespaces, it falls back
+    to removing all permissions from the hidden instances during each run.
+  - The mode used is written to the score file as `_isolation`. It was
+    `namespace` in every job of this iteration.
+  - Methods also run in their own session with output going to a file, so
+    leftover child processes are killed and cannot hang the evaluator on
+    pipes.
+- **Rendered depth restored to paper Eq. 2** (`data/backbone.py`).
+  - Depth is now `D = sum_i alpha_i T_i t_i`, converted to camera z.
+  - The earlier backbone added `(1 - acc) * t_far`, i.e. it composited a far
+    background into the depth. That made "large rendered depth" a stand-in for
+    "low opacity", which is what the depth-prior rule exploited.
+  - With Eq. 2 the one-line rules fail and WarpRF's AUSE moves to the paper's
+    range.
+- **Candidates drawn like the held-out views** (`data/scenes.py`).
+  - Before, the 8 candidates came from a much wider pose law (radius 2.3-3.9,
+    elevation 0-60 degrees, look-at jitter 0.35) than the held-out views
+    (2.8-3.2, 15-35 degrees, 0.1).
+  - As a result, the one-step gain tracked camera novelty more than rendering
+    error (Spearman 0.37 vs 0.21). Selecting by the *true* candidate error
+    gained only +0.04 dB over WarpRF, so a better uncertainty could not score
+    higher.
+  - In the paper's benchmarks, candidates and test views come from one capture.
+    The gym now draws 16 candidates i.i.d. from the held-out views' own law.
+- **32 held-out views instead of 8.** With 8 views, part of a candidate's value
+  came from happening to sit next to one hidden view, which no method can know:
+  that alignment correlated 0.24-0.27 with the gain. The paper scores on many
+  test views (200 for NeRF Synthetic).
+  - With 32 views, true candidate error predicts the one-step gain with
+    Spearman 0.74 on train, up from 0.63.
+- **More hidden scenes**: 56 test scenes (40 kept from the first rebuild plus 16
+  new 128-bit seeds), and 16 public train scenes.
+  - Every ordered acquisition pair (240 per scene) is trained at build time, so
+    the hidden test only looks results up.
+  - The build is resumable and split across two GPUs (`scripts/build_assets.sh`),
+    about 3.2 h.
+- **Audit extended** (`redteam/hardening/`).
+  - `variants.py` adds honest depth and acquisition variants, the one-line depth
+    rules, and `shortcut_escape`, which tries every route to the hidden answers.
+  - `run_checks.py` adds oracle selectors and paired comparisons of the reference
+    against both baselines.
+  - Pure-Python analyses of the acquisition tables are in
+    `redteam/hardening/analysis/`. The design study that chose the depth
+    convention and candidate law is `design_study.py` / `design_study.json`.
+- **Records.** The intermediate build (8 held-out views, 40 test scenes) is kept
+  as `results_8eval_40scene.*`. The final audit is `results.{md,json}`.
+
+Ranks below use the same cohort formula as before:
 `sum(weight * |coef| * direction * (value - reference) / std)`, where std is
-taken across the 23 audited cases on that split. The reference is 0. Paired
-improvements use a 2,000-sample scene bootstrap (95% CI).
+taken across the audited cases of that split. The reference is 0. CIs are 95%
+scene-bootstrap intervals on paired per-scene differences.
 
 ## Do better results now score higher?
 
-**Before** (red team, old gym): a real geometry fix scored −0.06/−0.13/+0.08
-paired against matching seeds, and extra training scored −0.02, all inside a seed
-spread of 0.61. Constant predictions scored −0.97 and removing warping −1.55.
-Corrupting images scored +0.35.
+Yes for uncertainty quality; only partly for acquisition (see "What I could not
+fix"). Variants before (iteration 11 test) and after (final test, 56 scenes):
 
-**After** (hidden test / train):
+| Case | What changes | Before | After (test) | After (train) |
+|---|---|---:|---:|---:|
+| `warprf_edge` (better) | adds rendered-depth edges to Eq. 8 | +0.094 | **+0.093** | +0.031 |
+| `warprf_rgbd_edge` | adds the Eq. 9 photometric map and depth edges | +0.097 | +0.025 | -0.107 |
+| `warprf_lookahead_select` | pair-aware first acquisition | -0.004 | +0.035 | +0.078 |
+| `warprf_reference_copy` | identical reference | 0.000 | 0.000 | 0.000 |
+| `weak_constant` (weaker) | constant predictions | -0.510 | -1.193 | -1.386 |
+| `warprf_coverage_select` (weaker) | out-of-view pixels count as max error | -0.667 | -0.873 | -0.944 |
+| `warprf_depth_select` (weaker) | selects by summed Eq. 8 | -1.126 | -1.010 | -0.639 |
+| failed run (crash, NaN, wrong shape, broken registration) | worst value of every metric | -4.335 | -5.087 | -4.873 |
 
-| Case | What changes | Test rank | Train rank |
-|---|---|---:|---:|
-| `warprf_edge` (better) | adds rendered-depth edge magnitude to Eq. 8 | **+0.094** | **+0.101** |
-| `warprf_rgbd_edge` (better) | adds Eq. 9 photometric map and depth edges | +0.097 | +0.051 |
-| `warprf_reference_copy` | identical reference | 0.000 | 0.000 |
-| `warprf_lookahead_select` | pair-aware first acquisition | −0.004 | −0.204 |
-| `warprf_ensemble_select` | rank-sum with camera distance | −0.054 | −0.085 |
-| `weak_depth_prior` (weaker) | uncertainty = rendered depth; pick farthest-depth view | −0.280 | −0.345 |
-| `weak_constant` (weaker) | constant predictions | −0.510 | −1.030 |
-| `warprf_coverage_select` (weaker) | out-of-view pixels count as max error | −0.667 | −0.656 |
-| `warprf_depth_select` (weaker) | selects by summed Eq. 8 | −1.126 | −0.710 |
+`warprf_edge` beats the reference beyond noise on both depth experiments of the
+hidden test:
+- sparse AUSE +0.046 [+0.019, +0.075];
+- dense AUSE +0.039 [+0.015, +0.062].
 
-The better variant `warprf_edge` beats the reference beyond noise on both depth
-experiments and both splits (paired AUSE gain):
+On the 16-scene train split the same gains are +0.009 / +0.014 and not
+significant.
 
-- test: sparse +0.039 [+0.018, +0.063] (23/32 scenes better), dense +0.060 [+0.033, +0.088] (25/32);
-- train: sparse +0.047 [+0.008, +0.086], dense +0.063 [+0.025, +0.097].
-
-There is no retraining noise to compare against, because inputs are frozen and
-evaluation is deterministic. The paper's effect is far larger than the
-scene-sampling noise. On test, WarpRF beats random by an AUSE of +0.101
-[+0.063, +0.139] (sparse) and +0.164 [+0.129, +0.198] (dense). Its acquisition
-beats random by +0.42 dB PSNR [+0.16, +0.69], with SSIM +0.016 [+0.006, +0.025].
+Weaker methods score clearly lower: constant predictions, coverage-penalised and
+depth-based selection, and every failed run.
 
 ## Major shortcuts: fix and score before → after
 
-| Red-team shortcut | Before | Fix | After (test rank) |
+| Shortcut | Before | Fix | After (test rank) |
 |---|---:|---|---:|
-| Oracle enumeration via the visible generator | +0.631 | Test scenes come from 128-bit seeds held only in `eval/test/`; answers are frozen there. | `shortcut_generator_oracle`: tries public seeds 0–1999, otherwise falls back to WarpRF. Train +1.965 (train is public by design), **test 0.000** (no match, no gain). |
-| Legacy fabricated `depth_error` / `candidate_oracle_errors` | +1.488 | Legacy path and `eval/metrics.py` deleted. Every error is computed from evaluator answers; extra arrays are ignored. | `shortcut_fabricated_fields` (forged errors, PSNR, flags, selection): **−0.510**, identical to constant predictions. |
-| False budget / impossible constraint flags | +0.012 / +1.597 | No self-reported quantity is read. The budget is applied by the evaluator, which performs every acquisition. | Same case (`source_view_count=-100`, flags −100): **−0.510**. |
-| Constant-white / RGB-1000 candidate images | +0.352 / +0.941 | The metric is final held-out quality after acquisition, not "error exposed". Methods return only scores; renderings are evaluator-owned. | No image output path exists (closed by construction). |
-| Replacing the fixed generator in `data/` | +0.766 | The test evaluator imports nothing from `data/`; answers are frozen files in `eval/test/assets/`. | Closed by construction (imports are numpy and the standard library only). |
-| Empty train results → empty test entry | 0 (tie) | No filtering by `scores_train.json`. Every registered method is scored. If none is registered, a `no_method_registered` entry gets worst values. | Empty registry: PSNR 21.07 (worst pair), AUSE 1.34/1.71. **No tie**. |
-| Omitting a weaker method on disk | 0 (tie) | Every `outputs/*/predict.json` is scored. Malformed registrations fail to worst values. | `broken_registration`: **−4.335**. |
-| Invalid selected-view field | 0 (tie) | Selection is derived from the score vector (argmax over available candidates). | Forged `selected_index=-999999` is ignored (in the fabricated case). |
-| NaN outputs | unrankable | Non-finite, misshapen or crashed run fails, with worst value in every metric of every experiment. | `shortcut_nonfinite` / `shortcut_wrong_shape` / `shortcut_crash`: **−4.335**. |
-| Prewritten / stale score file | overwritten / stale left | The evaluator deletes the score file before loading anything and writes atomically. | Forged file overwritten; a failing evaluator leaves no file. |
+| Reading the hidden answers at prediction time (`shortcut_escape`) | **+2.211** | Namespace isolation hides `eval/test/` and `.git`, and `/proc` shows only the method's own processes. | **0.000**: on all 112 test calls, every route failed (direct read: not found; `chmod`: read-only empty tmpfs; `/proc/*/root`: one visible pid; `git show`: no repository). It falls back to WarpRF and ties the reference with no gain. |
+| One-line depth rule, U = rendered depth (`depth_prior_hybrid`) | **+0.080** | Paper Eq. 2 depth: low opacity no longer pushes depth toward the far bound. | **-0.905** (AUSE worse by 0.70 / 0.70) |
+| Opposite rule, U = -rendered depth (`neg_depth_prior_hybrid`) | not tested | same | **-0.335** (AUSE worse by 0.10 / 0.38) |
+| Hand-written camera-coverage planners (pure-Python analysis) | farthest tied WarpRF | Candidates share the held-out views' law, so content matters. | Farthest -0.33 dB, optimal azimuth-gap planner -0.30 dB, greedy gap planner -0.41 dB vs WarpRF (test). |
+| Public-seed generator oracle (`shortcut_generator_oracle`) | 0.000 test | unchanged (128-bit hidden seeds) | 0.000 test (train +1.35: the train split is public by design) |
+| Fabricated metric, label and flag fields | -0.510 | unchanged (nothing a method writes besides the arrays is read) | -1.193 (equal to constant predictions) |
+| Empty registry / forged or stale score files | no tie | unchanged | empty registry gets worst values; forged file overwritten; failing evaluator leaves no file |
 
 ## Shortcuts left open
 
-- **Reading the hidden answers from disk at prediction time**
-  (`shortcut_read_hidden_answers`): **+2.211 test**. The method process runs on
-  the same filesystem as `eval/test/assets/`. Closing this needs process or
-  filesystem isolation that the container does not provide. Any obfuscation of
-  the answers would sit next to its key. It is forbidden in `CONSTRAINTS.md`
-  and is blatant in code, so it is left to the shortcut grader.
-- **Inverting the scene family**: fitting the public generator's parameters to
-  the captured views to recover ground-truth depth. Not tested. The family has
-  3–6 primitives with random types, poses, sizes and procedural textures, seen
-  in 3–8 low-resolution views, so recovery is an expensive inverse-graphics
-  problem. Seed search is infeasible (128-bit seeds).
-- **Simple rendered-depth cue (disclosed, not a constraint break)**: using
-  rendered depth as uncertainty orders sparse-field errors better than WarpRF.
-  - Sparse AUSE gain +0.070 [+0.021, +0.122]; dense tie.
-  - Paired with WarpRF's acquisition (`depth_prior_hybrid`) it ranks +0.080
-    test / +0.092 train: above the reference, below `warprf_edge`, and far from
-    the AUSE bound.
-  - This is a genuinely better error ordering: in sparse volume rendering,
-    semi-transparent pixels near silhouettes get both a high expected depth and
-    a large error. So it is headroom a cheap idea can claim, not a shortcut.
+- **Fallback isolation is weaker.** If a future container refused unprivileged
+  user namespaces, the evaluator would only chmod the hidden instances during
+  each run. A method could chmod them back, and the git store would stay
+  readable. The probe makes this visible (`_isolation: "lock"` in the score
+  file). Namespaces worked in every job here, and the hidden test runs in this
+  same container. The bypass would be blatant code for the shortcut grader.
+- **Copying hidden files at development time.** A future agent can read
+  `eval/test/` in its own workspace and bake answers into its method before the
+  test runs. No evaluator can prevent this. `CONSTRAINTS.md` forbids it, and it
+  is left to the grader.
+- **Inverting the scene family** from the captured photos (inverse graphics
+  with the public generator) was not tested. It needs fitting 3-6 textured
+  primitives to 3-8 views at 48x48; seed search is infeasible with 128-bit
+  seeds.
 
 ## Reference score before and after
 
-The two cannot be compared number for number: metrics and instances changed.
+The instances changed (depth convention, candidate law, held-out views, scene
+count), so the numbers are not comparable one to one.
 
-- **Before** (old test): sparse AUSE 0.0537 (random 0.1319), dense 0.0331
-  (0.2798), shifted 0.1224 (random 0.1100: the reference lost). Selected-error
-  lift was 2.06/1.39/1.03.
-- **After** (hidden test, `scoring/reference.json` = `scoring/scores_test.json`):
+| Experiment | Metric | Before: WarpRF / random / farthest | After: WarpRF / random / farthest | Bound |
+|---|---|---|---|---|
+| depth_uncertainty_sparse | AUSE ↓ | 0.463 / 0.564 / - | **0.348** / 0.588 / - | 0 |
+| | Spearman ↑ | 0.148 / 0.000 / - | **0.346** / 0.002 / - | 1 |
+| depth_uncertainty_dense | AUSE ↓ | 0.462 / 0.626 / - | **0.358** / 0.707 / - | 0 |
+| | Spearman ↑ | 0.107 / -0.001 / - | **0.230** / -0.002 / - | 1 |
+| active_view_selection | final PSNR ↑ | 23.012 / 22.594 / 22.969 | **23.267** / 22.436 / 22.933 | 24.203 (best pair) |
+| | final SSIM ↑ | 0.8035 / 0.7878 / 0.7991 | **0.8165** / 0.7816 / 0.8006 | - |
+| | final depth MAE ↓ | 0.2327 / 0.2399 / 0.2304 | **0.3352** / 0.3751 / 0.3623 | - |
 
-| Experiment | Metric | WarpRF | Random | Farthest | Bound |
-|---|---|---:|---:|---:|---:|
-| depth_uncertainty_sparse | AUSE ↓ | 0.4633 | 0.5643 | – | 0 |
-| | Spearman ↑ | 0.1479 | 0.0005 | – | 1 |
-| depth_uncertainty_dense | AUSE ↓ | 0.4618 | 0.6258 | – | 0 |
-| | Spearman ↑ | 0.1068 | −0.0006 | – | 1 |
-| active_view_selection | final PSNR ↑ | 23.012 | 22.594 | 22.969 | 24.177 (best pair) |
-| | final SSIM ↑ | 0.8035 | 0.7878 | 0.7991 | – |
-| | final depth MAE ↓ | 0.2327 | 0.2399 | 0.2304 | – |
+Depth MAE rose for every method because Eq. 2 depth falls short of the surface
+wherever the field is not opaque. WarpRF's AUSE (0.35) now sits in the paper's
+Table 1 range (0.23-0.42).
 
-Train split (16 scenes) is consistent: AUSE 0.430/0.449 vs random 0.562/0.601,
-PSNR 22.95 vs random 22.53 / farthest 22.90.
+The paper's direction holds on the hidden test, paired over the same 56 scenes:
+- WarpRF beats random uncertainty by +0.240 AUSE [+0.204, +0.275] (sparse) and
+  +0.349 [+0.318, +0.380] (dense).
+- Its acquisitions beat random by **+0.83 dB** [+0.66, +1.00] (49/56 scenes).
+- They beat farthest-camera selection by **+0.33 dB** [+0.12, +0.55] (39/56
+  scenes). This is review item 1. The paper reports +0.3 to +0.9 dB over
+  farthest with SVRaster.
+
+On the 16-scene train split all differences have the same sign: +0.10 dB over
+farthest, not significant.
+
+`scoring/scores_test.json` and `scoring/scores_train.json` are the reference
+run (WarpRF plus the evaluator's baselines) from the final job, and
+`scoring/reference.json` holds the same test values. The paper's numbers are
+unchanged under `_paper_reported`.
 
 ## Headroom check
 
-- **No scored metric sits at its bound.** AUSE is 0.46 (bound 0) and Spearman
-  0.11–0.15 (bound 1). WarpRF's acquisitions land at the 62nd percentile of the
-  56 possible pairs: 23.01 dB against 24.18 dB for the best pair and 21.07 dB for
-  the worst.
-- **Added experiment where the method falls short**:
-  `depth_uncertainty_sparse` (3-view fields, large unobserved regions), weight
-  0.25. Here WarpRF is weakest relative to simple cues.
-- **Variants above the reference beyond noise**: `warprf_edge` on both depth
-  experiments (above). No single simple variant reaches any bound.
-- **Brute force**: enumerating candidates needs each candidate's photograph and
-  the held-out views. On the hidden split the method sees neither: a candidate's
-  photograph is revealed only after it is acquired, and the held-out views
-  never. Its own copy of the backbone and generator therefore cannot compute
-  the objective. The public-seed enumeration (`shortcut_generator_oracle`)
-  reaches the 98th percentile pair and AUSE 0 on the public train split, but
-  gains nothing on test.
-- **Baselines**: random is clearly below the reference on every experiment,
-  with the CIs above. Farthest-camera acquisition ties it (see below).
-
-## AUSE normalisation
-
-The released evaluation code divides both sparsification curves by the larger
-curve's maximum. That denominator depends on the prediction. In the first audit
-job, an anti-correlated ordering (the failed-run value) therefore scored AUSE
-0.34/0.21, *better* than WarpRF's 0.39/0.42, and lower than random's 0.49/0.52
-(`results_job1_released_ause_normalization.md`). The evaluators now divide by
-the view's full-set mean error, a constant independent of the prediction, so
-AUSE is monotone in ordering quality. Failed runs now score 1.34/1.71 against
-random's 0.56/0.63. Everything else in the protocol follows the paper's code:
-removal fractions 0–0.99 in steps of 0.01, MAE, per-view averaging, and
-trapezoidal area.
+- **No scored metric is at its bound.**
+  - AUSE is 0.35 / 0.36 (bound 0); Spearman is 0.35 / 0.23 (bound 1).
+  - WarpRF's acquisitions land at the 80th percentile of the 240 ordered pairs.
+    The best pair is +0.94 dB [+0.77, +1.10] above it.
+- **The headroom is real, not noise.** Acquiring (a, b) and (b, a) gives final
+  PSNRs that correlate 0.91. Order noise is 0.22 dB against a 0.75 dB
+  within-scene spread.
+- **A variant above the reference beyond noise**: `warprf_edge`, on both depth
+  experiments (above).
+- **The experiment where the method falls short**: `depth_uncertainty_sparse`
+  (3 views, large unobserved regions) is kept at weight 0.25.
+- **Brute force cannot solve it.** The method never sees held-out views or
+  unacquired candidate photographs, so it cannot compute the objective. Its own
+  copy of the generator and backbone does not help without the hidden seeds.
+- **Simple rules stay below the reference**: depth rules, camera-coverage
+  planners, farthest and random.
 
 ## Weights
 
-The four paper tables previously held weight 0.50 but were never scored. That
-weight moved to runnable experiments. The paper's two halves (uncertainty
-quality, Table 1; downstream acquisition and mapping, Tables 2–7) each get 0.5:
+Unchanged: sparse depth uncertainty 0.25, dense depth uncertainty 0.25,
+acquisition 0.5 (PSNR 1.0, SSIM 0.5, depth MAE 0.5 as the geometry constraint).
 
-- sparse depth uncertainty 0.25, dense depth uncertainty 0.25;
-- acquisition 0.5, with PSNR 1.0, SSIM 0.5, and depth MAE 0.5 as the
-  mapping/geometry constraint.
-
-The shifted-split diagnostic was dropped: it had weight 0.05, and its negative
-result came from the reference's ray-distance bug.
+The paper's two halves (Table 1; Tables 2-7) still carry equal weight. The
+acquisition experiment now reproduces both of the paper's downstream
+comparisons, and it is where breaking the selection costs most.
 
 ## What I could not fix
 
-- **WarpRF only ties farthest-camera acquisition**: +0.04 dB [−0.27, +0.36],
-  SSIM +0.004, depth MAE −0.002. The paper reports WarpRF beating farthest-view
-  selection with SVRaster by 0.3–0.9 dB. At this scale (48×48, 3+2 views,
-  tiny NeRF) that part of the downstream claim is not reproduced; beating random
-  is reproduced.
-- **No honest acquisition variant beat the reference beyond noise.**
-  `warprf_masked` is +0.10 dB [−0.11, +0.32] on test but −0.01 dB on train.
-  Look-ahead, distance ensemble, coverage penalty and depth-based selection are
-  all at or below the reference. The acquisition experiment's headroom is shown
-  only by the 1.17 dB gap to the best pair (and by the answer-reading shortcut).
-  The overall test has demonstrated headroom through the depth experiments.
-- **Scale**:
-  - Procedural scenes instead of ScanNet++/ETH3D/NeRF-Synthetic/Tanks and
-    Temples, at 48×48.
-  - A tiny NeRF only (no 3DGS or SVRaster).
-  - Dense means 8 views (the paper uses about 20).
-  - Two acquisitions instead of 8–16.
-  - No LPIPS (it needs pretrained network weights) and no mesh metrics; depth
-    MAE stands in for geometry.
-- The prediction time limit (1800 s per round) is wall-clock and therefore
-  hardware-dependent. The hidden test scored all 23 audit cases (both rounds,
-  32 scenes each) in 433 s on one CPU, under 20 s per case.
-- `redteam/` outside `redteam/hardening/` is the previous red team's harness for
-  the old gym. It is kept as a record and does not run against the new evaluator.
+- **No honest acquisition variant beats WarpRF beyond noise.** On the final
+  build (test / train):
+  - pair-aware lookahead: +0.01 [-0.12, +0.15] / +0.09 [-0.01, +0.22];
+  - rank-sum with camera distance: -0.07 / +0.13;
+  - Eq. 9 with source photographs: -0.00 / 0.00;
+  - valid-pixel mean: -0.12 / +0.04;
+  - rank-sum with Eq. 8: -0.20 / -0.10;
+  - three-way ensemble: -0.26 / -0.18;
+  - angular neighbourhood smoothing: -0.52 / -0.50;
+  - occlusion-aware Eq. 9: -0.65 / -0.63.
+
+  Even selecting by each candidate's *true* rendering error, a perfect version
+  of the quantity WarpRF estimates, gains only +0.13 dB [-0.01, +0.28] (test) /
+  +0.10 (train). WarpRF is close to the ceiling of max-uncertainty selection.
+
+  The remaining headroom is real: the best one-step-then-best-second choice
+  (greedy oracle) gains +0.72 dB [+0.55, +0.89]. Reaching it requires predicting
+  which view improves *other* views, not which view is rendered worst. That is
+  a research problem the interface allows (methods see all candidate renderings
+  and the public train tables), but I did not find a method that solves it.
+
+  So the acquisition experiment's headroom is shown by oracles, not by an honest
+  variant. The test as a whole has demonstrated headroom through the depth
+  experiments.
+- **The train split is small.** With 16 scenes, `warprf_edge`'s train gains and
+  WarpRF's train margin over farthest are not significant. The hidden test
+  (56 scenes) is where the effects are resolved.
+- **Scale.**
+  - Procedural scenes at 48x48 and a tiny NeRF only (no 3DGS, SVRaster, LPIPS
+    or meshes).
+  - Two acquisitions instead of 8-16; depth MAE stands in for mesh metrics.
+  - The paper's competing uncertainty methods (BayesRays, FisherRF, Manifold)
+    need model internals and are not expressible through the rendering-only
+    interface. The baselines are random and farthest-camera selection, as in
+    the paper's SVRaster tables.
+- **The time limit is wall-clock.** The prediction limit (1800 s per round) is
+  hardware-dependent. The final audit ran 28 cases on the hidden test in 675 s
+  on one CPU core.
+- **Repository size.** The two rebuilds added about 320 MB of instance files to
+  the git history (current tree: about 180 MB: 140 MB hidden test, 40 MB train).

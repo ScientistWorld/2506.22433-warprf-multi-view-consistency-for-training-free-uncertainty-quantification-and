@@ -4,6 +4,12 @@
 
 ## Progress Log
 
+### [2026-11-16] - core_claim_plus (final hardening)
+- Rebuilt the instances: 16 public and 56 hidden scenes, 16 candidates drawn from the same pose law as 32 held-out views (as in the paper's benchmarks), rendered depth restored to the paper's Eq. 2, all 240 ordered acquisition pairs per scene precomputed.
+- On the hidden test, WarpRF beats random uncertainty (AUSE 0.348 vs 0.588 with 3 views, 0.358 vs 0.707 with 8 views) and beats both acquisition baselines: +0.83 dB PSNR over random [0.66, 1.00] and +0.33 dB over farthest-camera selection [0.12, 0.55].
+- Methods now run in Linux namespaces with the hidden test folder and git store hidden; the answer-reading shortcut no longer finds the answers.
+- Shortcut fixes, headroom and limitations are recorded in `HARDENING.md`.
+
 ### [2026-11-11] - core_claim_plus (iteration 11, hardening)
 - Rebuilt the gym on frozen tiny-NeRF instances: 16 public and 32 hidden procedurally generated scenes. The paper's sequential active view selection is scored by final held-out quality, with every acquisition branch retrained at build time.
 - Restored WarpRF to the paper and official-code semantics.

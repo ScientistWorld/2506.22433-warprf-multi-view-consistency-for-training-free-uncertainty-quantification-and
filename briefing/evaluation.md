@@ -27,9 +27,9 @@ setting:
 - **Spearman**: rank correlation between predicted uncertainty and true depth
   error over the same pixels, averaged over target views.
 - **Final PSNR / SSIM / depth MAE**: quality of the radiance field after the
-  two acquisitions, rendered at 8 held-out evaluation views that are never shown
-  to the method (PSNR in dB, SSIM with an 11x11 Gaussian window, depth MAE in
-  scene units over surface pixels). Averaged over scenes.
+  two acquisitions, rendered at 32 held-out evaluation views that are never
+  shown to the method (PSNR in dB, SSIM with an 11x11 Gaussian window, depth MAE
+  in scene units over surface pixels). Averaged over views, then scenes.
 
 ## Instances
 
@@ -41,15 +41,22 @@ by the benchmark itself; methods never train or modify it.
 - *Sparse field*: trained on 3 captured views spread over ~150 degrees.
 - *Dense field*: trained on 8 captured views spread around the scene.
 - *Targets*: 6 held-out views per scene for the depth-uncertainty experiments.
-- *Candidates*: 8 possible next views for acquisition.
+- *Candidates*: 16 possible next views for acquisition, drawn independently
+  from the same camera-pose distribution as the 32 held-out evaluation views
+  (which are spread evenly around the scene).
 - *Acquisition*: starting from the sparse field, the evaluator acquires the
   candidate with the highest score, continues training with it, asks for
   scores again from the updated field, and acquires a second candidate. The
-  final quality of every possible ordered pair was computed once, with one
-  fixed training schedule and initialisation, when the instances were built.
+  final quality of every possible ordered pair (240 per scene) was computed
+  once, with one fixed training schedule and initialisation, when the instances
+  were built.
+- *Rendered depth* is the expected termination depth `sum_i w_i t_i` along each
+  ray, converted to camera z, with no background term: where the field is not
+  opaque the rendered depth falls short of the surface. Depth error is measured
+  on this rendered depth.
 
 The train split (`data/train_assets/`, 16 scenes) is public, including its
-answers, for development. The hidden test split has 32 different scenes from the
+answers, for development. The hidden test split has 56 different scenes from the
 same generator family, built and scored with the same protocol.
 
 ## Interface
@@ -79,26 +86,31 @@ uint8; depth arrays are float16. `*_images` are captured photographs, `*_rgb` /
 
 **Round 1 input**: `intrinsics`; `sparse_source_poses/_images/_rgb/_depth` (3
 views); `target_poses` (6); `sparse_target_rgb/_depth`;
-`candidate_poses` (8); `sparse_candidate_rgb/_depth`;
+`candidate_poses` (16); `sparse_candidate_rgb/_depth`;
 `dense_source_poses/_images/_rgb/_depth` (8); `dense_target_rgb/_depth`.
 
 **Round 1 output**: `sparse_uncertainty` [6, H, W], `dense_uncertainty`
-[6, H, W] (higher = less reliable depth), `candidate_scores` [8] (the highest
+[6, H, W] (higher = less reliable depth), `candidate_scores` [16] (the highest
 is acquired; ties go to the lowest index).
 
 **Round 2 input** (field after continued training with the first acquisition):
-`intrinsics`; `selected_candidates` [1]; `candidate_available` [8] bool;
+`intrinsics`; `selected_candidates` [1]; `candidate_available` [16] bool;
 `source_poses/_images/_rgb/_depth` (4 views: the 3 initial views plus the
 acquired one, whose photograph is now available); `candidate_poses`;
-`candidate_rgb/_depth` (8, rendered by the updated field).
+`candidate_rgb/_depth` (16, rendered by the updated field).
 
-**Round 2 output**: `candidate_scores` [8]; the highest-scored available
+**Round 2 output**: `candidate_scores` [16]; the highest-scored available
 candidate is acquired.
 
 ## Rules enforced by the evaluator
 
 - Every registered method is scored; nothing reported by a method other than the
   arrays above is read, and the evaluator derives each acquisition itself.
+- The method command runs isolated (Linux user, mount and PID namespaces): the
+  `eval/test/` folder and the git object store appear empty, and only the
+  method's own processes are visible. It can read the rest of the workspace
+  and its input folder, and write anywhere it normally could. Both evaluators
+  run methods the same way.
 - A run fails if the command cannot start, exits non-zero, exceeds 1800 s per
   round, or returns a missing, misshapen, non-real or non-finite array. A failed
   run receives the worst achievable value of every metric of every experiment

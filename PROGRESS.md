@@ -2,6 +2,12 @@
 
 ## What Works
 
+- Final hardening (2026-11-16): instances rebuilt with 16 candidates drawn
+  from the held-out views' pose law, 32 held-out views, paper Eq. 2 depth and
+  56 hidden test scenes; methods run in namespaces that hide `eval/test/` and
+  the git store. `scripts/run.sh` reproduces the build, the reference scores
+  and the audit end to end (about 3.5 h on two A100s). See `HARDENING.md`.
+
 - Final audit on 2026-06-04 22:10 re-ran `python validate.py --compare`
   successfully and confirmed the packaged environment is still at
   `core_claim_plus`.
