@@ -217,6 +217,7 @@ candidate is acquired.
 - `bash scripts/evaluate.sh` -> `scoring/scores.json` (train split)
 
 All three take no arguments and score every method registered under `outputs/`.
+
 ---
 
 # Reproduction Log
@@ -731,14 +732,13 @@ All three take no arguments and score every method registered under `outputs/`.
 
 </details>
 
+### Iteration 11: claude-opus-5-5 (hardener)
+- **Milestone**: `core_claim_plus` | **Status**: done
+- **Working time**: 36m | **GPU**: 10.0h
+- **Jobs**: 15 total (13 completed, 2 failed)
 
----
-
-# Reproduction Milestones
-
-**Current: core_claim_plus**
-
-## Progress Log
+<details>
+<summary>Progress Log</summary>
 
 ### [2026-11-16] - core_claim_plus (final hardening)
 - Rebuilt the instances: 16 public and 56 hidden scenes, 16 candidates drawn from the same pose law as 32 held-out views (as in the paper's benchmarks), rendered depth restored to the paper's Eq. 2, all 240 ordered acquisition pairs per scene precomputed.
@@ -797,6 +797,15 @@ All three take no arguments and score every method registered under `outputs/`.
 ### [2026-06-02 23:31] - core_claim_plus
 - Fixed the remaining split-consistency validation issue on the shifted active-view diagnostic by using a representative reproduction-generated `selected_error_lift` reference.
 - Re-ran `python validate.py`; all checks pass.
+
+</details>
+
+
+---
+
+# Reproduction Milestones
+
+**Current: core_claim_plus**
 
 ## Stop Justification
 - Completed at milestone `core_claim_plus`.

@@ -1,8 +1,6 @@
 # Once you set action to 'submit' or 'done', STOP immediately.
 # Do NOT sleep, poll, or wait for jobs. The system reads this file
 # only after your turn ends.
-action: submit
-gpus: 2
-test: false
+action: done
 milestone: core_claim_plus
-notes: "Rebuild with 32 held-out views (paper-like dense test set) and 56 hidden test scenes (+16 train), same seeds for existing scenes; rerun reference/baselines and the full variant/shortcut audit"
+notes: "Hidden-test answers unreadable at prediction time (namespace isolation; escape shortcut +2.21 -> 0); paper Eq. 2 depth kills the depth-prior rule (+0.08 -> -0.91); candidates share the 32 held-out views' pose law, 56 hidden scenes: WarpRF now beats farthest by +0.33 dB [0.12, 0.55] and random by +0.83 dB; warprf_edge beats the reference beyond noise on both depth experiments; no honest acquisition variant beats WarpRF (stated in HARDENING.md)"
