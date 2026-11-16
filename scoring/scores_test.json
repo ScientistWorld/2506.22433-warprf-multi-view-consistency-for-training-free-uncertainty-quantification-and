@@ -1,47 +1,47 @@
 {
   "slice": "test",
-  "num_scenes": 40,
+  "num_scenes": 56,
   "experiments": {
     "depth_uncertainty_sparse": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.5855329270754442,
-          "spearman_depth_error": 0.002423207157950231
+          "ause": 0.5883755775072359,
+          "spearman_depth_error": 0.002016164123324007
         },
         "warprf": {
-          "ause": 0.3568388481101089,
-          "spearman_depth_error": 0.3284666391918021
+          "ause": 0.3484252044202152,
+          "spearman_depth_error": 0.34600090214444074
         }
       }
     },
     "depth_uncertainty_dense": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.7037727084149782,
-          "spearman_depth_error": -0.002656396603767873
+          "ause": 0.7071667064163246,
+          "spearman_depth_error": -0.0018178157624001454
         },
         "warprf": {
-          "ause": 0.34196341075066916,
-          "spearman_depth_error": 0.26306968301448597
+          "ause": 0.3579710836821268,
+          "spearman_depth_error": 0.2296675124537065
         }
       }
     },
     "active_view_selection": {
       "results": {
         "random_view": {
-          "final_psnr": 22.194748235146204,
-          "final_ssim": 0.7723277268496653,
-          "final_depth_mae": 0.3813191588502377
+          "final_psnr": 22.435883239550247,
+          "final_ssim": 0.7816004245209375,
+          "final_depth_mae": 0.3750605602227595
         },
         "farthest_view": {
-          "final_psnr": 22.750926160812377,
-          "final_ssim": 0.7950238332152366,
-          "final_depth_mae": 0.37027792893350125
+          "final_psnr": 22.932891368865967,
+          "final_ssim": 0.8005788315619741,
+          "final_depth_mae": 0.36232297361961435
         },
         "warprf": {
-          "final_psnr": 22.922925901412963,
-          "final_ssim": 0.8055751368403434,
-          "final_depth_mae": 0.34290064722299574
+          "final_psnr": 23.26681058747428,
+          "final_ssim": 0.816490460719381,
+          "final_depth_mae": 0.3351841462509973
         }
       }
     }

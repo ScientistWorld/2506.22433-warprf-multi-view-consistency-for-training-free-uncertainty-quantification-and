@@ -5,43 +5,43 @@
     "depth_uncertainty_sparse": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.5870518224681192,
-          "spearman_depth_error": 0.0024106472425911604
+          "ause": 0.5864075033788366,
+          "spearman_depth_error": 0.0045390807290391745
         },
         "warprf": {
-          "ause": 0.27860650157491024,
-          "spearman_depth_error": 0.45653095935832394
+          "ause": 0.2820842978558413,
+          "spearman_depth_error": 0.45247801189971487
         }
       }
     },
     "depth_uncertainty_dense": {
       "results": {
         "random_uncertainty": {
-          "ause": 0.6794735406480727,
-          "spearman_depth_error": 0.004355471669834859
+          "ause": 0.6813418007468216,
+          "spearman_depth_error": 0.00334135619519583
         },
         "warprf": {
-          "ause": 0.32481337555277673,
-          "spearman_depth_error": 0.26854555953357195
+          "ause": 0.3241742770711083,
+          "spearman_depth_error": 0.26333702843537005
         }
       }
     },
     "active_view_selection": {
       "results": {
         "random_view": {
-          "final_psnr": 22.687332497537135,
-          "final_ssim": 0.7973568128732343,
-          "final_depth_mae": 0.3858794603283362
+          "final_psnr": 22.774247217923403,
+          "final_ssim": 0.8011268704353521,
+          "final_depth_mae": 0.3821356112777721
         },
         "farthest_view": {
-          "final_psnr": 23.157384991645813,
-          "final_ssim": 0.8181280121207237,
-          "final_depth_mae": 0.36466762609779835
+          "final_psnr": 23.459418773651123,
+          "final_ssim": 0.8278649859130383,
+          "final_depth_mae": 0.34853522200137377
         },
         "warprf": {
-          "final_psnr": 23.30342698097229,
-          "final_ssim": 0.8185440003871918,
-          "final_depth_mae": 0.36342726089060307
+          "final_psnr": 23.55890464782715,
+          "final_ssim": 0.8288478553295135,
+          "final_depth_mae": 0.35749339079484344
         }
       }
     }
